@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function LoginLayout({ children }: Readonly<{ children: React.ReactNode }>) {
     return (
-        <div className="size-full">
+        <div className="size-full flex">
             {children}
         </div>
     )
