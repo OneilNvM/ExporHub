@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function CreateAccountLayout({ children }: Readonly<{ children: React.ReactNode }>) {
     return (
-        <div className='size-full flex'>
+        <div className={`size-full flex`}>
             {children}
         </div>
     )

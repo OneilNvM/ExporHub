@@ -13,6 +13,9 @@ export default {
         foreground: "var(--foreground)",
         borderColor: "var(--border-color)"
       },
+      fontFamily: {
+        serif: ['var(--font-nunito-serif)']
+      }
     },
   },
   plugins: [],

@@ -3,7 +3,7 @@ import LoginFormComponent from './components/LoginFormComponent'
 
 export default function Login() {
   return (
-    <div className='flex flex-col flex-1 bg-gradient-to-b from-transparent via-transparent to-pink-900/20'>
+    <div className='flex flex-col flex-1'>
       <main className='flex flex-1 items-center'>
         <div className='flex flex-[0_0_100%] justify-center'>
           <LoginFormComponent />
