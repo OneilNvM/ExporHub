@@ -11,7 +11,7 @@ export default function Create() {
         </section>
         <section className='hidden flex-1 bg-gradient-to-br from-red-400 via-pink-400 via-indigo-400 to-purple-500 md:flex'>
           <div className='flex flex-col m-4 flex-1 items-center justify-center gap-4'>
-            <span aria-label='Side Gradient' className='text-4xl'>Create, Share, Explore!</span>
+            <span aria-label='Side Gradient' className='text-4xl text-center'>Create, Share, Explore!</span>
             <span className='text-xl text-center'>Get started with a new account to share your inspirations with the world.</span>
           </div>
         </section>
