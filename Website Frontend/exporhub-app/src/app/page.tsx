@@ -11,6 +11,7 @@ export default function Landing() {
         <Link href={"/home"}>Home Page</Link>
         <Link href={"/search"}>Search Page</Link>
         <Link href={"/profile"}>Profile Page</Link>
+        <Link href={"/project"}>Project Page</Link>
         <Link href={"/account"}>Account Page</Link>
         <Link href={"/settings"}>Settings Page</Link>
         <Link href={"/about-us"}>About us Page</Link>

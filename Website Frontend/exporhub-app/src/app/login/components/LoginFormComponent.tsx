@@ -23,7 +23,7 @@ export default function LoginFormComponent() {
                             <input className='border border-[var(--border-color)] px-5 py-2 rounded-3xl max-h-10 bg-transparent' id='password' type="password" />
                         </div>
                         <div className='flex flex-col items-center gap-2'>
-                            <input className='cursor-pointer rounded-3xl px-10 py-1 text-md transition-all hover:shadow-md hover:shadow-pink-900/40 bg-pink-300 hover:bg-pink-600 dark:border-white' type="submit" value="Login" />
+                            <input className='cursor-pointer rounded-3xl px-10 py-1 text-md transition-all hover:shadow-md hover:shadow-pink-900/40 bg-pink-300 hover:bg-pink-600' type="submit" value="Login" />
                             <p>Or</p>
                             <Link href={"/create"}>Create a new account</Link>
                         </div>
