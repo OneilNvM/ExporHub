@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
 import "./globals.css";
+import styles from './style.module.css'
 
 const nunitoSerif = Nunito({
     variable: "--font-nunito-serif",
@@ -20,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`bg-gradient-to-b from-transparent via-transparent to-pink-900/20 ${nunitoSerif.variable} font-serif w-screen h-screen antialiased`}
+        className={`${nunitoSerif.variable} font-serif w-screen h-screen antialiased`}
       >
         {children}
       </body>

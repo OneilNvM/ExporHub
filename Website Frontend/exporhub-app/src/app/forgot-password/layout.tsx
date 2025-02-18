@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function ForgotPasswordLayout({ children }: Readonly<{ children: React.ReactNode }>) {
     return (
-        <div className='size-full flex'>
+        <div className='bg-gradient-to-b from-transparent via-transparent to-pink-900/20 size-full flex'>
             {children}
         </div>
     )

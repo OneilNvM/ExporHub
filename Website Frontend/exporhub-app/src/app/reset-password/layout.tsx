@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function ResetPasswordLayout({ children }: Readonly<{ children: React.ReactNode }>) {
     return (
-        <div className='flex size-full'>
+        <div className='bg-gradient-to-b from-transparent via-transparent to-pink-900/20 flex size-full'>
             {children}
         </div>
     )
