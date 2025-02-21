@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import React from 'react'
 
 export const metadata: Metadata = {
-    title: 'Create Account',
+    title: 'Create Account - ExporHub',
     description: 'Page for creating an account.',
 }
 

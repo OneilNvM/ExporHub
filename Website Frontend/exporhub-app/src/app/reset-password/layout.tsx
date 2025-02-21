@@ -3,7 +3,7 @@ import { Metadata } from 'next'
 import React from 'react'
 
 export const metadata: Metadata = {
-    title: 'Reset Password',
+    title: 'Reset Password - ExporHub',
     description: 'This page is used for resetting the password of a user.'
 }
 

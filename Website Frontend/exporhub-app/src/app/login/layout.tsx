@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import React from "react";
 
 export const metadata: Metadata = {
-    title: "Login To Account",
+    title: "Login To Account - ExporHub",
     description: "Account login page for ExporHub"
 }
 
