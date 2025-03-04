@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function HomeLayout({children}: Readonly<{children: React.ReactNode}>) {
   return (
-    <div className='flex bg-pink-950/10 size-full'>
+    <div className='bg-pink-950/10 size-full'>
         {children}
     </div>
   )

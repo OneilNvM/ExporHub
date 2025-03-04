@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function FooterComponent() {
     return (
-        <footer className='flex gap-24 justify-center items-center m-10 text-pink-950/70'>
+        <footer className='flex row-span-1 gap-24 justify-center items-center m-10 text-pink-950/70'>
             <div>
                 <p>image</p>
             </div>
