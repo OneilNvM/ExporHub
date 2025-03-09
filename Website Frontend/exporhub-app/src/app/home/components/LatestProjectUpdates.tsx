@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function LatestProjectUpdates() {
     return (
-        <aside className='h-[800px] overflow-hidden sticky top-0 rounded-r-3xl p-4 bg-gradient-to-b from-pink-100 to-pink-500 shadow-lg shadow-pink-300'>
+        <aside className='h-[800px] overflow-hidden sticky top-0 rounded-r-3xl p-4 bg-gradient-to-b from-pink-100 to-pink-300 shadow-lg shadow-pink-200 dark:bg-gradient-to-b dark:from-[var(--background)] dark:via-[var(--background)] dark:to-pink-950 dark:shadow-none'>
             <div className='text-2xl font-bold'>Latest Project Updates</div>
             <div className='absolute'>
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque rem, deserunt esse a saepe culpa explicabo! Dolorem dolore minus culpa accusantium aut maxime, provident exercitationem similique. Perferendis tempora eaque dolorum.

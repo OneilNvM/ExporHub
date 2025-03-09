@@ -8,11 +8,26 @@
   --border-color: #0a0a0a;
 }
 
+.active-tab {
+  @apply !bg-pink-400;
+}
+
+.inactive-tab {
+  @apply bg-pink-200;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
     --border-color: #ffffff;
+  }
+  .active-tab {
+    @apply !bg-pink-800;
+  }
+
+  .inactive-tab {
+    @apply bg-pink-950;
   }
 }
 
