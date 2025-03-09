@@ -16,6 +16,14 @@
   @apply bg-pink-200;
 }
 
+.followed {
+  @apply !bg-pink-400
+}
+
+.unfollowed {
+  @apply bg-transparent
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -28,6 +36,14 @@
 
   .inactive-tab {
     @apply bg-pink-950;
+  }
+
+  .followed {
+    @apply !bg-pink-800
+  }
+  
+  .unfollowed {
+    @apply bg-transparent
   }
 }
 

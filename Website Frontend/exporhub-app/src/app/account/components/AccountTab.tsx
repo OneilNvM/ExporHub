@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
 import LogoSVG from '~/public/logo_draft_3.svg'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { UserRound } from 'lucide-react'
 
 export default function AccountTab() {
@@ -30,6 +30,20 @@ export default function AccountTab() {
 }
 
 const ProfileTab = () => {
+    const handleClick = () => {
+        const followBtn = document.getElementById('follow-btn')
+
+        if (followBtn) {
+            if (followBtn.classList.contains("followed")) {
+                followBtn.classList.add("unfollowed")
+                followBtn.classList.remove("followed")
+            } else {
+                followBtn.classList.add("followed")
+                followBtn.classList.remove("unfollowed")
+            }
+        }
+    }
+
     const ProjectItem = () => {
         return (
             <>
@@ -40,6 +54,7 @@ const ProfileTab = () => {
             </>
         )
     }
+
     return (
         <>
             <section className='flex flex-1 w-full flex-col gap-4 my-4 md:ml-10 self-start'>
@@ -54,7 +69,7 @@ const ProfileTab = () => {
                 </div>
                 <div className='ml-4 self-center md:self-start'>
                     <div className='flex relative rounded-md items-center border text-pink-300 border-pink-300 dark:text-pink-950 dark:border-pink-950'>
-                        <button className='px-4 rounded-s-md before:block before:bg-pink-300 before:dark:bg-pink-950 before:absolute before:w-[0.05rem] before:h-6 before:left-14 before:top-0'>
+                        <button onClick={handleClick} id='follow-btn' className='px-4 rounded-s-md before:block before:bg-pink-300 before:dark:bg-pink-950 before:absolute before:w-[0.05rem] before:h-6 before:left-14 before:top-0 transition-colors duration-300 ease-in-out'>
                             <UserRound width={24} height={24} absoluteStrokeWidth={true} />
                         </button>
                         <span className='px-2 text-black dark:text-white'>1000 followers</span>
