@@ -1,1 +1,5 @@
-target
+**/target
+**/.next
+**/certificates
+**/node_modules
+**/next-env.d.ts
