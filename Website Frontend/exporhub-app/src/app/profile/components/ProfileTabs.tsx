@@ -7,7 +7,7 @@ import ProjectsTab from '@/app/components/profile-tabs/ProjectsTab'
 import { useSearchParams } from 'next/navigation'
 import React from 'react'
 
-export default function AccountTab() {
+export default function ProfileTabs() {
     const searchParams = useSearchParams()
 
     switch (searchParams.get('tab')) {

@@ -1,10 +1,9 @@
 import React from 'react'
-import NavBarComponent from '../components/NavBarComponent'
-import FooterComponent from '../components/FooterComponent'
+import NavBarComponent from '../components/general/NavBarComponent'
+import FooterComponent from '../components/general/FooterComponent'
 import LatestProjectUpdates from './components/LatestProjectUpdates'
-import Image from 'next/image'
-import GlobeSVG from '~/public/globe.svg'
 import { ChevronRight } from 'lucide-react'
+import ProjectItem from '../components/project/ProjectItem'
 
 export default function Home() {
   return (
@@ -35,36 +34,6 @@ export default function Home() {
           </div>
       </main>
       <FooterComponent />
-    </div>
-  )
-}
-
-const ProjectItem = () => {
-  return (
-    <div id='project-container' className='flex rounded-2xl max-w-[48rem] border border-pink-200 dark:border-pink-900'>
-      <div id='profile' className='flex  flex-col items-center gap-4 p-3'>
-        <div className='rounded-full self-center'>
-          <Image src={GlobeSVG} width={48} alt='Test Image' />
-        </div>
-        <div className='flex flex-col items-center'>
-          <p className='text-sm'>Followers</p>
-          <p className='text-sm'>1000</p>
-        </div>
-      </div>
-      <div id="meta-data" className='flex flex-col w-full justify-center'>
-        <div className='flex self-stretch px-2 flex-col items-center gap-4 justify-between'>
-          <div className='flex flex-col items-center px-4'>
-            <p className='text-xl'>Project Name</p>
-            <div className='max-w-[24rem] text-gray-600 truncate'>
-              <span className=''>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Odit consectetur molestiae iusto quos, repudiandae sunt minima ut possimus sit aspernatur et iure nemo expedita cum, temporibus odio aut omnis libero!</span>
-            </div>
-          </div>
-          <div className='flex self-stretch justify-between items-center px-4'>
-            <p>Favourite</p>
-            <p>Last Updated</p>
-          </div>
-        </div>
-      </div>
     </div>
   )
 }

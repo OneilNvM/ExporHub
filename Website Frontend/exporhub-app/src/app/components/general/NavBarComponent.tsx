@@ -11,7 +11,7 @@ export default function NavBarComponent() {
   const pathName = usePathname()
   const queryParams = useSearchParams()
 
-  if (pathName == "/account") {
+  if (pathName == "/account" || pathName == "/profile") {
     useEffect(() => {
       const profileTab = document.getElementById('profile-tab');
       const projectsTab = document.getElementById('projects-tab');
@@ -82,22 +82,22 @@ export default function NavBarComponent() {
         </div>
         <div className='flex relative bottom-[1.8rem] text-lg'>
           <div id='profile-tab' className='absolute border-e border-b border-t rounded-e-full z-30 transition-colors duration-500 ease-in-out border-pink-300 bg-pink-200 dark:border-pink-800 dark:bg-pink-950'>
-            <Link href={"/account"} className='px-14'>
+            <Link href={pathName == "/account" ? "/account" : "/profile"} className='px-14'>
               Profile
             </Link>
           </div>
           <div id='projects-tab' className='absolute left-32 border rounded-full z-20 transition-colors duration-500 ease-in-out border-pink-300 bg-pink-200 dark:border-pink-800 dark:bg-pink-950'>
-            <Link href={"/account?tab=projects"} className='px-14'>
+            <Link href={pathName == "/account" ? "/account?tab=projects" : "/profile?tab=projects"} className='px-14'>
               Projects
             </Link>
           </div>
           <div id='favourites-tab' className='absolute left-[16.5rem] border rounded-full z-10 transition-colors duration-500 ease-in-out border-pink-300 bg-pink-200 dark:border-pink-800 dark:bg-pink-950'>
-            <Link href={"/account?tab=favourites"} className='px-14'>
+            <Link href={pathName == "/account" ? "/account?tab=favourites" : "/profile?tab=favourites"} className='px-14'>
               Favourites
             </Link>
           </div>
           <div id='following-tab' className='absolute left-[26rem] border rounded-full z-0 transition-colors duration-500 ease-in-out border-pink-300 bg-pink-200 dark:border-pink-800 dark:bg-pink-950'>
-            <Link href={"/account?tab=following"} className='px-14'>
+            <Link href={pathName == "/account" ? "/account?tab=following" : "/profile?tab=following"} className='px-14'>
               Following
             </Link>
           </div>

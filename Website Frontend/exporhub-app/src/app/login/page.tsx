@@ -1,6 +1,6 @@
 import React from 'react'
 import LoginFormComponent from './components/LoginFormComponent'
-import FooterComponent from '../components/FooterComponent'
+import FooterComponent from '../components/general/FooterComponent'
 
 export default function Login() {
   return (
