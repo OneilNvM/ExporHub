@@ -5,7 +5,7 @@ import GlobeSVG from '~/public/globe.svg'
 
 export default function ProjectItem() {
     return (
-        <div className='flex w-full rounded-2xl max-w-[48rem] border border-pink-200 dark:border-pink-900'>
+        <div className='flex w-full rounded-2xl max-w-[52rem] border border-pink-200 dark:border-pink-900'>
             <div className='flex flex-col items-center gap-4 p-3'>
                 <div className='rounded-full self-center'>
                     <Image src={GlobeSVG} width={48} alt='Test Image' />
