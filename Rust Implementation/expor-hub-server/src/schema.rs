@@ -58,8 +58,8 @@ diesel::table! {
         image_id -> Integer,
         #[max_length = 255]
         file_name -> Varchar,
-        user_id -> Integer,
-        project_id -> Integer,
+        user_id -> Nullable<Integer>,
+        project_id -> Nullable<Integer>,
         date_uploaded -> Datetime,
     }
 }

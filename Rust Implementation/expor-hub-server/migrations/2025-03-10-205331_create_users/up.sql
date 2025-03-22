@@ -1,6 +1,6 @@
 -- Your SQL goes here
 CREATE TABLE IF NOT EXISTS users (
-    user_id         INT(10) PRIMARY KEY,
+    user_id         INT(10) PRIMARY KEY AUTO_INCREMENT,
     username        VARCHAR(50) NOT NULL,
     email           VARCHAR(128) NOT NULL,
     password        VARCHAR(255) NOT NULL,
