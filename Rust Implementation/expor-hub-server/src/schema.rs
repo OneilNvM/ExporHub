@@ -128,6 +128,8 @@ diesel::table! {
         email -> Varchar,
         #[max_length = 255]
         password -> Varchar,
+        #[max_length = 4000]
+        bio -> Nullable<Varchar>,
         #[max_length = 255]
         profile_img -> Nullable<Varchar>,
         followers -> Integer,

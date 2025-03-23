@@ -6,5 +6,6 @@ CREATE TABLE IF NOT EXISTS projects (
     favourites      INT(10) NOT NULL DEFAULT 0,
     user_id         INT(10) NOT NULL REFERENCES users(user_id),
     date_created    DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
-    date_updated    DATETIME(6)
+    date_updated    DATETIME(6),
+    FULLTEXT projects_idx    (name, description)
 );

@@ -1,2 +1,2 @@
-pub mod actions;
+pub mod db_actions;
 pub mod models;
