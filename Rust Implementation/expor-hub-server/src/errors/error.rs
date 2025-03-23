@@ -29,3 +29,27 @@ pub enum ProjectCreationError {
     #[error("an error occurred during the database transaction: {0}")]
     DatabaseError(diesel::result::Error),
 }
+
+#[derive(Error, Debug)]
+pub enum CommentCreationError {
+    #[error("the comment must have at least 1 character")]
+    EmptyComment,
+    #[error("an error occurred during the database transaction: {0}")]
+    DatabaseError(diesel::result::Error),
+}
+
+#[derive(Error, Debug)]
+pub enum ReplyCreationError {
+    #[error("the reply must have at least 1 character")]
+    EmptyReply,
+    #[error("an error occurred during the database transaction: {0}")]
+    DatabaseError(diesel::result::Error),
+}
+
+#[derive(Error, Debug)]
+pub enum DeleteError {
+    #[error("zero rows were deleted")]
+    ZeroRowsDeleted,
+    #[error("an error occurred during the database transaction: {0}")]
+    DatabaseError(diesel::result::Error)
+}
