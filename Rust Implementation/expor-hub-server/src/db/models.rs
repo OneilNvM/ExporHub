@@ -1,9 +1,9 @@
-use chrono::{NaiveDate, NaiveDateTime};
-use diesel::prelude::*;
 use crate::schema::*;
+use chrono::{NaiveDate, NaiveDateTime};
 use diesel::mysql::Mysql;
+use diesel::prelude::*;
 
-#[derive(Queryable, Selectable)]
+#[derive(Queryable, Selectable, Debug)]
 #[diesel(table_name = users)]
 #[diesel(check_for_backend(Mysql))]
 pub struct User {
@@ -37,7 +37,7 @@ pub struct Project {
     pub favourites: i32,
     pub user_id: i32,
     pub date_created: NaiveDateTime,
-    pub date_updated: Option<NaiveDateTime>
+    pub date_updated: Option<NaiveDateTime>,
 }
 
 #[derive(Insertable)]
@@ -60,7 +60,7 @@ pub struct Image {
     pub file_name: String,
     pub user_id: Option<i32>,
     pub project_id: Option<i32>,
-    pub date_uploaded: NaiveDateTime
+    pub date_uploaded: NaiveDateTime,
 }
 
 #[derive(Insertable)]
@@ -68,7 +68,7 @@ pub struct Image {
 pub struct NewUserImage<'a> {
     pub file_name: &'a str,
     pub user_id: i32,
-    pub date_uploaded: NaiveDateTime
+    pub date_uploaded: NaiveDateTime,
 }
 
 #[derive(Insertable)]
@@ -77,7 +77,7 @@ pub struct NewProjectImage<'a> {
     pub file_name: &'a str,
     pub user_id: i32,
     pub project_id: i32,
-    pub date_uploaded: NaiveDateTime
+    pub date_uploaded: NaiveDateTime,
 }
 
 #[derive(Queryable, Selectable, Associations)]
@@ -89,7 +89,7 @@ pub struct Favourite {
     pub favourite_id: i32,
     pub user_id: i32,
     pub project_id: i32,
-    pub date_favourited: NaiveDateTime
+    pub date_favourited: NaiveDateTime,
 }
 
 #[derive(Insertable)]
@@ -97,7 +97,7 @@ pub struct Favourite {
 pub struct NewFavourite {
     pub user_id: i32,
     pub project_id: i32,
-    pub date_favourited: NaiveDateTime
+    pub date_favourited: NaiveDateTime,
 }
 
 #[derive(Queryable, Selectable, Associations)]
@@ -108,7 +108,7 @@ pub struct Follow {
     pub follow_id: i32,
     pub follower: i32,
     pub following: i32,
-    pub date_followed: NaiveDateTime
+    pub date_followed: NaiveDateTime,
 }
 
 #[derive(Insertable)]
@@ -116,7 +116,7 @@ pub struct Follow {
 pub struct NewFollow {
     pub follower: i32,
     pub following: i32,
-    pub date_followed: NaiveDateTime
+    pub date_followed: NaiveDateTime,
 }
 
 #[derive(Queryable, Selectable, Associations)]
@@ -130,7 +130,17 @@ pub struct Comment {
     pub date: NaiveDate,
     pub user_id: i32,
     pub project_id: i32,
-    pub replies: i32
+    pub replies: i32,
+}
+
+#[derive(Insertable)]
+#[diesel(table_name = comments)]
+pub struct NewComment<'a> {
+    pub text: &'a str,
+    pub date: NaiveDate,
+    pub user_id: i32,
+    pub project_id: i32,
+    pub replies: i32,
 }
 
 #[derive(Queryable, Selectable, Associations)]
@@ -141,7 +151,15 @@ pub struct Reply {
     pub reply_id: i32,
     pub text: String,
     pub date: NaiveDate,
-    pub user_id: i32
+    pub user_id: i32,
+}
+
+#[derive(Insertable)]
+#[diesel(table_name = replies)]
+pub struct NewReply<'a> {
+    pub text: &'a str,
+    pub date: NaiveDate,
+    pub user_id: i32,
 }
 
 #[derive(Queryable, Selectable, Associations)]
@@ -152,7 +170,14 @@ pub struct Reply {
 pub struct Thread {
     pub thread_id: i32,
     pub comment_id: i32,
-    pub reply_id: i32
+    pub reply_id: i32,
+}
+
+#[derive(Insertable)]
+#[diesel(table_name = threads)]
+pub struct NewThread {
+    pub comment_id: i32,
+    pub reply_id: i32,
 }
 
 #[derive(Queryable, Selectable)]
@@ -160,7 +185,13 @@ pub struct Thread {
 #[diesel(check_for_backend(Mysql))]
 pub struct Like {
     pub like_id: i32,
-    pub date_liked: NaiveDate
+    pub date_liked: NaiveDate,
+}
+
+#[derive(Insertable)]
+#[diesel(table_name = likes)]
+pub struct NewLike {
+    pub date_liked: NaiveDate,
 }
 
 #[derive(Queryable, Selectable)]
@@ -168,5 +199,83 @@ pub struct Like {
 #[diesel(check_for_backend(Mysql))]
 pub struct Dislike {
     pub dislike_id: i32,
-    pub date_disliked: NaiveDate
+    pub date_disliked: NaiveDate,
+}
+
+#[derive(Insertable)]
+#[diesel(table_name = dislikes)]
+pub struct NewDislike {
+    pub date_disliked: NaiveDate,
+}
+
+#[derive(Queryable, Selectable, Associations)]
+#[diesel(table_name = comment_likes)]
+#[diesel(belongs_to(Comment))]
+#[diesel(belongs_to(Like))]
+#[diesel(check_for_backend(Mysql))]
+pub struct CommentLike {
+    pub id: i32,
+    pub comment_id: i32,
+    pub like_id: i32,
+}
+
+#[derive(Insertable)]
+#[diesel(table_name = comment_likes)]
+pub struct NewCommentLike {
+    pub comment_id: i32,
+    pub like_id: i32,
+}
+
+#[derive(Queryable, Selectable, Associations)]
+#[diesel(table_name = comment_dislikes)]
+#[diesel(belongs_to(Comment))]
+#[diesel(belongs_to(Dislike))]
+#[diesel(check_for_backend(Mysql))]
+pub struct CommentDislike {
+    pub id: i32,
+    pub comment_id: i32,
+    pub dislike_id: i32,
+}
+
+#[derive(Insertable)]
+#[diesel(table_name = comment_dislikes)]
+pub struct NewCommentDislike {
+    pub comment_id: i32,
+    pub dislike_id: i32,
+}
+
+#[derive(Queryable, Selectable, Associations)]
+#[diesel(table_name = reply_likes)]
+#[diesel(belongs_to(Reply))]
+#[diesel(belongs_to(Like))]
+#[diesel(check_for_backend(Mysql))]
+pub struct ReplyLike {
+    pub id: i32,
+    pub reply_id: i32,
+    pub like_id: i32,
+}
+
+#[derive(Insertable)]
+#[diesel(table_name = reply_likes)]
+pub struct NewReplyLike {
+    pub reply_id: i32,
+    pub like_id: i32,
+}
+
+#[derive(Queryable, Selectable, Associations)]
+#[diesel(table_name = reply_dislikes)]
+#[diesel(belongs_to(Reply))]
+#[diesel(belongs_to(Dislike))]
+#[diesel(check_for_backend(Mysql))]
+pub struct ReplyDislike {
+    pub id: i32,
+    pub reply_id: i32,
+    pub dislike_id: i32,
+}
+
+#[derive(Insertable)]
+#[diesel(table_name = reply_dislikes)]
+pub struct NewReplyDislike {
+    pub reply_id: i32,
+    pub dislike_id: i32,
 }
