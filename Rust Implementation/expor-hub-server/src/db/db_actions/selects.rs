@@ -5,7 +5,7 @@ pub fn find_user_by_id(conn: &mut MysqlConnection, in_id: i32) -> Result<User, a
     use crate::schema::users::dsl::*;
 
     let results = users
-        .filter(user_id.eq(in_id))
+        .find(in_id)
         .select(User::as_select())
         .get_result(conn);
 
@@ -47,8 +47,8 @@ pub fn find_project_by_id(conn: &mut MysqlConnection, in_id: i32) -> Result<Proj
     use crate::schema::projects::dsl::*;
 
     let project = projects
+        .find(in_id)
         .select(Project::as_select())
-        .filter(project_id.eq(in_id))
         .get_result(conn);
 
     match project {

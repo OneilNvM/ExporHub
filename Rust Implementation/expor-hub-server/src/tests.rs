@@ -367,58 +367,327 @@ fn should_delete_image_by_file_name() {
 }
 
 #[test]
-fn should_delete_favourite() {
+#[should_panic]
+fn should_delete_favourite_by_id() {
+    use crate::db::db_actions::deletes::delete_favourite_by_id;
 
+    let mut conn = establish_connection();
+
+    let result = delete_favourite_by_id(&mut conn, 0);
+
+    if let Err(error) = &result {
+        eprintln!("Error: {error}")
+    } else {
+        println!("Number of rows deleted: {}", result.as_ref().unwrap())
+    }
+
+    assert!(result.is_ok())
 }
 
 #[test]
-fn should_delete_follow() {
+#[should_panic]
+fn should_delete_favourite_by_ids() {
+    use crate::db::db_actions::deletes::delete_favourite_by_ids;
 
+    let mut conn = establish_connection();
+
+    let result = delete_favourite_by_ids(&mut conn, 0, 0);
+
+    if let Err(error) = &result {
+        eprintln!("Error: {error}")
+    } else {
+        println!("Number of rows deleted: {}", result.as_ref().unwrap())
+    }
+
+    assert!(result.is_ok())
 }
 
 #[test]
-fn should_delete_comment() {
+#[should_panic]
+fn should_delete_follow_by_id() {
+    use crate::db::db_actions::deletes::delete_follow_by_id;
 
+    let mut conn = establish_connection();
+
+    let result = delete_follow_by_id(&mut conn, 0);
+
+    if let Err(error) = &result {
+        eprintln!("Error: {error}")
+    } else {
+        println!("Number of rows deleted: {}", result.as_ref().unwrap())
+    }
+
+    assert!(result.is_ok())
 }
 
 #[test]
-fn should_delete_reply() {
+#[should_panic]
+fn should_delete_follow_by_ids() {
+    use crate::db::db_actions::deletes::delete_follow_by_ids;
 
+    let mut conn = establish_connection();
+
+    let result = delete_follow_by_ids(&mut conn, 0, 0);
+
+    if let Err(error) = &result {
+        eprintln!("Error: {error}")
+    } else {
+        println!("Number of rows deleted: {}", result.as_ref().unwrap())
+    }
+
+    assert!(result.is_ok())
 }
 
 #[test]
-fn should_delete_thread() {
+#[should_panic]
+fn should_delete_comment_by_id() {
+    use crate::db::db_actions::deletes::delete_comment_by_id;
 
+    let mut conn = establish_connection();
+
+    let result = delete_comment_by_id(&mut conn, 0);
+
+    if let Err(error) = &result {
+        eprintln!("Error: {error}")
+    } else {
+        println!("Number of rows deleted: {}", result.as_ref().unwrap())
+    }
+
+    assert!(result.is_ok())
 }
 
 #[test]
-fn should_delete_like() {
+#[should_panic]
+fn should_delete_reply_by_id() {
+    use crate::db::db_actions::deletes::delete_reply_by_id;
 
+    let mut conn = establish_connection();
+
+    let result = delete_reply_by_id(&mut conn, 0);
+
+    if let Err(error) = &result {
+        eprintln!("Error: {error}")
+    } else {
+        println!("Number of rows deleted: {}", result.as_ref().unwrap())
+    }
+
+    assert!(result.is_ok())
 }
 
 #[test]
-fn should_delete_dislike() {
+#[should_panic]
+fn should_delete_thread_by_id() {
+    use crate::db::db_actions::deletes::delete_thread_by_id;
 
+    let mut conn = establish_connection();
+
+    let result = delete_thread_by_id(&mut conn, 0);
+
+    if let Err(error) = &result {
+        eprintln!("Error: {error}")
+    } else {
+        println!("Number of rows deleted: {}", result.as_ref().unwrap())
+    }
+
+    assert!(result.is_ok())
 }
 
 #[test]
-fn should_delete_comment_like() {
+#[should_panic]
+fn should_delete_thread_by_ids() {
+    use crate::db::db_actions::deletes::delete_thread_by_ids;
 
+    let mut conn = establish_connection();
+
+    let result = delete_thread_by_ids(&mut conn, 0, 0);
+
+    if let Err(error) = &result {
+        eprintln!("Error: {error}")
+    } else {
+        println!("Number of rows deleted: {}", result.as_ref().unwrap())
+    }
+
+    assert!(result.is_ok())
 }
 
 #[test]
-fn should_delete_comment_dislike() {
+#[should_panic]
+fn should_delete_like_by_id() {
+    use crate::db::db_actions::deletes::delete_like_by_id;
 
+    let mut conn = establish_connection();
+
+    let result = delete_like_by_id(&mut conn, 0);
+
+    if let Err(error) = &result {
+        eprintln!("Error: {error}")
+    } else {
+        println!("Number of rows deleted: {}", result.as_ref().unwrap())
+    }
+
+    assert!(result.is_ok())
 }
 
 #[test]
-fn should_delete_reply_like() {
+#[should_panic]
+fn should_delete_dislike_by_id() {
+    use crate::db::db_actions::deletes::delete_dislike_by_id;
 
+    let mut conn = establish_connection();
+
+    let result = delete_dislike_by_id(&mut conn, 0);
+
+    if let Err(error) = &result {
+        eprintln!("Error: {error}")
+    } else {
+        println!("Number of rows deleted: {}", result.as_ref().unwrap())
+    }
+
+    assert!(result.is_ok())
 }
 
 #[test]
-fn should_delete_reply_dislike() {
+#[should_panic]
+fn should_delete_comment_like_by_id() {
+    use crate::db::db_actions::deletes::delete_comment_like_by_id;
 
+    let mut conn = establish_connection();
+
+    let result = delete_comment_like_by_id(&mut conn, 0);
+
+    if let Err(error) = &result {
+        eprintln!("Error: {error}")
+    } else {
+        println!("Number of rows deleted: {}", result.as_ref().unwrap())
+    }
+
+    assert!(result.is_ok())
+}
+
+#[test]
+#[should_panic]
+fn should_delete_comment_like_by_ids() {
+    use crate::db::db_actions::deletes::delete_comment_like_by_ids;
+
+    let mut conn = establish_connection();
+
+    let result = delete_comment_like_by_ids(&mut conn, 0, 0);
+
+    if let Err(error) = &result {
+        eprintln!("Error: {error}")
+    } else {
+        println!("Number of rows deleted: {}", result.as_ref().unwrap())
+    }
+
+    assert!(result.is_ok())
+}
+
+#[test]
+#[should_panic]
+fn should_delete_comment_dislike_by_id() {
+    use crate::db::db_actions::deletes::delete_comment_dislike_by_id;
+
+    let mut conn = establish_connection();
+
+    let result = delete_comment_dislike_by_id(&mut conn, 0);
+
+    if let Err(error) = &result {
+        eprintln!("Error: {error}")
+    } else {
+        println!("Number of rows deleted: {}", result.as_ref().unwrap())
+    }
+
+    assert!(result.is_ok())
+}
+
+#[test]
+#[should_panic]
+fn should_delete_comment_dislike_by_ids() {
+    use crate::db::db_actions::deletes::delete_comment_dislike_by_ids;
+
+    let mut conn = establish_connection();
+
+    let result = delete_comment_dislike_by_ids(&mut conn, 0, 0);
+
+    if let Err(error) = &result {
+        eprintln!("Error: {error}")
+    } else {
+        println!("Number of rows deleted: {}", result.as_ref().unwrap())
+    }
+
+    assert!(result.is_ok())
+}
+
+#[test]
+#[should_panic]
+fn should_delete_reply_like_by_id() {
+    use crate::db::db_actions::deletes::delete_reply_like_by_id;
+
+    let mut conn = establish_connection();
+
+    let result = delete_reply_like_by_id(&mut conn, 0);
+
+    if let Err(error) = &result {
+        eprintln!("Error: {error}")
+    } else {
+        println!("Number of rows deleted: {}", result.as_ref().unwrap())
+    }
+
+    assert!(result.is_ok())
+}
+
+#[test]
+#[should_panic]
+fn should_delete_reply_like_by_ids() {
+    use crate::db::db_actions::deletes::delete_reply_like_by_ids;
+
+    let mut conn = establish_connection();
+
+    let result = delete_reply_like_by_ids(&mut conn, 0, 0);
+
+    if let Err(error) = &result {
+        eprintln!("Error: {error}")
+    } else {
+        println!("Number of rows deleted: {}", result.as_ref().unwrap())
+    }
+
+    assert!(result.is_ok())
+}
+
+#[test]
+#[should_panic]
+fn should_delete_reply_dislike_by_id() {
+    use crate::db::db_actions::deletes::delete_reply_dislike_by_id;
+
+    let mut conn = establish_connection();
+
+    let result = delete_reply_dislike_by_id(&mut conn, 0);
+
+    if let Err(error) = &result {
+        eprintln!("Error: {error}")
+    } else {
+        println!("Number of rows deleted: {}", result.as_ref().unwrap())
+    }
+
+    assert!(result.is_ok())
+}
+
+#[test]
+#[should_panic]
+fn should_delete_reply_dislike_by_ids() {
+    use crate::db::db_actions::deletes::delete_reply_dislike_by_ids;
+
+    let mut conn = establish_connection();
+
+    let result = delete_reply_dislike_by_ids(&mut conn, 0, 0);
+
+    if let Err(error) = &result {
+        eprintln!("Error: {error}")
+    } else {
+        println!("Number of rows deleted: {}", result.as_ref().unwrap())
+    }
+
+    assert!(result.is_ok())
 }
 
 // Unit Tests for Selects
@@ -510,5 +779,27 @@ fn should_not_return_project_by_name() {
 }
 
 // Unit Tests for Updates
+
+#[test]
+fn should_update_user() {
+    use crate::db::db_actions::updates::update_user;
+    use std::collections::HashMap;
+
+    let conn = &mut establish_connection();
+
+    let mut values: HashMap<&str, Option<&str>> = HashMap::new();
+
+    values.insert("username", Some("OneilNvM"));
+
+    let user = update_user(conn, 1, values);
+
+    if let Err(error) = &user {
+        eprintln!("Error: {error}")
+    } else {
+        println!("{user:#?}")
+    }
+
+    assert!(user.is_ok() && user.unwrap().is_some())
+}
 
 // Unit Tests for REST API Routes
