@@ -8,13 +8,8 @@ async fn main() -> Result<(), std::io::Error> {
 
     println!("Server running at http://exporhub.com:9000");
 
-    HttpServer::new(move || {
-        App::new()
-            .service(index)
-    })
-    .bind(("exporhub.com", 9000))?
-    .run()
-    .await
+    HttpServer::new(move || App::new().service(index))
+        .bind(("exporhub.com", 9000))?
+        .run()
+        .await
 }
-
-

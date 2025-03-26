@@ -802,4 +802,29 @@ fn should_update_user() {
     assert!(user.is_ok() && user.unwrap().is_some())
 }
 
+#[test]
+fn should_update_project() {
+    use crate::db::db_actions::updates::update_project;
+    use chrono::{Local, NaiveDateTime};
+    use std::collections::HashMap;
+
+    let conn = &mut establish_connection();
+
+    let mut values: HashMap<&str, Option<&str>> = HashMap::new();
+    let new_date_time =
+        NaiveDateTime::new(Local::now().date_naive(), Local::now().time()).to_string();
+
+    values.insert("date_updated", Some(&new_date_time));
+
+    let project = update_project(conn, 1, values);
+
+    if let Err(error) = &project {
+        eprintln!("Error: {error}")
+    } else {
+        println!("{project:#?}")
+    }
+
+    assert!(project.is_ok() && project.unwrap().is_some())
+}
+
 // Unit Tests for REST API Routes

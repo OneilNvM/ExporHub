@@ -1,6 +1,6 @@
-pub mod routes;
 pub mod db;
-pub mod schema;
 pub mod errors;
+pub mod routes;
+pub mod schema;
 #[cfg(test)]
 mod tests;

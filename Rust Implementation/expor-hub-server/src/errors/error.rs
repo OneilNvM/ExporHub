@@ -51,5 +51,13 @@ pub enum DeleteError {
     #[error("zero rows were deleted")]
     ZeroRowsDeleted,
     #[error("an error occurred during the database transaction: {0}")]
-    DatabaseError(diesel::result::Error)
+    DatabaseError(diesel::result::Error),
+}
+
+#[derive(Error, Debug)]
+pub enum UpdateError {
+    #[error("there was an error when parsing the date: {0}")]
+    DateParseError(String),
+    #[error("an error occurred during the database transaction: {0}")]
+    DatabaseError(diesel::result::Error),
 }

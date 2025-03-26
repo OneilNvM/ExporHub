@@ -1,8 +1,10 @@
+use crate::db::models::*;
+use crate::errors::error::{
+    AccountCreationError, CommentCreationError, ProjectCreationError, ReplyCreationError,
+};
 use chrono::Local;
 use diesel::prelude::*;
 use sha2::{Digest, Sha256};
-use crate::db::models::*;
-use crate::errors::error::{AccountCreationError, CommentCreationError, ProjectCreationError, ReplyCreationError};
 
 pub fn insert_user(
     conn: &mut MysqlConnection,
@@ -13,14 +15,12 @@ pub fn insert_user(
     use crate::schema::users;
     use AccountCreationError::*;
 
-    if in_username.len() < 3 {
-        return Err(InvalidUsername(in_username.to_owned()));
-    } else if in_username.contains("@") {
-        return Err(InvalidUsername(in_username.to_owned()));
+    if in_username.len() < 3 || in_username.contains("@") {
+        Err(InvalidUsername(in_username.to_owned()))
     } else if !in_email.contains("@") {
-        return Err(InvalidEmail(in_email.to_owned()));
+        Err(InvalidEmail(in_email.to_owned()))
     } else if in_password.len() < 8 {
-        return Err(InvalidPassword);
+        Err(InvalidPassword)
     } else {
         let mut hasher = Sha256::new();
         hasher.update(in_password.as_bytes());
@@ -59,9 +59,9 @@ pub fn insert_project(
     use ProjectCreationError::*;
 
     if in_name.len() < 3 {
-        return Err(InvalidProjectName(in_name.to_owned()));
+        Err(InvalidProjectName(in_name.to_owned()))
     } else if in_description.len() < 3 {
-        return Err(InvalidDescription(in_description.to_owned()));
+        Err(InvalidDescription(in_description.to_owned()))
     } else {
         let new_project = NewProject::new(in_name, in_description, in_user_id);
 
@@ -203,7 +203,7 @@ pub fn insert_comment(
     use CommentCreationError::*;
 
     if in_text.is_empty() {
-        return Err(EmptyComment)
+        Err(EmptyComment)
     } else {
         let new_comment = NewComment::new(in_text, in_user_id, in_project_id);
 
@@ -235,7 +235,7 @@ pub fn insert_reply(
     use ReplyCreationError::*;
 
     if in_text.is_empty() {
-        return Err(EmptyReply)
+        Err(EmptyReply)
     } else {
         let new_reply = NewReply::new(in_text, in_user_id);
 
@@ -289,7 +289,7 @@ pub fn insert_like(conn: &mut MysqlConnection) -> Result<Option<Like>, anyhow::E
     use crate::schema::likes;
 
     let new_like = NewLike {
-        date_liked: Local::now().date_naive()
+        date_liked: Local::now().date_naive(),
     };
 
     let like = conn.transaction(|conn| {
@@ -314,7 +314,7 @@ pub fn insert_dislike(conn: &mut MysqlConnection) -> Result<Option<Dislike>, any
     use crate::schema::dislikes;
 
     let new_dislike = NewDislike {
-        date_disliked: Local::now().date_naive()
+        date_disliked: Local::now().date_naive(),
     };
 
     let dislike = conn.transaction(|conn| {
@@ -344,7 +344,7 @@ pub fn insert_comment_like(
 
     let new_comment_like = NewCommentLike {
         comment_id: in_comment_id,
-        like_id: in_like_id
+        like_id: in_like_id,
     };
 
     let comment_like = conn.transaction(|conn| {
@@ -352,7 +352,7 @@ pub fn insert_comment_like(
             .values(&new_comment_like)
             .execute(conn)?;
 
-            comment_likes::table
+        comment_likes::table
             .order(comment_likes::id.desc())
             .select(CommentLike::as_select())
             .first(conn)
@@ -374,7 +374,7 @@ pub fn insert_comment_dislike(
 
     let new_comment_dislike = NewCommentDislike {
         comment_id: in_comment_id,
-        dislike_id: in_dislike_id
+        dislike_id: in_dislike_id,
     };
 
     let comment_dislike = conn.transaction(|conn| {
@@ -382,7 +382,7 @@ pub fn insert_comment_dislike(
             .values(&new_comment_dislike)
             .execute(conn)?;
 
-            comment_dislikes::table
+        comment_dislikes::table
             .order(comment_dislikes::id.desc())
             .select(CommentDislike::as_select())
             .first(conn)
@@ -404,7 +404,7 @@ pub fn insert_reply_like(
 
     let new_reply_like = NewReplyLike {
         reply_id: in_reply_id,
-        like_id: in_like_id
+        like_id: in_like_id,
     };
 
     let reply_like = conn.transaction(|conn| {
@@ -412,7 +412,7 @@ pub fn insert_reply_like(
             .values(&new_reply_like)
             .execute(conn)?;
 
-            reply_likes::table
+        reply_likes::table
             .order(reply_likes::id.desc())
             .select(ReplyLike::as_select())
             .first(conn)
@@ -434,7 +434,7 @@ pub fn insert_reply_dislike(
 
     let new_reply_dislike = NewReplyDislike {
         reply_id: in_reply_id,
-        dislike_id: in_dislike_id
+        dislike_id: in_dislike_id,
     };
 
     let reply_dislike = conn.transaction(|conn| {
@@ -442,7 +442,7 @@ pub fn insert_reply_dislike(
             .values(&new_reply_dislike)
             .execute(conn)?;
 
-            reply_dislikes::table
+        reply_dislikes::table
             .order(reply_dislikes::id.desc())
             .select(ReplyDislike::as_select())
             .first(conn)

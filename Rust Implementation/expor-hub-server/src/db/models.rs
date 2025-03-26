@@ -34,7 +34,7 @@ impl<'a> NewUser<'a> {
             email,
             password,
             followers: 0,
-            date_created: NaiveDateTime::new(Local::now().date_naive(), Local::now().time())
+            date_created: NaiveDateTime::new(Local::now().date_naive(), Local::now().time()),
         }
     }
 }
@@ -70,7 +70,7 @@ impl<'a> NewProject<'a> {
             description,
             favourites: 0,
             user_id,
-            date_created: NaiveDateTime::new(Local::now().date_naive(), Local::now().time())
+            date_created: NaiveDateTime::new(Local::now().date_naive(), Local::now().time()),
         }
     }
 }
@@ -101,7 +101,7 @@ impl<'a> NewUserImage<'a> {
         Self {
             file_name,
             user_id,
-            date_uploaded: NaiveDateTime::new(Local::now().date_naive(), Local::now().time())
+            date_uploaded: NaiveDateTime::new(Local::now().date_naive(), Local::now().time()),
         }
     }
 }
@@ -121,7 +121,7 @@ impl<'a> NewProjectImage<'a> {
             file_name,
             user_id,
             project_id,
-            date_uploaded: NaiveDateTime::new(Local::now().date_naive(), Local::now().time())
+            date_uploaded: NaiveDateTime::new(Local::now().date_naive(), Local::now().time()),
         }
     }
 }
@@ -151,7 +151,7 @@ impl NewFavourite {
         Self {
             user_id,
             project_id,
-            date_favourited: NaiveDateTime::new(Local::now().date_naive(), Local::now().time())
+            date_favourited: NaiveDateTime::new(Local::now().date_naive(), Local::now().time()),
         }
     }
 }
@@ -180,7 +180,7 @@ impl NewFollow {
         Self {
             follower,
             following,
-            date_followed: NaiveDateTime::new(Local::now().date_naive(), Local::now().time())
+            date_followed: NaiveDateTime::new(Local::now().date_naive(), Local::now().time()),
         }
     }
 }
@@ -216,7 +216,7 @@ impl<'a> NewComment<'a> {
             date: Local::now().date_naive(),
             user_id,
             project_id,
-            replies: 0
+            replies: 0,
         }
     }
 }
