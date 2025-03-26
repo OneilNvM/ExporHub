@@ -1,0 +1,5 @@
+{
+    "rust-analyzer.linkedProjects": [
+        "Rust Implementation\\expor-hub-server\\Cargo.toml"
+    ]
+}
