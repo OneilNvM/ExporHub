@@ -13,14 +13,6 @@ pub enum AccountCreationError {
 }
 
 #[derive(Error, Debug)]
-pub enum LoginError {
-    #[error("invalid login credentials provided")]
-    InvalidCredentials,
-    #[error("an error occurred during the database transaction: {0}")]
-    DatabaseError(diesel::result::Error),
-}
-
-#[derive(Error, Debug)]
 pub enum ProjectCreationError {
     #[error("the project name '{0}' is not long enough")]
     InvalidProjectName(String),
@@ -59,5 +51,13 @@ pub enum UpdateError {
     #[error("there was an error when parsing the date: {0}")]
     DateParseError(String),
     #[error("an error occurred during the database transaction: {0}")]
+    DatabaseError(diesel::result::Error),
+}
+
+#[derive(Error, Debug)]
+pub enum LoginError {
+    #[error("Invalid login credentials provided")]
+    InvalidCredentials,
+    #[error("An error occurred during the database transaction: {0}")]
     DatabaseError(diesel::result::Error),
 }

@@ -93,7 +93,8 @@ pub fn update_project(
                 }
                 "date_updated" => {
                     let date =
-                        NaiveDateTime::parse_from_str(value.unwrap(), "%Y-%m-%d %H:%M:%S%.6f").unwrap_or_default();
+                        NaiveDateTime::parse_from_str(value.unwrap(), "%Y-%m-%d %H:%M:%S%.6f")
+                            .unwrap_or_default();
 
                     if date == NaiveDateTime::default() {
                         println!("{:?}", value.unwrap());

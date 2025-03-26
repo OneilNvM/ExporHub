@@ -1,0 +1,129 @@
+use actix_web::{
+    error,
+    http::header::{
+        ACCESS_CONTROL_ALLOW_HEADERS, ACCESS_CONTROL_ALLOW_METHODS, ACCESS_CONTROL_ALLOW_ORIGIN,
+    },
+    options, post, web, HttpResponse, Responder, Result,
+};
+use serde::{Deserialize, Serialize};
+use sha2::{Digest, Sha256};
+
+use crate::{
+    db::db_actions::{
+        connection::establish_connection,
+        selects::{find_user_by_email, find_user_by_username},
+    },
+    errors::error::LoginError,
+    DbPool,
+};
+
+#[derive(Deserialize)]
+struct UserCredentials {
+    username_or_email: String,
+    password: String,
+}
+
+#[derive(Serialize)]
+struct LoginResponse {
+    code: u8,
+    message: String,
+}
+
+#[post("/login")]
+pub async fn login(
+    pool: web::Data<DbPool>,
+    credentials: web::Json<UserCredentials>,
+) -> Result<HttpResponse> {
+    let credentials = credentials.into_inner();
+
+    if credentials.username_or_email.contains("@") {
+        let user = web::block(move || {
+            let conn = &mut pool.get()?;
+
+            find_user_by_email(conn, &credentials.username_or_email)
+        })
+        .await?
+        .map_err(error::ErrorInternalServerError);
+
+        match user {
+            Ok(user) => {
+                let mut hasher = Sha256::new();
+                hasher.update(credentials.password.as_bytes());
+                let result = hasher.finalize();
+
+                let hex = hex::encode(result);
+
+                if hex == user.password {
+                    Ok(HttpResponse::Ok()
+                        .insert_header((ACCESS_CONTROL_ALLOW_ORIGIN, "https://exporhub.com:3000"))
+                        .json(LoginResponse {
+                            code: 0,
+                            message: String::from("Successful login"),
+                        }))
+                } else {
+                    Ok(HttpResponse::InternalServerError()
+                        .insert_header((ACCESS_CONTROL_ALLOW_ORIGIN, "https://exporhub.com:3000"))
+                        .json(LoginResponse {
+                            code: 1,
+                            message: LoginError::InvalidCredentials.to_string(),
+                        }))
+                }
+            }
+            Err(error) => Ok(HttpResponse::InternalServerError()
+                .insert_header((ACCESS_CONTROL_ALLOW_ORIGIN, "https://exporhub.com:3000"))
+                .json(LoginResponse {
+                    code: 2,
+                    message: error.to_string(),
+                })),
+        }
+    } else {
+        let user = web::block(move || {
+            let conn = &mut establish_connection();
+
+            find_user_by_username(conn, &credentials.username_or_email)
+        })
+        .await?
+        .map_err(error::ErrorInternalServerError);
+
+        match user {
+            Ok(user) => {
+                let mut hasher = Sha256::new();
+                hasher.update(credentials.password.as_bytes());
+                let result = hasher.finalize();
+
+                let hex = hex::encode(result);
+
+                if hex == user.password {
+                    Ok(HttpResponse::Ok()
+                        .insert_header((ACCESS_CONTROL_ALLOW_ORIGIN, "https://exporhub.com:3000"))
+                        .json(LoginResponse {
+                            code: 0,
+                            message: String::from("Successful login"),
+                        }))
+                } else {
+                    Ok(HttpResponse::InternalServerError()
+                        .insert_header((ACCESS_CONTROL_ALLOW_ORIGIN, "https://exporhub.com:3000"))
+                        .json(LoginResponse {
+                            code: 1,
+                            message: LoginError::InvalidCredentials.to_string(),
+                        }))
+                }
+            }
+            Err(error) => Ok(HttpResponse::InternalServerError()
+                .insert_header((ACCESS_CONTROL_ALLOW_ORIGIN, "https://exporhub.com:3000"))
+                .json(LoginResponse {
+                    code: 2,
+                    message: error.to_string(),
+                })),
+        }
+    }
+}
+
+#[options("/login")]
+pub async fn login_options() -> impl Responder {
+    HttpResponse::NoContent()
+        .insert_header((ACCESS_CONTROL_ALLOW_ORIGIN, "https://exporhub.com:3000"))
+        .insert_header((ACCESS_CONTROL_ALLOW_METHODS, "POST"))
+        .insert_header((ACCESS_CONTROL_ALLOW_HEADERS, "content-type"))
+        .finish()
+}
