@@ -691,6 +691,245 @@ fn should_delete_reply_dislike_by_ids() {
 }
 
 // Unit Tests for Selects
+
+#[test]
+fn should_find_users() {
+    use crate::db::db_actions::selects::find_users;
+
+    let conn = &mut establish_connection();
+
+    let users = find_users(conn);
+
+    if let Err(error) = &users {
+        eprintln!("Error: {error}")
+    } else {
+        println!("Rows: {:#?}", users)
+    }
+
+    assert!(users.is_ok())
+}
+
+#[test]
+fn should_find_projects() {
+    use crate::db::db_actions::selects::find_projects;
+
+    let conn = &mut establish_connection();
+
+    let users = find_projects(conn);
+
+    if let Err(error) = &users {
+        eprintln!("Error: {error}")
+    } else {
+        println!("Rows: {:#?}", users)
+    }
+
+    assert!(users.is_ok())
+}
+
+#[test]
+fn should_find_images() {
+    use crate::db::db_actions::selects::find_images;
+
+    let conn = &mut establish_connection();
+
+    let users = find_images(conn);
+
+    if let Err(error) = &users {
+        eprintln!("Error: {error}")
+    } else {
+        println!("Rows: {:#?}", users)
+    }
+
+    assert!(users.is_ok())
+}
+
+#[test]
+fn should_find_follows() {
+    use crate::db::db_actions::selects::find_follows;
+
+    let conn = &mut establish_connection();
+
+    let users = find_follows(conn);
+
+    if let Err(error) = &users {
+        eprintln!("Error: {error}")
+    } else {
+        println!("Rows: {:#?}", users)
+    }
+
+    assert!(users.is_ok())
+}
+
+#[test]
+fn should_find_favourites() {
+    use crate::db::db_actions::selects::find_favourites;
+
+    let conn = &mut establish_connection();
+
+    let users = find_favourites(conn);
+
+    if let Err(error) = &users {
+        eprintln!("Error: {error}")
+    } else {
+        println!("Rows: {:#?}", users)
+    }
+
+    assert!(users.is_ok())
+}
+
+#[test]
+fn should_find_comments() {
+    use crate::db::db_actions::selects::find_comments;
+
+    let conn = &mut establish_connection();
+
+    let users = find_comments(conn);
+
+    if let Err(error) = &users {
+        eprintln!("Error: {error}")
+    } else {
+        println!("Rows: {:#?}", users)
+    }
+
+    assert!(users.is_ok())
+}
+
+#[test]
+fn should_find_replies() {
+    use crate::db::db_actions::selects::find_replies;
+
+    let conn = &mut establish_connection();
+
+    let users = find_replies(conn);
+
+    if let Err(error) = &users {
+        eprintln!("Error: {error}")
+    } else {
+        println!("Rows: {:#?}", users)
+    }
+
+    assert!(users.is_ok())
+}
+
+#[test]
+fn should_find_threads() {
+    use crate::db::db_actions::selects::find_threads;
+
+    let conn = &mut establish_connection();
+
+    let users = find_threads(conn);
+
+    if let Err(error) = &users {
+        eprintln!("Error: {error}")
+    } else {
+        println!("Rows: {:#?}", users)
+    }
+
+    assert!(users.is_ok())
+}
+
+#[test]
+fn should_find_likes() {
+    use crate::db::db_actions::selects::find_likes;
+
+    let conn = &mut establish_connection();
+
+    let users = find_likes(conn);
+
+    if let Err(error) = &users {
+        eprintln!("Error: {error}")
+    } else {
+        println!("Rows: {:#?}", users)
+    }
+
+    assert!(users.is_ok())
+}
+
+#[test]
+fn should_find_dislikes() {
+    use crate::db::db_actions::selects::find_dislikes;
+
+    let conn = &mut establish_connection();
+
+    let users = find_dislikes(conn);
+
+    if let Err(error) = &users {
+        eprintln!("Error: {error}")
+    } else {
+        println!("Rows: {:#?}", users)
+    }
+
+    assert!(users.is_ok())
+}
+
+#[test]
+fn should_find_comment_likes() {
+    use crate::db::db_actions::selects::find_comment_likes;
+
+    let conn = &mut establish_connection();
+
+    let users = find_comment_likes(conn);
+
+    if let Err(error) = &users {
+        eprintln!("Error: {error}")
+    } else {
+        println!("Rows: {:#?}", users)
+    }
+
+    assert!(users.is_ok())
+}
+
+#[test]
+fn should_find_comment_dislikes() {
+    use crate::db::db_actions::selects::find_comment_dislikes;
+
+    let conn = &mut establish_connection();
+
+    let users = find_comment_dislikes(conn);
+
+    if let Err(error) = &users {
+        eprintln!("Error: {error}")
+    } else {
+        println!("Rows: {:#?}", users)
+    }
+
+    assert!(users.is_ok())
+}
+
+#[test]
+fn should_find_reply_likes() {
+    use crate::db::db_actions::selects::find_reply_likes;
+
+    let conn = &mut establish_connection();
+
+    let users = find_reply_likes(conn);
+
+    if let Err(error) = &users {
+        eprintln!("Error: {error}")
+    } else {
+        println!("Rows: {:#?}", users)
+    }
+
+    assert!(users.is_ok())
+}
+
+#[test]
+fn should_find_reply_dislikes() {
+    use crate::db::db_actions::selects::find_reply_dislikes;
+
+    let conn = &mut establish_connection();
+
+    let users = find_reply_dislikes(conn);
+
+    if let Err(error) = &users {
+        eprintln!("Error: {error}")
+    } else {
+        println!("Rows: {:#?}", users)
+    }
+
+    assert!(users.is_ok())
+}
+
 #[test]
 fn should_return_user_by_id() {
     use crate::db::db_actions::selects::find_user_by_id;
