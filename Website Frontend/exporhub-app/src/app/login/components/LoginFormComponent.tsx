@@ -11,11 +11,6 @@ export default function LoginFormComponent() {
     const passwordInput = useRef<HTMLInputElement | null>(null)
 
     const resetInputs = () => {
-        if (identityInput.current && passwordInput.current) {
-            identityInput.current.value = ""
-            passwordInput.current.value = ""
-        }
-
         setPassword("")
         setIdentity("")
     }
@@ -66,14 +61,14 @@ export default function LoginFormComponent() {
                     <form onSubmit={handleLogin} className='flex flex-col self-stretch items-center gap-8'>
                         <div className='flex w-3/5 flex-col gap-3'>
                             <label htmlFor="identity">Email Address/ Username</label>
-                            <input ref={identityInput} onChange={e => setIdentity(e.target.value)} className='border border-[var(--border-color)] bg-transparent  px-5 py-2 rounded-3xl max-h-10' id='identity' type="text" required />
+                            <input value={identity} ref={identityInput} onChange={e => setIdentity(e.target.value)} className='border border-[var(--border-color)] bg-transparent  px-5 py-2 rounded-3xl max-h-10' id='identity' type="text" required />
                         </div>
                         <div className='flex flex-col w-3/5 gap-3'>
                             <div className='flex justify-between'>
                                 <label htmlFor="password">Password</label>
                                 <label htmlFor="password"><Link href={"/forgot-password"}>Forgot Password?</Link></label>
                             </div>
-                            <input ref={passwordInput} onChange={e => setPassword(e.target.value)} className='border border-[var(--border-color)] px-5 py-2 rounded-3xl max-h-10 bg-transparent' id='password' type="password" required />
+                            <input value={password} ref={passwordInput} onChange={e => setPassword(e.target.value)} className='border border-[var(--border-color)] px-5 py-2 rounded-3xl max-h-10 bg-transparent' id='password' type="password" required />
                         </div>
                         <div className='flex flex-col items-center gap-2'>
                             <input className='cursor-pointer rounded-3xl px-10 py-1 text-md transition-all hover:shadow-md hover:shadow-pink-900/40 bg-pink-300 hover:bg-pink-600' type="submit" value="Login" />

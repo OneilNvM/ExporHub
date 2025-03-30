@@ -45,9 +45,9 @@ pub fn initialize_db_pool() -> DbPool {
 }
 
 pub async fn validate_auth(req: ServiceRequest, creds: BasicAuth) -> Result<ServiceRequest, (actix_web::Error, ServiceRequest)> {
-    if creds.user_id() == "OneilNvM" && creds.password().unwrap() == "nether1215" {
+    if creds.user_id() == "OneilNvM" && creds.password().unwrap() == "authorized" {
         Ok(req)
     } else {
-        Err((actix_web::error::ErrorUnauthorized("Request Denied"), req))
+        Err((actix_web::error::ErrorForbidden("Request Denied"), req))
     }
 }

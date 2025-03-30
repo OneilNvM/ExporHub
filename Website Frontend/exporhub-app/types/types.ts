@@ -3,6 +3,11 @@ export type LoginStatus = {
     message: string
 }
 
+export type AccountCreateStatus = {
+    code: number,
+    message: string
+}
+
 export type User = {
     userId: number,
     username: string,
