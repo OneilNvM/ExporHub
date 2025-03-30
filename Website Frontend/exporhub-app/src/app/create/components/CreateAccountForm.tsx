@@ -1,9 +1,13 @@
 'use client'
 
 import Link from 'next/link'
-import React, { useRef } from 'react'
+import React, { FormEvent, useRef, useState } from 'react'
+import { User } from '~/types/types'
 
 export default function CreateAccountForm() {
+  const [username, setUsername] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
   const usernameInput = useRef<HTMLInputElement | null>(null)
   const usernameContainer = useRef<HTMLSpanElement | null>(null)
   const emailInput = useRef<HTMLInputElement | null>(null)
@@ -35,25 +39,50 @@ export default function CreateAccountForm() {
     }
   }
 
+  const handleAccountCreation = async (e: FormEvent) => {
+    e.preventDefault()
+
+    try {
+      const response = await fetch("https://api.exporhub.com/account/create-account", {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ username: username, email: email, password: password })
+      })
+
+      if (!response.ok) {
+        throw new Error(`${response.statusText}`)
+      }
+
+      let json = await response.json() as User
+
+      console.log(json)
+
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   return (
     <div className='flex flex-1 mt-24'>
-      <form className='flex flex-col gap-5' action="">
+      <form onSubmit={handleAccountCreation} className='flex flex-col gap-5'>
         <div className='flex flex-col gap-3'>
           <label className='text-2xl' htmlFor="username">Username</label>
           <span ref={usernameContainer} className='relative after:size-6 after:block after:transparent after:rounded-full after:absolute after:top-5 after:right-6 after:transition-all after:duration-1000 after:ease-out'>
-            <input onBlur={() => inputBlur(usernameInput, usernameContainer)} ref={usernameInput} className='w-full px-5 py-4 text-xl rounded-3xl shadow-lg shadow-pink-300/40  bg-gradient-to-b from-transparent to-pink-300/30 dark:bg-none dark:bg-pink-950/10 dark:border dark:border-pink-800 dark:shadow-none transition-all duration-1000 ease-in-out' required type="text" id='username' spellCheck='false' />
+            <input onChange={e => setUsername(e.target.value)} onBlur={() => inputBlur(usernameInput, usernameContainer)} ref={usernameInput} className='w-full px-5 py-4 text-xl rounded-3xl shadow-lg shadow-pink-300/40  bg-gradient-to-b from-transparent to-pink-300/30 dark:bg-none dark:bg-pink-950/10 dark:border dark:border-pink-800 dark:shadow-none transition-all duration-1000 ease-in-out' required type="text" id='username' spellCheck='false' />
           </span>
         </div>
         <div className='flex flex-col gap-3'>
           <label className='text-2xl' htmlFor="email">Email Address</label>
           <span ref={emailContainer} className='relative after:size-6 after:block after:transparent after:rounded-full after:absolute after:top-5 after:right-6 after:transition-all after:duration-1000 after:ease-out'>
-            <input onBlur={() => inputBlur(emailInput, emailContainer)} ref={emailInput} className='w-full px-5 py-4 text-xl rounded-3xl shadow-lg shadow-pink-300/40 bg-gradient-to-b from-transparent to-pink-300/30 dark:bg-none dark:bg-pink-950/10 dark:border dark:border-pink-800 dark:shadow-none transition-all duration-1000 ease-in-out' required type="text" id='email' spellCheck='false' />
+            <input onChange={e => setEmail(e.target.value)} onBlur={() => inputBlur(emailInput, emailContainer)} ref={emailInput} className='w-full px-5 py-4 text-xl rounded-3xl shadow-lg shadow-pink-300/40 bg-gradient-to-b from-transparent to-pink-300/30 dark:bg-none dark:bg-pink-950/10 dark:border dark:border-pink-800 dark:shadow-none transition-all duration-1000 ease-in-out' required type="text" id='email' spellCheck='false' />
           </span>
         </div>
         <div className='flex flex-col gap-3'>
           <label className='text-2xl' htmlFor="password">Password</label>
           <span ref={passwordContainer} className='relative after:size-6 after:block after:transparent after:rounded-full after:absolute after:top-5 after:right-6 after:transition-all after:duration-1000 after:ease-out'>
-            <input onBlur={() => inputBlur(passwordInput, passwordContainer)} ref={passwordInput} className='w-full px-5 py-4 text-pink-600 text-xl rounded-3xl shadow-lg shadow-pink-300/40 bg-gradient-to-b from-transparent to-pink-300/30 dark:bg-none dark:bg-pink-950/10 dark:border dark:border-pink-800 dark:shadow-none transition-all duration-1000 ease-in-out' required type="password" name="" id="password" spellCheck='false' />
+            <input onChange={e => setPassword(e.target.value)} onBlur={() => inputBlur(passwordInput, passwordContainer)} ref={passwordInput} className='w-full px-5 py-4 text-pink-600 text-xl rounded-3xl shadow-lg shadow-pink-300/40 bg-gradient-to-b from-transparent to-pink-300/30 dark:bg-none dark:bg-pink-950/10 dark:border dark:border-pink-800 dark:shadow-none transition-all duration-1000 ease-in-out' required type="password" name="" id="password" spellCheck='false' />
           </span>
         </div>
         <div className='flex flex-row-reverse items-center gap-4'>

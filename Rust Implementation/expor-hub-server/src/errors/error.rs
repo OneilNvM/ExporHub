@@ -1,3 +1,4 @@
+use diesel::r2d2;
 use thiserror::Error;
 
 #[derive(Error, Debug)]
@@ -10,6 +11,14 @@ pub enum AccountCreationError {
     InvalidPassword,
     #[error("an error occurred during the database transaction: {0}")]
     DatabaseError(diesel::result::Error),
+    #[error("database pool error occurred")]
+    R2D2Error(diesel::r2d2::Error),
+}
+
+impl std::convert::From<r2d2::Error> for AccountCreationError {
+    fn from(value: r2d2::Error) -> Self {
+        Self::R2D2Error(value)
+    }
 }
 
 #[derive(Error, Debug)]

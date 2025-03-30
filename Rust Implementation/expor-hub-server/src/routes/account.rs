@@ -1,7 +1,7 @@
 use actix_web::{
-    error,
+    error::{self, ErrorInternalServerError},
     http::header::{
-        ACCESS_CONTROL_ALLOW_HEADERS, ACCESS_CONTROL_ALLOW_METHODS, ACCESS_CONTROL_ALLOW_ORIGIN,
+        ACCESS_CONTROL_ALLOW_HEADERS, ACCESS_CONTROL_ALLOW_METHODS,
     },
     options, post, web, HttpResponse, Responder, Result,
 };
@@ -11,6 +11,7 @@ use sha2::{Digest, Sha256};
 use crate::{
     db::db_actions::{
         connection::establish_connection,
+        inserts::insert_user,
         selects::{find_user_by_email, find_user_by_username},
     },
     errors::error::LoginError,
@@ -54,27 +55,21 @@ pub async fn login(
                 let hex = hex::encode(result);
 
                 if hex == user.password {
-                    Ok(HttpResponse::Ok()
-                        .insert_header((ACCESS_CONTROL_ALLOW_ORIGIN, "https://exporhub.com:3000"))
-                        .json(LoginResponse {
-                            code: 0,
-                            message: String::from("Successful login"),
-                        }))
+                    Ok(HttpResponse::Ok().json(LoginResponse {
+                        code: 0,
+                        message: String::from("Successful login"),
+                    }))
                 } else {
-                    Ok(HttpResponse::InternalServerError()
-                        .insert_header((ACCESS_CONTROL_ALLOW_ORIGIN, "https://exporhub.com:3000"))
-                        .json(LoginResponse {
-                            code: 1,
-                            message: LoginError::InvalidCredentials.to_string(),
-                        }))
+                    Ok(HttpResponse::InternalServerError().json(LoginResponse {
+                        code: 1,
+                        message: LoginError::InvalidCredentials.to_string(),
+                    }))
                 }
             }
-            Err(error) => Ok(HttpResponse::InternalServerError()
-                .insert_header((ACCESS_CONTROL_ALLOW_ORIGIN, "https://exporhub.com:3000"))
-                .json(LoginResponse {
-                    code: 2,
-                    message: error.to_string(),
-                })),
+            Err(error) => Ok(HttpResponse::InternalServerError().json(LoginResponse {
+                code: 2,
+                message: error.to_string(),
+            })),
         }
     } else {
         let user = web::block(move || {
@@ -94,27 +89,21 @@ pub async fn login(
                 let hex = hex::encode(result);
 
                 if hex == user.password {
-                    Ok(HttpResponse::Ok()
-                        .insert_header((ACCESS_CONTROL_ALLOW_ORIGIN, "https://exporhub.com:3000"))
-                        .json(LoginResponse {
-                            code: 0,
-                            message: String::from("Successful login"),
-                        }))
+                    Ok(HttpResponse::Ok().json(LoginResponse {
+                        code: 0,
+                        message: String::from("Successful login"),
+                    }))
                 } else {
-                    Ok(HttpResponse::InternalServerError()
-                        .insert_header((ACCESS_CONTROL_ALLOW_ORIGIN, "https://exporhub.com:3000"))
-                        .json(LoginResponse {
-                            code: 1,
-                            message: LoginError::InvalidCredentials.to_string(),
-                        }))
+                    Ok(HttpResponse::InternalServerError().json(LoginResponse {
+                        code: 1,
+                        message: LoginError::InvalidCredentials.to_string(),
+                    }))
                 }
             }
-            Err(error) => Ok(HttpResponse::InternalServerError()
-                .insert_header((ACCESS_CONTROL_ALLOW_ORIGIN, "https://exporhub.com:3000"))
-                .json(LoginResponse {
-                    code: 2,
-                    message: error.to_string(),
-                })),
+            Err(error) => Ok(HttpResponse::InternalServerError().json(LoginResponse {
+                code: 2,
+                message: error.to_string(),
+            })),
         }
     }
 }
@@ -122,7 +111,53 @@ pub async fn login(
 #[options("/login")]
 pub async fn login_options() -> impl Responder {
     HttpResponse::NoContent()
-        .insert_header((ACCESS_CONTROL_ALLOW_ORIGIN, "https://exporhub.com:3000"))
+        .insert_header((ACCESS_CONTROL_ALLOW_METHODS, "POST"))
+        .insert_header((ACCESS_CONTROL_ALLOW_HEADERS, "content-type"))
+        .finish()
+}
+
+#[derive(Deserialize)]
+struct UserData {
+    username: String,
+    email: String,
+    password: String,
+}
+
+#[derive(Serialize)]
+struct CreateAccountResponse {
+    code: u8,
+    message: String,
+}
+
+#[post("/create-account")]
+pub async fn create_account(
+    pool: web::Data<DbPool>,
+    inputs: web::Json<UserData>,
+) -> Result<HttpResponse> {
+    let inputs = inputs.into_inner();
+
+    let user = web::block(move || {
+        let conn = &mut pool.get().unwrap();
+
+        insert_user(conn, &inputs.username, &inputs.email, &inputs.password)
+    })
+    .await?
+    .map_err(ErrorInternalServerError);
+
+    match user {
+        Ok(user) => Ok(HttpResponse::Ok().json(user.unwrap())),
+        Err(error) => Ok(
+            HttpResponse::InternalServerError().json(CreateAccountResponse {
+                code: 1,
+                message: error.to_string(),
+            }),
+        ),
+    }
+}
+
+#[options("/create-account")]
+pub async fn create_account_options() -> impl Responder {
+    HttpResponse::NoContent()
         .insert_header((ACCESS_CONTROL_ALLOW_METHODS, "POST"))
         .insert_header((ACCESS_CONTROL_ALLOW_HEADERS, "content-type"))
         .finish()

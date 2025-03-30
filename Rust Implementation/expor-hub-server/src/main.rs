@@ -1,13 +1,15 @@
 use std::{fs::File, io::BufReader};
 
-use actix_web::{web, App, HttpServer};
+use actix_web::{http::header::ACCESS_CONTROL_ALLOW_ORIGIN, middleware, web, App, HttpServer};
 use actix_web_lab::{header::StrictTransportSecurity, middleware::RedirectHttps};
 use expor_hub_server::{
     initialize_db_pool,
     routes::{
-        account::{login, login_options},
+        account::{create_account, create_account_options, login, login_options},
+        api::*,
         root::*,
     },
+    validate_auth,
 };
 
 #[actix_web::main]
@@ -42,6 +44,7 @@ async fn main() -> Result<(), std::io::Error> {
         .unwrap();
 
     let mw = RedirectHttps::with_hsts(StrictTransportSecurity::default().include_subdomains());
+    let auth_mw = actix_web_httpauth::middleware::HttpAuthentication::basic(validate_auth);
 
     println!("Server running at https://api.exporhub.com:9000");
 
@@ -49,8 +52,36 @@ async fn main() -> Result<(), std::io::Error> {
         App::new()
             .app_data(web::Data::new(pool.clone()))
             .wrap(mw.clone())
-            .service(web::scope("/account").service(login).service(login_options))
             .service(index)
+            .service(
+                web::scope("/account")
+                    .wrap(mw.clone())
+                    .wrap(
+                        middleware::DefaultHeaders::new()
+                            .add((ACCESS_CONTROL_ALLOW_ORIGIN, "https://exporhub.com:3000")),
+                    )
+                    .service(login)
+                    .service(login_options)
+                    .service(create_account)
+                    .service(create_account_options),
+            )
+            .service(
+                web::scope("/api")
+                    .wrap(auth_mw.clone())
+                    .service(all_tables)
+                    .service(show_users)
+                    .service(show_projects)
+                    .service(show_images)
+                    .service(show_follows)
+                    .service(show_favourites)
+                    .service(show_comments)
+                    .service(show_replies)
+                    .service(show_threads)
+                    .service(show_comment_likes)
+                    .service(show_comment_dislikes)
+                    .service(show_reply_likes)
+                    .service(show_reply_dislikes),
+            )
     })
     .bind_rustls_0_23(("api.exporhub.com", 9000), tls_config)?
     .workers(8)

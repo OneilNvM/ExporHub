@@ -20,7 +20,7 @@ export default function LoginFormComponent() {
         setIdentity("")
     }
 
-    const handleSubmit = async (e: FormEvent) => {
+    const handleLogin = async (e: FormEvent) => {
         e.preventDefault()
 
         try {
@@ -33,8 +33,7 @@ export default function LoginFormComponent() {
             })
 
             if (!response.ok) {
-                let responseError = await response.json() as LoginStatus
-                throw new Error(`Code ${responseError.code}: ${responseError.message}`)
+                throw new Error(`Invalid credentials provided`)
             }
 
             let json = await response.json() as LoginStatus;
@@ -47,16 +46,14 @@ export default function LoginFormComponent() {
             const message = `${error}`
 
             if (errorField) {
-                if (message.includes("Code 1")) {
-                    errorField.innerHTML = `${message.split("Code 1: ")[1]}`
-                } else if (message.includes("Code 2")) {
-                    console.error(error)
-
-                    errorField.innerHTML = `Invalid login credentials provided`
-
-                    resetInputs()
-                }
+                errorField.innerHTML = message.replace("Error: ", "")
             }
+
+            if (passwordInput.current) {
+                passwordInput.current.value = ""
+            }
+    
+            setPassword("")
         }
 
     }
@@ -66,7 +63,7 @@ export default function LoginFormComponent() {
                 <div className='flex flex-col items-center py-10 gap-4 rounded-2xl bg-[var(--background)]'>
                     <p className='font-bold text-xl'>Login To Your Account</p>
                     <p id='error' className='text-red-400'></p>
-                    <form onSubmit={handleSubmit} className='flex flex-col self-stretch items-center gap-8' action="">
+                    <form onSubmit={handleLogin} className='flex flex-col self-stretch items-center gap-8'>
                         <div className='flex w-3/5 flex-col gap-3'>
                             <label htmlFor="identity">Email Address/ Username</label>
                             <input ref={identityInput} onChange={e => setIdentity(e.target.value)} className='border border-[var(--border-color)] bg-transparent  px-5 py-2 rounded-3xl max-h-10' id='identity' type="text" required />
