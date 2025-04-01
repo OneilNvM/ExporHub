@@ -4,9 +4,7 @@ use diesel::prelude::*;
 pub fn find_users(conn: &mut MysqlConnection) -> Result<Vec<User>, anyhow::Error> {
     use crate::schema::users::dsl::*;
 
-    let results = conn.transaction(|conn| {
-        users.select(User::as_select()).load(conn)
-    });
+    let results = conn.transaction(|conn| users.select(User::as_select()).load(conn));
 
     match results {
         Ok(rows) => Ok(rows),
@@ -17,9 +15,7 @@ pub fn find_users(conn: &mut MysqlConnection) -> Result<Vec<User>, anyhow::Error
 pub fn find_projects(conn: &mut MysqlConnection) -> Result<Vec<Project>, anyhow::Error> {
     use crate::schema::projects::dsl::*;
 
-    let results = conn.transaction(|conn| {
-        projects.select(Project::as_select()).load(conn)
-    });
+    let results = conn.transaction(|conn| projects.select(Project::as_select()).load(conn));
 
     match results {
         Ok(rows) => Ok(rows),
@@ -30,9 +26,7 @@ pub fn find_projects(conn: &mut MysqlConnection) -> Result<Vec<Project>, anyhow:
 pub fn find_images(conn: &mut MysqlConnection) -> Result<Vec<Image>, anyhow::Error> {
     use crate::schema::images::dsl::*;
 
-    let results = conn.transaction(|conn| {
-        images.select(Image::as_select()).load(conn)
-    });
+    let results = conn.transaction(|conn| images.select(Image::as_select()).load(conn));
 
     match results {
         Ok(rows) => Ok(rows),
@@ -43,9 +37,7 @@ pub fn find_images(conn: &mut MysqlConnection) -> Result<Vec<Image>, anyhow::Err
 pub fn find_follows(conn: &mut MysqlConnection) -> Result<Vec<Follow>, anyhow::Error> {
     use crate::schema::follows::dsl::*;
 
-    let results = conn.transaction(|conn| {
-        follows.select(Follow::as_select()).load(conn)
-    });
+    let results = conn.transaction(|conn| follows.select(Follow::as_select()).load(conn));
 
     match results {
         Ok(rows) => Ok(rows),
@@ -56,9 +48,7 @@ pub fn find_follows(conn: &mut MysqlConnection) -> Result<Vec<Follow>, anyhow::E
 pub fn find_favourites(conn: &mut MysqlConnection) -> Result<Vec<Favourite>, anyhow::Error> {
     use crate::schema::favourites::dsl::*;
 
-    let results = conn.transaction(|conn| {
-        favourites.select(Favourite::as_select()).load(conn)
-    });
+    let results = conn.transaction(|conn| favourites.select(Favourite::as_select()).load(conn));
 
     match results {
         Ok(rows) => Ok(rows),
@@ -69,9 +59,7 @@ pub fn find_favourites(conn: &mut MysqlConnection) -> Result<Vec<Favourite>, any
 pub fn find_comments(conn: &mut MysqlConnection) -> Result<Vec<Comment>, anyhow::Error> {
     use crate::schema::comments::dsl::*;
 
-    let results = conn.transaction(|conn| {
-        comments.select(Comment::as_select()).load(conn)
-    });
+    let results = conn.transaction(|conn| comments.select(Comment::as_select()).load(conn));
 
     match results {
         Ok(rows) => Ok(rows),
@@ -82,9 +70,7 @@ pub fn find_comments(conn: &mut MysqlConnection) -> Result<Vec<Comment>, anyhow:
 pub fn find_replies(conn: &mut MysqlConnection) -> Result<Vec<Reply>, anyhow::Error> {
     use crate::schema::replies::dsl::*;
 
-    let results = conn.transaction(|conn| {
-        replies.select(Reply::as_select()).load(conn)
-    });
+    let results = conn.transaction(|conn| replies.select(Reply::as_select()).load(conn));
 
     match results {
         Ok(rows) => Ok(rows),
@@ -95,9 +81,7 @@ pub fn find_replies(conn: &mut MysqlConnection) -> Result<Vec<Reply>, anyhow::Er
 pub fn find_threads(conn: &mut MysqlConnection) -> Result<Vec<Thread>, anyhow::Error> {
     use crate::schema::threads::dsl::*;
 
-    let results = conn.transaction(|conn| {
-        threads.select(Thread::as_select()).load(conn)
-    });
+    let results = conn.transaction(|conn| threads.select(Thread::as_select()).load(conn));
 
     match results {
         Ok(rows) => Ok(rows),
@@ -108,9 +92,7 @@ pub fn find_threads(conn: &mut MysqlConnection) -> Result<Vec<Thread>, anyhow::E
 pub fn find_likes(conn: &mut MysqlConnection) -> Result<Vec<Like>, anyhow::Error> {
     use crate::schema::likes::dsl::*;
 
-    let results = conn.transaction(|conn| {
-        likes.select(Like::as_select()).load(conn)
-    });
+    let results = conn.transaction(|conn| likes.select(Like::as_select()).load(conn));
 
     match results {
         Ok(rows) => Ok(rows),
@@ -121,9 +103,7 @@ pub fn find_likes(conn: &mut MysqlConnection) -> Result<Vec<Like>, anyhow::Error
 pub fn find_dislikes(conn: &mut MysqlConnection) -> Result<Vec<Dislike>, anyhow::Error> {
     use crate::schema::dislikes::dsl::*;
 
-    let results = conn.transaction(|conn| {
-        dislikes.select(Dislike::as_select()).load(conn)
-    });
+    let results = conn.transaction(|conn| dislikes.select(Dislike::as_select()).load(conn));
 
     match results {
         Ok(rows) => Ok(rows),
@@ -134,9 +114,8 @@ pub fn find_dislikes(conn: &mut MysqlConnection) -> Result<Vec<Dislike>, anyhow:
 pub fn find_comment_likes(conn: &mut MysqlConnection) -> Result<Vec<CommentLike>, anyhow::Error> {
     use crate::schema::comment_likes::dsl::*;
 
-    let results = conn.transaction(|conn| {
-        comment_likes.select(CommentLike::as_select()).load(conn)
-    });
+    let results =
+        conn.transaction(|conn| comment_likes.select(CommentLike::as_select()).load(conn));
 
     match results {
         Ok(rows) => Ok(rows),
@@ -144,11 +123,15 @@ pub fn find_comment_likes(conn: &mut MysqlConnection) -> Result<Vec<CommentLike>
     }
 }
 
-pub fn find_comment_dislikes(conn: &mut MysqlConnection) -> Result<Vec<CommentDislike>, anyhow::Error> {
+pub fn find_comment_dislikes(
+    conn: &mut MysqlConnection,
+) -> Result<Vec<CommentDislike>, anyhow::Error> {
     use crate::schema::comment_dislikes::dsl::*;
 
     let results = conn.transaction(|conn| {
-        comment_dislikes.select(CommentDislike::as_select()).load(conn)
+        comment_dislikes
+            .select(CommentDislike::as_select())
+            .load(conn)
     });
 
     match results {
@@ -160,9 +143,7 @@ pub fn find_comment_dislikes(conn: &mut MysqlConnection) -> Result<Vec<CommentDi
 pub fn find_reply_likes(conn: &mut MysqlConnection) -> Result<Vec<ReplyLike>, anyhow::Error> {
     use crate::schema::reply_likes::dsl::*;
 
-    let results = conn.transaction(|conn| {
-        reply_likes.select(ReplyLike::as_select()).load(conn)
-    });
+    let results = conn.transaction(|conn| reply_likes.select(ReplyLike::as_select()).load(conn));
 
     match results {
         Ok(rows) => Ok(rows),
@@ -173,9 +154,8 @@ pub fn find_reply_likes(conn: &mut MysqlConnection) -> Result<Vec<ReplyLike>, an
 pub fn find_reply_dislikes(conn: &mut MysqlConnection) -> Result<Vec<ReplyDislike>, anyhow::Error> {
     use crate::schema::reply_dislikes::dsl::*;
 
-    let results = conn.transaction(|conn| {
-        reply_dislikes.select(ReplyDislike::as_select()).load(conn)
-    });
+    let results =
+        conn.transaction(|conn| reply_dislikes.select(ReplyDislike::as_select()).load(conn));
 
     match results {
         Ok(rows) => Ok(rows),

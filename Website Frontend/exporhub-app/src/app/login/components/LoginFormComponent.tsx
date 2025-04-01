@@ -1,12 +1,16 @@
 'use client'
 
+import { signIn } from '@/app/actions/auth'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import React, { FormEvent, useRef, useState } from 'react'
-import { LoginStatus } from '~/types/types'
+import { LoginStatus, User } from '~/types/types'
 
 export default function LoginFormComponent() {
     const [identity, setIdentity] = useState("")
     const [password, setPassword] = useState("")
+    const [error, setError] = useState("")
+    const router = useRouter()
     const identityInput = useRef<HTMLInputElement | null>(null)
     const passwordInput = useRef<HTMLInputElement | null>(null)
 
@@ -28,36 +32,42 @@ export default function LoginFormComponent() {
             })
 
             if (!response.ok) {
-                throw new Error(`Invalid credentials provided`)
-            }
-
-            let json = await response.json() as LoginStatus;
-
-            console.log(json.code, json.message)
-
-            resetInputs()
-        } catch (error) {
-            const errorField: HTMLElement | null = document.getElementById('error');
-            const message = `${error}`
-
-            if (errorField) {
-                errorField.innerHTML = message.replace("Error: ", "")
-            }
-
-            if (passwordInput.current) {
-                passwordInput.current.value = ""
+                throw new Error(`Error: ${response.statusText}`)
             }
     
-            setPassword("")
+            let json = await response.json();
+    
+            if (json.code) {
+                const status = json as LoginStatus;
+    
+                console.log(status.code, status.message)
+    
+                if (status.code === 1) {
+                    setError(status.message)
+                } else if (status.code === 2) {
+                    setError("Invalid login credentials")
+                }
+            } else {
+                const user = json as User;
+
+                await signIn(user)
+
+                router.push('/account')
+            }
+        } catch (error) {
+            console.error(error)
+
+            resetInputs()
         }
 
+        resetInputs()
     }
     return (
         <div className='flex-[0_0_40%]'>
             <div className='min-w-[25rem] bg-gradient-to-b from-[var(--border-color)] to-pink-900 rounded-2xl p-[1px]'>
                 <div className='flex flex-col items-center py-10 gap-4 rounded-2xl bg-[var(--background)]'>
                     <p className='font-bold text-xl'>Login To Your Account</p>
-                    <p id='error' className='text-red-400'></p>
+                    <p id='error' className='text-red-400'>{error}</p>
                     <form onSubmit={handleLogin} className='flex flex-col self-stretch items-center gap-8'>
                         <div className='flex w-3/5 flex-col gap-3'>
                             <label htmlFor="identity">Email Address/ Username</label>

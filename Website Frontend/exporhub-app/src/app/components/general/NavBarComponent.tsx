@@ -18,8 +18,6 @@ export default function NavBarComponent() {
       const favouritesTab = document.getElementById('favourites-tab');
       const followingTab = document.getElementById('following-tab');
 
-      console.log(queryParams.get("tab"))
-
       switch (queryParams.get("tab")) {
         case 'projects':
           profileTab?.classList.add("inactive-tab")

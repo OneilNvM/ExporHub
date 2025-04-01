@@ -1,6 +1,6 @@
 use std::env;
 
-use actix_web::dev::ServiceRequest;
+use actix_web::{dev::ServiceRequest, http::Method};
 use actix_web_httpauth::extractors::basic::BasicAuth;
 use db::models::*;
 use diesel::{r2d2, MysqlConnection};
@@ -44,10 +44,22 @@ pub fn initialize_db_pool() -> DbPool {
     r2d2::Pool::builder().build(manager).unwrap()
 }
 
-pub async fn validate_auth(req: ServiceRequest, creds: BasicAuth) -> Result<ServiceRequest, (actix_web::Error, ServiceRequest)> {
-    if creds.user_id() == "OneilNvM" && creds.password().unwrap() == "authorized" {
+pub async fn validate_auth(
+    req: ServiceRequest,
+    creds: BasicAuth,
+) -> Result<ServiceRequest, (actix_web::Error, ServiceRequest)> {
+    if req.method() == Method::OPTIONS {
         Ok(req)
     } else {
-        Err((actix_web::error::ErrorForbidden("Request Denied"), req))
+        println!(
+            "username: {}, password: {:?}",
+            creds.user_id(),
+            creds.password()
+        );
+        if creds.user_id() == "OneilNvM" && creds.password().unwrap() == "authorized" {
+            Ok(req)
+        } else {
+            Err((actix_web::error::ErrorForbidden("Request Denied"), req))
+        }
     }
 }

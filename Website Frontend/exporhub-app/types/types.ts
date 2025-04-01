@@ -9,11 +9,16 @@ export type AccountCreateStatus = {
 }
 
 export type User = {
-    userId: number,
+    user_id: number,
     username: string,
     email: string,
     password: string,
     profileImg: string,
     followers: number,
     dateCreated: Date
+}
+
+export type UserSessionPayload = {
+    userId: number,
+    expiresAt: Date
 }

@@ -49,38 +49,48 @@ export default function CreateAccountForm({ setError }: { setError: React.Dispat
       if (input.current.value) {
         if (input.current.id === "username") {
           try {
-            let encoded = Buffer.from("OneilNvM:authorized").toString("base64")
+            const response = await fetch(`https://api.exporhub.com:9000/api/user/username?username=${input.current.value}`)
 
-            const response = await fetch(`https://api.exporhub.com:9000/api/user/${input.current.value}`, {
-              method: "get",
-              headers: {
-                "Authorization": `Basic ${encoded}`
-              },
-              credentials: "include"
-            })
-
-            if (response.ok) {
-              throw new Error(`Username is already taken`)
+            if (!response.ok) {
+              throw new Error(`${response.statusText}`)
             }
 
-            if (input.current.value.length < 3 || input.current.value.includes("@")) {
+            const json = await response.json() as AccountCreateStatus
+
+            if (json.code === 0) {
+              setError("Username already taken")
+
+              container.current.classList.contains("after:transparent") ? container.current.classList.replace("after:transparent", "after:bg-red-500") : container.current.classList.replace("after:bg-green-400", "after:bg-red-500")
+            } else if (input.current.value.length < 3 || input.current.value.includes("@")) {
               container.current.classList.contains("after:transparent") ? container.current.classList.replace("after:transparent", "after:bg-red-500") : container.current.classList.replace("after:bg-green-400", "after:bg-red-500")
             } else {
               container.current.classList.contains("after:transparent") ? container.current.classList.replace("after:transparent", "after:bg-green-400") : container.current.classList.replace("after:bg-red-500", "after:bg-green-400")
             }
 
           } catch (error) {
-            const message = `${error}`
-
-            container.current.classList.contains("after:transparent") ? container.current.classList.replace("after:transparent", "after:bg-red-500") : container.current.classList.replace("after:bg-green-400", "after:bg-red-500")
-
-            setError(message.replace("Error: ", ""))
+            console.error(error)
           }
         } else if (input.current.id === "email") {
-          if (!input.current.value.includes("@")) {
-            container.current.classList.contains("after:transparent") ? container.current.classList.replace("after:transparent", "after:bg-red-500") : container.current.classList.replace("after:bg-green-400", "after:bg-red-500")
-          } else {
-            container.current.classList.contains("after:transparent") ? container.current.classList.replace("after:transparent", "after:bg-green-400") : container.current.classList.replace("after:bg-red-500", "after:bg-green-400")
+          try {
+            const response = await fetch(`https://api.exporhub.com:9000/api/user/email?email=${input.current.value}`)
+
+            if (!response.ok) {
+              throw new Error(`${response.statusText}`)
+            }
+
+            const json = await response.json() as AccountCreateStatus
+
+            if (json.code === 0) {
+              setError("Email already taken")
+
+              container.current.classList.contains("after:transparent") ? container.current.classList.replace("after:transparent", "after:bg-red-500") : container.current.classList.replace("after:bg-green-400", "after:bg-red-500")
+            } else if (!input.current.value.includes("@")) {
+              container.current.classList.contains("after:transparent") ? container.current.classList.replace("after:transparent", "after:bg-red-500") : container.current.classList.replace("after:bg-green-400", "after:bg-red-500")
+            } else {
+              container.current.classList.contains("after:transparent") ? container.current.classList.replace("after:transparent", "after:bg-green-400") : container.current.classList.replace("after:bg-red-500", "after:bg-green-400")
+            }
+          } catch (error) {
+            console.error(error)
           }
         } else if (input.current.type === "password") {
           if (input.current.value.length < 8) {

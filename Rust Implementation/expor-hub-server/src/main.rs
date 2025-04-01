@@ -1,6 +1,6 @@
 use std::{fs::File, io::BufReader};
 
-use actix_web::{http::header::{ACCESS_CONTROL_ALLOW_CREDENTIALS, ACCESS_CONTROL_ALLOW_HEADERS, ACCESS_CONTROL_ALLOW_METHODS, ACCESS_CONTROL_ALLOW_ORIGIN}, middleware, web, App, HttpServer};
+use actix_web::{http::header::ACCESS_CONTROL_ALLOW_ORIGIN, middleware, web, App, HttpServer};
 use actix_web_lab::{header::StrictTransportSecurity, middleware::RedirectHttps};
 use expor_hub_server::{
     initialize_db_pool,
@@ -8,7 +8,10 @@ use expor_hub_server::{
         account::{create_account, create_account_options, login, login_options},
         api::*,
         root::*,
-        users::{get_user_by_username, username_options},
+        users::{
+            email_options, get_user_by_email, get_user_by_id, get_user_by_username,
+            user_id_options, username_options,
+        },
     },
     validate_auth,
 };
@@ -45,7 +48,7 @@ async fn main() -> Result<(), std::io::Error> {
         .unwrap();
 
     let mw = RedirectHttps::with_hsts(StrictTransportSecurity::default().include_subdomains());
-    let auth_mw = actix_web_httpauth::middleware::HttpAuthentication::basic(validate_auth);
+    let _auth_mw = actix_web_httpauth::middleware::HttpAuthentication::basic(validate_auth);
 
     println!("Server running at https://api.exporhub.com:9000");
 
@@ -67,19 +70,18 @@ async fn main() -> Result<(), std::io::Error> {
             )
             .service(
                 web::scope("/api")
-                    .wrap(auth_mw.clone())
                     .wrap(
                         middleware::DefaultHeaders::new()
-                            .add((ACCESS_CONTROL_ALLOW_ORIGIN, "https://exporhub.com:3000"))
-                            .add((ACCESS_CONTROL_ALLOW_CREDENTIALS, "true"))
-                            .add((ACCESS_CONTROL_ALLOW_HEADERS, "authorization"))
-                            .add((ACCESS_CONTROL_ALLOW_METHODS, "GET, POST, PUT, DELETE"))
+                            .add((ACCESS_CONTROL_ALLOW_ORIGIN, "https://exporhub.com:3000")),
                     )
                     .service(
                         web::scope("/user")
-                            .wrap(auth_mw.clone())
+                            .service(get_user_by_id)
                             .service(get_user_by_username)
-                            .service(username_options),
+                            .service(get_user_by_email)
+                            .service(user_id_options)
+                            .service(username_options)
+                            .service(email_options),
                     )
                     .service(all_tables)
                     .service(show_users)

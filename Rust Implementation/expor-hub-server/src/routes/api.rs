@@ -28,9 +28,13 @@ pub async fn all_tables(pool: web::Data<DbPool>) -> Result<HttpResponse> {
             Replies(find_replies(conn).unwrap_or_else(|_| vec![Reply::default()])),
             Threads(find_threads(conn).unwrap_or_else(|_| vec![Thread::default()])),
             CommentLikes(find_comment_likes(conn).unwrap_or_else(|_| vec![CommentLike::default()])),
-            CommentDislikes(find_comment_dislikes(conn).unwrap_or_else(|_| vec![CommentDislike::default()])),
+            CommentDislikes(
+                find_comment_dislikes(conn).unwrap_or_else(|_| vec![CommentDislike::default()]),
+            ),
             ReplyLikes(find_reply_likes(conn).unwrap_or_else(|_| vec![ReplyLike::default()])),
-            ReplyDislikes(find_reply_dislikes(conn).unwrap_or_else(|_| vec![ReplyDislike::default()])),
+            ReplyDislikes(
+                find_reply_dislikes(conn).unwrap_or_else(|_| vec![ReplyDislike::default()]),
+            ),
         ]
     })
     .await?;

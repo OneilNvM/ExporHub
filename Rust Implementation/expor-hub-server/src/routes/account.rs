@@ -1,8 +1,6 @@
 use actix_web::{
-    error::{self, ErrorInternalServerError},
-    http::header::{
-        ACCESS_CONTROL_ALLOW_HEADERS, ACCESS_CONTROL_ALLOW_METHODS,
-    },
+    error,
+    http::header::{ACCESS_CONTROL_ALLOW_HEADERS, ACCESS_CONTROL_ALLOW_METHODS},
     options, post, web, HttpResponse, Responder, Result,
 };
 use serde::{Deserialize, Serialize};
@@ -55,18 +53,15 @@ pub async fn login(
                 let hex = hex::encode(result);
 
                 if hex == user.password {
-                    Ok(HttpResponse::Ok().json(LoginResponse {
-                        code: 0,
-                        message: String::from("Successful login"),
-                    }))
+                    Ok(HttpResponse::Ok().json(user))
                 } else {
-                    Ok(HttpResponse::InternalServerError().json(LoginResponse {
+                    Ok(HttpResponse::Ok().json(LoginResponse {
                         code: 1,
                         message: LoginError::InvalidCredentials.to_string(),
                     }))
                 }
             }
-            Err(error) => Ok(HttpResponse::InternalServerError().json(LoginResponse {
+            Err(error) => Ok(HttpResponse::Ok().json(LoginResponse {
                 code: 2,
                 message: error.to_string(),
             })),
@@ -89,18 +84,15 @@ pub async fn login(
                 let hex = hex::encode(result);
 
                 if hex == user.password {
-                    Ok(HttpResponse::Ok().json(LoginResponse {
-                        code: 0,
-                        message: String::from("Successful login"),
-                    }))
+                    Ok(HttpResponse::Ok().json(user))
                 } else {
-                    Ok(HttpResponse::InternalServerError().json(LoginResponse {
+                    Ok(HttpResponse::Ok().json(LoginResponse {
                         code: 1,
                         message: LoginError::InvalidCredentials.to_string(),
                     }))
                 }
             }
-            Err(error) => Ok(HttpResponse::InternalServerError().json(LoginResponse {
+            Err(error) => Ok(HttpResponse::Ok().json(LoginResponse {
                 code: 2,
                 message: error.to_string(),
             })),
@@ -142,12 +134,12 @@ pub async fn create_account(
         insert_user(conn, &inputs.username, &inputs.email, &inputs.password)
     })
     .await?
-    .map_err(ErrorInternalServerError);
+    .map_err(error::ErrorInternalServerError);
 
     match user {
         Ok(user) => Ok(HttpResponse::Ok().json(user.unwrap())),
         Err(error) => Ok(
-            HttpResponse::InternalServerError().json(CreateAccountResponse {
+            HttpResponse::Ok().json(CreateAccountResponse {
                 code: 1,
                 message: error.to_string(),
             }),

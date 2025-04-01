@@ -2,8 +2,18 @@ import React from 'react'
 import NavBarComponent from '../components/general/NavBarComponent'
 import FooterComponent from '../components/general/FooterComponent'
 import AccountTab from './components/AccountTab'
+import { cookies } from 'next/headers'
+import { decrypt } from '../lib/session'
 
-export default function Account() {
+export default async function Account() {
+  const cookieStore = await cookies()
+
+  const session = cookieStore.get('session')
+
+  const result = await decrypt(session?.value)
+
+  console.log(result)
+
   return (
     <div className='grid auto-rows-auto size-full overflow-auto'>
       <NavBarComponent />
