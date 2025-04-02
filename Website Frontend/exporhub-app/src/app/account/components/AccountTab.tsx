@@ -6,8 +6,9 @@ import ProfileTab from '@/app/components/profile-tabs/ProfileTab'
 import ProjectsTab from '@/app/components/profile-tabs/ProjectsTab'
 import { useSearchParams } from 'next/navigation'
 import React from 'react'
+import { User } from '~/types/types'
 
-export default function AccountTab() {
+export default function AccountTab({ user }: {user: User | null}) {
     const searchParams = useSearchParams()
 
     switch (searchParams.get('tab')) {
@@ -25,7 +26,7 @@ export default function AccountTab() {
             )
         default:
             return (
-                <ProfileTab />
+                <ProfileTab user={user}/>
             )
     }
 }

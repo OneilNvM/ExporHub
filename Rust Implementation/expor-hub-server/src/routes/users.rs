@@ -42,10 +42,7 @@ pub async fn get_user_by_id(
     .map_err(error::ErrorInternalServerError);
 
     match user {
-        Ok(_) => Ok(HttpResponse::Ok().json(DbResponse {
-            code: 0,
-            message: "Success".to_owned(),
-        })),
+        Ok(user) => Ok(HttpResponse::Ok().json(user)),
         Err(error) => Ok(HttpResponse::Ok().json(DbResponse {
             code: 1,
             message: error.to_string(),
