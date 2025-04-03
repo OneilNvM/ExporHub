@@ -36,7 +36,6 @@ export default function ProfileTab() {
 
     return (
         <>
-        <a href="/account/test">test</a>
             <section className='flex flex-1 w-full flex-col gap-4 my-4 md:ml-10 self-start'>
                 <div className='flex flex-col gap-2 self-center md:self-start'>
                     <Image className='rounded-full' src={LogoSVG} width={256} alt='Profile Picture' />

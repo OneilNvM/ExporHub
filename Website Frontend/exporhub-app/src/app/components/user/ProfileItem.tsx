@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React from 'react'
 import GlobeSVG from '~/public/logo_draft_3.svg'
@@ -10,13 +11,13 @@ export default function ProfileItem() {
 
     return (
         <div className='flex rounded-2xl p-4 w-full max-w-[52rem] items-center gap-4 border border-pink-200 dark:border-pink-900'>
-            <div className='self-start'>
+            <Link href={'/profile'} className='self-start'>
                 <Image src={GlobeSVG} className='rounded-full' width={56} alt='Profile Picture' />
-            </div>
+            </Link>
             <div className='flex flex-col w-full'>
                 <div className='flex justify-between py-2 border-b-[1px] border-b-pink-200 dark:border-b-pink-900'>
                     <div className='flex flex-col gap-2'>
-                        <p className='text-xl'>OneilNvM</p>
+                        <Link href={'/profile'} className='text-xl hover:underline'>OneilNvM</Link>
                         <p className='line-clamp-2 text-gray-500'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Vitae vero ea expedita at facere doloremque recusandae corporis, officiis saepe cumque nam quidem similique ipsa earum. At aliquam accusamus ratione esse!</p>
                     </div>
                     {

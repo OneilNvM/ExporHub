@@ -24,6 +24,14 @@
   @apply bg-transparent
 }
 
+.favourited {
+  @apply !bg-pink-400
+}
+
+.unfavourited {
+  @apply bg-transparent
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -43,6 +51,14 @@
   }
   
   .unfollowed {
+    @apply bg-transparent
+  }
+
+  .favourited {
+    @apply !bg-pink-800
+  }
+  
+  .unfavourited {
     @apply bg-transparent
   }
 }
