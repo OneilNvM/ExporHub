@@ -19,6 +19,8 @@ RUN apt-get update && apt-get install -y \
 COPY . /var/www/app
 WORKDIR /var/www/app
 
+RUN --mount=type=bind,source=certificates,target=/etc/nginx/ssl
+
 # Set folder owner and change permissions to read and write
 RUN chown www-data:www-data /var/www/app \
     && chmod -R 775 /var/www/app/storage
