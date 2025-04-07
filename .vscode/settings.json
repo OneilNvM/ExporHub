@@ -1,0 +1,10 @@
+{
+    "yaml.schemas": {
+        "https://www.artillery.io/schema.json": [
+            "file:///a%3A/Dissertation%20Project/ExporHub/php-implementation/exporhub-backend/artillery.yml",
+            "file:///a%3A/Dissertation%20Project/ExporHub/php-implementation/exporhub-backend/artillery-php-backend-test.yml",
+            "file:///a%3A/Dissertation%20Project/ExporHub/php-implementation/exporhub-backend/artillery-php-backend-load-test.yml",
+            "file:///a%3A/Dissertation%20Project/ExporHub/php-implementation/exporhub-backend/artillery-api-backend-load-test.yml"
+        ]
+    }
+}

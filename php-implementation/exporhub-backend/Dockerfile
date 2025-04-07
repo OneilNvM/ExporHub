@@ -19,6 +19,10 @@ RUN apt-get update && apt-get install -y \
 COPY . /var/www/app
 WORKDIR /var/www/app
 
+RUN mkdir -p /etc/nginx/ssl
+
+COPY ./nginx/nginx.conf /etc/nginx
+
 RUN --mount=type=bind,source=certificates,target=/etc/nginx/ssl
 
 # Set folder owner and change permissions to read and write

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('profile_img', 255)->nullable();
             $table->bigInteger('followers')->default(0);
             $table->dateTimeTz('date_created', 6)->useCurrent();
+            $table->fullText(['username', 'bio'], 'user_search_idx');
         });
     }
 

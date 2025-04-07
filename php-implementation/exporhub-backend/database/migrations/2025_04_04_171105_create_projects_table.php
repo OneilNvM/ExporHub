@@ -21,6 +21,7 @@ return new class extends Migration
             );
             $table->dateTime('date_created', 6)->useCurrent();
             $table->dateTime('date_updated', 6)->nullable();
+            $table->fullText(['name', 'description'], 'project_search_idx');
         });
     }
 
