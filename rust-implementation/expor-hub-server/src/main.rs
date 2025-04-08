@@ -3,21 +3,25 @@ use std::{env, fs::File, io::BufReader};
 use actix_web::{http::header::ACCESS_CONTROL_ALLOW_ORIGIN, middleware, web, App, HttpServer};
 use actix_web_lab::{header::StrictTransportSecurity, middleware::RedirectHttps};
 use expor_hub_server::{
-    db::seeder, initialize_db_pool, routes::{
+    db::seeder,
+    initialize_db_pool,
+    routes::{
         account::{create_account, create_account_options, login, login_options},
         api::*,
+        projects::get_projects_by_date_updated,
         root::*,
         users::{
             email_options, get_user_by_email, get_user_by_id, get_user_by_username,
             user_id_options, username_options,
         },
-    }, validate_auth
+    },
+    validate_auth,
 };
 
 #[actix_web::main]
 async fn main() -> Result<(), std::io::Error> {
     let mut args = env::args().into_iter();
-    
+
     if args.len() > 1 {
         args.next();
 
@@ -97,6 +101,7 @@ async fn main() -> Result<(), std::io::Error> {
                             .service(username_options)
                             .service(email_options),
                     )
+                    .service(web::scope("/project").service(get_projects_by_date_updated))
                     .service(all_tables)
                     .service(show_users)
                     .service(show_projects)

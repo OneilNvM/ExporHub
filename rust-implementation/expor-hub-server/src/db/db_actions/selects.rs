@@ -241,3 +241,32 @@ pub fn find_project_by_name(
         Err(error) => Err(error.into()),
     }
 }
+
+pub fn find_project_by_user_id_udate_desc(
+    conn: &mut MysqlConnection,
+    in_user_id: i32,
+) -> Result<Vec<Project>, anyhow::Error> {
+    use crate::schema::projects;
+    use crate::schema::users;
+
+    let user = users::table
+        .filter(users::columns::user_id.eq(in_user_id))
+        .select(User::as_select())
+        .get_result::<User>(conn)?;
+
+    println!("User Id: {}", user.user_id);
+
+    let projects = Project::belonging_to(&user)
+        .filter(projects::columns::date_updated.is_not_null())
+        .order(projects::columns::date_updated.desc())
+        .select(Project::as_select())
+        .get_results::<Project>(conn);
+
+    match projects {
+        Ok(projects) => {
+            println!("Projects: {:?}", projects);
+            Ok(projects)
+        }
+        Err(error) => Err(error.into()),
+    }
+}

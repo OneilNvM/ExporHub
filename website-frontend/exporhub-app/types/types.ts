@@ -23,3 +23,13 @@ export type UserSessionPayload = {
     userId: number,
     expiresAt: Date
 }
+
+export type Project = {
+    project_id: number,
+    name: string,
+    description: string,
+    favourites: number,
+    user_id: number,
+    date_created: Date,
+    date_updated: Date,
+}

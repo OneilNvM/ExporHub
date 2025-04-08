@@ -4,8 +4,9 @@ use diesel::mysql::Mysql;
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Queryable, Selectable, Debug, Default, Serialize, Deserialize)]
+#[derive(Queryable, Selectable, Identifiable, Debug, Default, Serialize, Deserialize)]
 #[diesel(table_name = users)]
+#[diesel(primary_key(user_id))]
 #[diesel(check_for_backend(Mysql))]
 pub struct User {
     pub user_id: i32,
@@ -40,9 +41,10 @@ impl<'a> NewUser<'a> {
     }
 }
 
-#[derive(Queryable, Selectable, Associations, Debug, Default, Serialize, Deserialize)]
+#[derive(Queryable, Selectable, Identifiable, Associations, Debug, Default, Serialize, Deserialize)]
 #[diesel(table_name = projects)]
 #[diesel(belongs_to(User))]
+#[diesel(primary_key(project_id))]
 #[diesel(check_for_backend(Mysql))]
 pub struct Project {
     pub project_id: i32,

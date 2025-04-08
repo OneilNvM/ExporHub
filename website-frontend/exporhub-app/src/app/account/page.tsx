@@ -5,6 +5,7 @@ import AccountTab from './components/AccountTab'
 import { cookies } from 'next/headers'
 import { decrypt } from '../lib/session'
 import { fetchUser } from '~/fetch/fetchUser'
+import fetchUpdatedProjects from '~/fetch/fetchUpdatedProjects'
 
 export default async function Account() {
   const cookieStore = await cookies()
@@ -16,12 +17,15 @@ export default async function Account() {
   console.log(session)
 
   const user = await fetchUser(result ? result.userId : null)
+  const projects = await fetchUpdatedProjects(result ? result.userId : null)
+
+  console.log(projects)
 
   return (
     <div className='grid auto-rows-auto size-full overflow-auto'>
       <NavBarComponent />
       <main className='flex flex-col md:flex-row items-center row-span-1'>
-        <AccountTab user={user} />
+        <AccountTab user={user} projects={projects} />
       </main>
       <FooterComponent />
     </div>
