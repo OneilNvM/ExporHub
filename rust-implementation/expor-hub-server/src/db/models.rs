@@ -129,10 +129,11 @@ impl<'a> NewProjectImage<'a> {
     }
 }
 
-#[derive(Queryable, Selectable, Associations, Debug, Default, Serialize, Deserialize)]
+#[derive(Queryable, Selectable, Identifiable, Associations, Debug, Default, Serialize, Deserialize)]
 #[diesel(table_name = favourites)]
 #[diesel(belongs_to(User))]
 #[diesel(belongs_to(Project))]
+#[diesel(primary_key(favourite_id))]
 #[diesel(check_for_backend(Mysql))]
 pub struct Favourite {
     pub favourite_id: i32,

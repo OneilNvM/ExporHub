@@ -8,17 +8,17 @@ import { useSearchParams } from 'next/navigation'
 import React from 'react'
 import { Project, User } from '~/types/types'
 
-export default function AccountTab({ user, projects }: {user: User | null, projects: Project[] | null}) {
+export default function AccountTab({ user, projects, projectNotifications, favouriteProjects }: {user: User | null, projects: Project[] | null, projectNotifications: Project[] | null, favouriteProjects: Project[] | null}) {
     const searchParams = useSearchParams()
 
     switch (searchParams.get('tab')) {
         case 'projects':
             return (
-                <ProjectsTab />
+                <ProjectsTab user={user} projects={projects} />
             )
         case 'favourites':
             return (
-                <FavouritesTab />
+                <FavouritesTab user={user} favouriteProjects={favouriteProjects} />
             )
         case 'following':
             return (
@@ -26,7 +26,7 @@ export default function AccountTab({ user, projects }: {user: User | null, proje
             )
         default:
             return (
-                <ProfileTab projects={projects} user={user}/>
+                <ProfileTab projectNotifications={projectNotifications} user={user}/>
             )
     }
 }

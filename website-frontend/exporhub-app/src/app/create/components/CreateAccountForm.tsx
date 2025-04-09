@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import React, { FormEvent, useRef, useState } from 'react'
-import { AccountCreateStatus, User } from '~/types/types'
+import { ResponseStatus, User } from '~/types/types'
 
 export default function CreateAccountForm({ setError }: { setError: React.Dispatch<React.SetStateAction<string>> }) {
   const [username, setUsername] = useState("")
@@ -55,7 +55,7 @@ export default function CreateAccountForm({ setError }: { setError: React.Dispat
               throw new Error(`${response.statusText}`)
             }
 
-            const json = await response.json() as AccountCreateStatus
+            const json = await response.json() as ResponseStatus
 
             if (json.code === 0) {
               setError("Username already taken")
@@ -78,7 +78,7 @@ export default function CreateAccountForm({ setError }: { setError: React.Dispat
               throw new Error(`${response.statusText}`)
             }
 
-            const json = await response.json() as AccountCreateStatus
+            const json = await response.json() as ResponseStatus
 
             if (json.code === 0) {
               setError("Email already taken")
@@ -126,7 +126,7 @@ export default function CreateAccountForm({ setError }: { setError: React.Dispat
       })
 
       if (!response.ok) {
-        const error = await response.json() as AccountCreateStatus;
+        const error = await response.json() as ResponseStatus;
 
         throw new Error(`${error.message}`)
       }

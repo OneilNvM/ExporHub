@@ -8,7 +8,11 @@ use expor_hub_server::{
     routes::{
         account::{create_account, create_account_options, login, login_options},
         api::*,
-        projects::get_projects_by_date_updated,
+        favourite::{
+            create_new_favourite, get_favourite_by_ids, get_favourites_by_user_id,
+            unfavourite_project,
+        },
+        projects::{get_project_by_id, get_projects_by_date_updated, get_projects_by_user_id},
         root::*,
         users::{
             email_options, get_user_by_email, get_user_by_id, get_user_by_username,
@@ -101,7 +105,19 @@ async fn main() -> Result<(), std::io::Error> {
                             .service(username_options)
                             .service(email_options),
                     )
-                    .service(web::scope("/project").service(get_projects_by_date_updated))
+                    .service(
+                        web::scope("/project")
+                            .service(get_project_by_id)
+                            .service(get_projects_by_user_id)
+                            .service(get_projects_by_date_updated),
+                    )
+                    .service(
+                        web::scope("/favourite")
+                            .service(create_new_favourite)
+                            .service(unfavourite_project)
+                            .service(get_favourite_by_ids)
+                            .service(get_favourites_by_user_id),
+                    )
                     .service(all_tables)
                     .service(show_users)
                     .service(show_projects)

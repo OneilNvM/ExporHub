@@ -242,7 +242,30 @@ pub fn find_project_by_name(
     }
 }
 
-pub fn find_project_by_user_id_udate_desc(
+pub fn find_projects_by_user_id(
+    conn: &mut MysqlConnection,
+    in_user_id: i32,
+) -> Result<Vec<Project>, anyhow::Error> {
+    use crate::schema::projects;
+    use crate::schema::users;
+
+    let user = users::table
+        .filter(users::columns::user_id.eq(in_user_id))
+        .select(User::as_select())
+        .get_result::<User>(conn)?;
+
+    let projects = Project::belonging_to(&user)
+        .order(projects::columns::date_created.desc())
+        .select(Project::as_select())
+        .get_results::<Project>(conn);
+
+    match projects {
+        Ok(projects) => Ok(projects),
+        Err(error) => Err(error.into()),
+    }
+}
+
+pub fn find_projects_by_user_id_udate_desc(
     conn: &mut MysqlConnection,
     in_user_id: i32,
 ) -> Result<Vec<Project>, anyhow::Error> {
@@ -266,6 +289,47 @@ pub fn find_project_by_user_id_udate_desc(
         Ok(projects) => {
             println!("Projects: {:?}", projects);
             Ok(projects)
+        }
+        Err(error) => Err(error.into()),
+    }
+}
+
+pub fn find_favourites_by_user_id(
+    conn: &mut MysqlConnection,
+    in_user_id: i32,
+) -> Result<Vec<Favourite>, anyhow::Error> {
+    use crate::schema::users;
+
+    let user = users::table
+        .filter(users::columns::user_id.eq(in_user_id))
+        .select(User::as_select())
+        .get_result::<User>(conn)?;
+
+    let favourites = Favourite::belonging_to(&user)
+        .select(Favourite::as_select())
+        .get_results::<Favourite>(conn);
+
+    match favourites {
+        Ok(favourites) => {
+            println!("Favourites: {:?}", favourites);
+            Ok(favourites)
+        }
+        Err(error) => Err(error.into()),
+    }
+}
+
+pub fn find_favourite_by_ids(conn: &mut MysqlConnection, in_user_id: i32, in_project_id: i32) -> Result<Favourite, anyhow::Error> {
+    use crate::schema::favourites::dsl::*;
+
+    let result = favourites
+        .select(Favourite::as_select())
+        .filter(user_id.eq(in_user_id).and(project_id.eq(in_project_id)))
+        .first::<Favourite>(conn);
+
+    match result {
+        Ok(result) => {
+            println!("Favourites: {:?}", result);
+            Ok(result)
         }
         Err(error) => Err(error.into()),
     }

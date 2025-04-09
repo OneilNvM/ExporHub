@@ -4,7 +4,7 @@ import { signIn } from '@/app/actions/auth'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { FormEvent, useRef, useState } from 'react'
-import { LoginStatus, User } from '~/types/types'
+import { ResponseStatus, User } from '~/types/types'
 
 export default function LoginFormComponent() {
     const [identity, setIdentity] = useState("")
@@ -38,7 +38,7 @@ export default function LoginFormComponent() {
             let json = await response.json();
     
             if (json.code) {
-                const status = json as LoginStatus;
+                const status = json as ResponseStatus;
     
                 console.log(status.code, status.message)
     
@@ -49,9 +49,7 @@ export default function LoginFormComponent() {
                 }
             } else {
                 const user = json as User;
-                console.dir("User Object: " + user)
                 await signIn(user)
-                console.log("Signin finished")
                 router.push('/account')
             }
         } catch (error) {

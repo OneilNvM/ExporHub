@@ -1,9 +1,4 @@
-export type LoginStatus = {
-    code: number,
-    message: string
-}
-
-export type AccountCreateStatus = {
+export type ResponseStatus = {
     code: number,
     message: string
 }
@@ -32,4 +27,11 @@ export type Project = {
     user_id: number,
     date_created: Date,
     date_updated: Date,
+}
+
+export type Favourite = {
+    favourite_id: number,
+    user_id: number,
+    project_id: number,
+    date_favourited: Date,
 }

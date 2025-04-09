@@ -6,16 +6,59 @@ use actix_web::{
 };
 use serde::{Deserialize, Serialize};
 
-use crate::{db::db_actions::selects::find_project_by_user_id_udate_desc, DbPool};
+use crate::{db::db_actions::selects::{find_project_by_id, find_projects_by_user_id, find_projects_by_user_id_udate_desc}, DbPool};
 
 #[derive(Deserialize)]
 struct UserId {
     user_id: i32,
 }
 
+#[derive(Deserialize)]
+struct ProjectId {
+    project_id: i32,
+}
+
+#[derive(Serialize)]
+struct ProjectResponse {
+    code: u8,
+    message: String
+}
+
 #[derive(Serialize)]
 struct NoDates {
     message: String,
+}
+
+#[get("/project-id")]
+pub async fn get_project_by_id(pool: web::Data<DbPool>, project_id: Query<ProjectId>) -> Result<HttpResponse> {
+    let project = web::block(move || {
+        let conn = &mut pool.get()?;
+
+        find_project_by_id(conn, project_id.into_inner().project_id)
+    }).await?.map_err(ErrorInternalServerError);
+
+    match project {
+        Ok(project) => Ok(HttpResponse::Ok().json(project)),
+        Err(_error) => Ok(HttpResponse::Ok().json(ProjectResponse {
+            code: 1 , message: "No project".to_owned(),
+        }))
+    }
+}
+
+#[get("/user-id")]
+pub async fn get_projects_by_user_id(pool: web::Data<DbPool>, user_id: Query<UserId>) -> Result<HttpResponse> {
+    let projects = web::block(move || {
+        let conn = &mut pool.get()?;
+
+        find_projects_by_user_id(conn, user_id.into_inner().user_id)
+    }).await?.map_err(ErrorInternalServerError);
+
+    match projects {
+        Ok(projects) => Ok(HttpResponse::Ok().json(projects)),
+        Err(_error) => Ok(HttpResponse::Ok().json(ProjectResponse {
+            code: 1 , message: "No projects".to_owned(),
+        }))
+    }
 }
 
 #[get("/date-updated")]
@@ -26,7 +69,7 @@ pub async fn get_projects_by_date_updated(
     let projects = web::block(move || {
         let conn = &mut pool.get()?;
 
-        find_project_by_user_id_udate_desc(conn, user_id.into_inner().user_id)
+        find_projects_by_user_id_udate_desc(conn, user_id.into_inner().user_id)
     })
     .await?
     .map_err(ErrorInternalServerError);

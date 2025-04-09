@@ -33,8 +33,6 @@ export async function decrypt(session: string | undefined = '') {
 }
 
 export async function createSession(userId: number) {
-    console.log("Im here also")
-
     try {
         const expiresAt = new Date(Date.now() + 1 * 24 * 60 * 60 * 1000)
         const session = await encrypt({ userId, expiresAt })
