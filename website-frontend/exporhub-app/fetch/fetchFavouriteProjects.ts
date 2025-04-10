@@ -1,6 +1,6 @@
 import { Favourite, Project } from "~/types/types"
 
-export default async function fetchFavouriteProjects(userId: number | null) {
+export default async function fetchFavouriteProjects(userId: number): Promise<Project[] | null> {
     try {
         let projects: Array<Project> = []
         const favouritesResponse = await fetch(`https://api.exporhub.com:9000/api/favourite/user-id?user_id=${userId}`)

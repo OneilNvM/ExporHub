@@ -1,6 +1,6 @@
 import { Favourite } from "~/types/types"
 
-export default async function fetchFavourite(userId: number | undefined, projectId: number) {
+export default async function fetchFavourite(userId: number | null, projectId: number): Promise<Favourite | null> {
     try {
         const favRes = await fetch(`https://api.exporhub.com:9000/api/favourite/u-p-id?user_id=${userId}&project_id=${projectId}`)
 

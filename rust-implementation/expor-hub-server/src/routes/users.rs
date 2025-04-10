@@ -2,31 +2,10 @@ use actix_web::{
     error, get, http::header::ACCESS_CONTROL_ALLOW_METHODS, options, web, HttpResponse, Responder,
     Result,
 };
-use serde::{Deserialize, Serialize};
 
 use crate::{
-    db::db_actions::selects::{find_user_by_email, find_user_by_id, find_user_by_username},
-    DbPool,
+    db::db_actions::selects::{find_user_by_email, find_user_by_id, find_user_by_username}, routes::{Email, ServerResponse, UserId, Username}, DbPool
 };
-
-#[derive(Serialize)]
-struct DbResponse {
-    code: u8,
-    message: String,
-}
-
-#[derive(Deserialize)]
-struct UserId {
-    user_id: i32,
-}
-#[derive(Deserialize)]
-struct Username {
-    username: String,
-}
-#[derive(Deserialize)]
-struct Email {
-    email: String,
-}
 
 #[get("/user-id")]
 pub async fn get_user_by_id(
@@ -43,7 +22,7 @@ pub async fn get_user_by_id(
 
     match user {
         Ok(user) => Ok(HttpResponse::Ok().json(user)),
-        Err(error) => Ok(HttpResponse::Ok().json(DbResponse {
+        Err(error) => Ok(HttpResponse::Ok().json(ServerResponse {
             code: 1,
             message: error.to_string(),
         })),
@@ -71,11 +50,11 @@ pub async fn get_user_by_username(
     .map_err(error::ErrorInternalServerError);
 
     match user {
-        Ok(_) => Ok(HttpResponse::Ok().json(DbResponse {
+        Ok(_) => Ok(HttpResponse::Ok().json(ServerResponse {
             code: 0,
             message: "Success".to_owned(),
         })),
-        Err(error) => Ok(HttpResponse::Ok().json(DbResponse {
+        Err(error) => Ok(HttpResponse::Ok().json(ServerResponse {
             code: 1,
             message: error.to_string(),
         })),
@@ -103,11 +82,11 @@ pub async fn get_user_by_email(
     .map_err(error::ErrorInternalServerError);
 
     match user {
-        Ok(_) => Ok(HttpResponse::Ok().json(DbResponse {
+        Ok(_) => Ok(HttpResponse::Ok().json(ServerResponse {
             code: 0,
             message: "Success".to_owned(),
         })),
-        Err(error) => Ok(HttpResponse::Ok().json(DbResponse {
+        Err(error) => Ok(HttpResponse::Ok().json(ServerResponse {
             code: 1,
             message: error.to_string(),
         })),

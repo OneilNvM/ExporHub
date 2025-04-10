@@ -5,8 +5,10 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React from 'react'
 import GlobeSVG from '~/public/logo_draft_3.svg'
+import { User } from '~/types/types'
+import UnfollowButton from './UnfollowButton'
 
-export default function ProfileItem() {
+export default function ProfileItem({ user, session, setFollowedUsers }: { user: User, session: {userId: number, expiresAt: Date}, setFollowedUsers: React.Dispatch<React.SetStateAction<User[] | null>> }) {
     const pathname = usePathname()
 
     return (
@@ -17,28 +19,18 @@ export default function ProfileItem() {
             <div className='flex flex-col w-full'>
                 <div className='flex justify-between py-2 border-b-[1px] border-b-pink-200 dark:border-b-pink-900'>
                     <div className='flex flex-col gap-2'>
-                        <Link href={'/profile'} className='text-xl hover:underline'>OneilNvM</Link>
-                        <p className='line-clamp-2 text-gray-500'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Vitae vero ea expedita at facere doloremque recusandae corporis, officiis saepe cumque nam quidem similique ipsa earum. At aliquam accusamus ratione esse!</p>
+                        <Link href={'/profile'} className='text-xl hover:underline'>{user.username}</Link>
+                        <p className='line-clamp-2 text-gray-500'>{user.bio}</p>
                     </div>
                     {
-                        pathname == "/account" ? <UnfollowButton /> : null
+                        pathname == "/account" ? <UnfollowButton setFollowedUsers={setFollowedUsers} session={session} user={user} /> : null
                     }
                 </div>
                 <div className='flex py-2 justify-between'>
                     <p>12 projects</p>
-                    <p>1000 Followers</p>
+                    <p>{user.followers}</p>
                 </div>
             </div>
-        </div>
-    )
-}
-
-const UnfollowButton = () => {
-    return (
-        <div className='border self-center rounded-md border-pink-300 dark:border-pink-900'>
-            <button className='px-2 py-1'>
-                Unfollow
-            </button>
         </div>
     )
 }

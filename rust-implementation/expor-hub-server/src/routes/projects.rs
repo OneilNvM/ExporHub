@@ -4,30 +4,8 @@ use actix_web::{
     web::{self, Query},
     HttpResponse, Result,
 };
-use serde::{Deserialize, Serialize};
 
-use crate::{db::db_actions::selects::{find_project_by_id, find_projects_by_user_id, find_projects_by_user_id_udate_desc}, DbPool};
-
-#[derive(Deserialize)]
-struct UserId {
-    user_id: i32,
-}
-
-#[derive(Deserialize)]
-struct ProjectId {
-    project_id: i32,
-}
-
-#[derive(Serialize)]
-struct ProjectResponse {
-    code: u8,
-    message: String
-}
-
-#[derive(Serialize)]
-struct NoDates {
-    message: String,
-}
+use crate::{db::db_actions::selects::{find_project_by_id, find_projects_by_user_id, find_projects_by_user_id_udate_desc}, routes::{NoDates, ProjectId, ServerResponse, UserId}, DbPool};
 
 #[get("/project-id")]
 pub async fn get_project_by_id(pool: web::Data<DbPool>, project_id: Query<ProjectId>) -> Result<HttpResponse> {
@@ -39,7 +17,7 @@ pub async fn get_project_by_id(pool: web::Data<DbPool>, project_id: Query<Projec
 
     match project {
         Ok(project) => Ok(HttpResponse::Ok().json(project)),
-        Err(_error) => Ok(HttpResponse::Ok().json(ProjectResponse {
+        Err(_error) => Ok(HttpResponse::Ok().json(ServerResponse {
             code: 1 , message: "No project".to_owned(),
         }))
     }
@@ -55,7 +33,7 @@ pub async fn get_projects_by_user_id(pool: web::Data<DbPool>, user_id: Query<Use
 
     match projects {
         Ok(projects) => Ok(HttpResponse::Ok().json(projects)),
-        Err(_error) => Ok(HttpResponse::Ok().json(ProjectResponse {
+        Err(_error) => Ok(HttpResponse::Ok().json(ServerResponse {
             code: 1 , message: "No projects".to_owned(),
         }))
     }

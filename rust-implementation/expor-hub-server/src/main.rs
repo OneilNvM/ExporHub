@@ -12,6 +12,7 @@ use expor_hub_server::{
             create_new_favourite, get_favourite_by_ids, get_favourites_by_user_id,
             unfavourite_project,
         },
+        follow::get_user_followings,
         projects::{get_project_by_id, get_projects_by_date_updated, get_projects_by_user_id},
         root::*,
         users::{
@@ -118,6 +119,7 @@ async fn main() -> Result<(), std::io::Error> {
                             .service(get_favourite_by_ids)
                             .service(get_favourites_by_user_id),
                     )
+                    .service(web::scope("/follow").service(get_user_followings))
                     .service(all_tables)
                     .service(show_users)
                     .service(show_projects)

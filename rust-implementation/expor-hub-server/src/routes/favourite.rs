@@ -3,26 +3,8 @@ use std::{collections::HashMap, ops::{Add, Sub}};
 use actix_web::{
     error::ErrorInternalServerError, get, post, web, HttpResponse, Result
 };
-use serde::{Deserialize, Serialize};
 
-use crate::{db::db_actions::{deletes::delete_favourite_by_ids, inserts::insert_favourite, selects::{find_favourite_by_ids, find_favourites_by_user_id, find_project_by_id}, updates::update_project}, DbPool};
-
-#[derive(Deserialize)]
-struct UserId {
-    user_id: i32,
-}
-
-#[derive(Deserialize)]
-struct UserAndProjectId {
-    user_id: i32,
-    project_id: i32
-}
-
-#[derive(Serialize)]
-struct FavouriteResponse {
-    code: u8,
-    message: String
-}
+use crate::{db::db_actions::{deletes::delete_favourite_by_ids, inserts::insert_favourite, selects::{find_favourite_by_ids, find_favourites_by_user_id, find_project_by_id}, updates::update_project}, routes::{ServerResponse, UserAndProjectId, UserId}, DbPool};
 
 #[get("/user-id")]
 pub async fn get_favourites_by_user_id(pool: web::Data<DbPool>, user_id: web::Query<UserId>) -> Result<HttpResponse> {
@@ -34,7 +16,7 @@ pub async fn get_favourites_by_user_id(pool: web::Data<DbPool>, user_id: web::Qu
 
     match favourites {
         Ok(favourites) => Ok(HttpResponse::Ok().json(favourites)),
-        Err(_error) => Ok(HttpResponse::Ok().json(FavouriteResponse {
+        Err(_error) => Ok(HttpResponse::Ok().json(ServerResponse {
             code: 1, message: "No Favourites".to_owned()
         }))
     }
@@ -61,7 +43,7 @@ pub async fn unfavourite_project(pool: web::Data<DbPool>, ids: web::Query<UserAn
 
     match result {
         Ok(_) => Ok(HttpResponse::NoContent().finish()),
-        Err(error) => Ok(HttpResponse::Ok().json(FavouriteResponse {
+        Err(error) => Ok(HttpResponse::Ok().json(ServerResponse {
             code: 1, message: error.to_string()
         }))
     }
@@ -79,7 +61,7 @@ pub async fn get_favourite_by_ids(pool: web::Data<DbPool>, ids: web::Query<UserA
 
     match favourite {
         Ok(favourite) => Ok(HttpResponse::Ok().json(favourite)),
-        Err(_error) => Ok(HttpResponse::Ok().json(FavouriteResponse {
+        Err(_error) => Ok(HttpResponse::Ok().json(ServerResponse {
             code: 1, message: "No Favourite".to_owned()
         }))
     }
@@ -109,7 +91,7 @@ pub async fn create_new_favourite(pool: web::Data<DbPool>, ids: web::Query<UserA
 
     match favourite {
         Ok(favourite) => Ok(HttpResponse::Ok().json(favourite.unwrap())),
-        Err(_error) => Ok(HttpResponse::Ok().json(FavouriteResponse {
+        Err(_error) => Ok(HttpResponse::Ok().json(ServerResponse {
             code: 1, message: "Failed to favourite".to_owned()
         }))
     }

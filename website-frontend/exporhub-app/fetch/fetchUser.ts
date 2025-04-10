@@ -1,6 +1,6 @@
 import { User } from '~/types/types'
 
-export async function fetchUser(userId: number | null): Promise<User | null> {
+export async function fetchUser(userId: number): Promise<User | null> {
     try {
         const response = await fetch(`https://api.exporhub.com:9000/api/user/user-id?user_id=${userId}`)
 

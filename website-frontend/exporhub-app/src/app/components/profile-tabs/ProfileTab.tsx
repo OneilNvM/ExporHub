@@ -1,3 +1,5 @@
+'use client'
+
 import Image from 'next/image'
 import React from 'react'
 import LogoSVG from '~/public/logo_draft_3.svg'
@@ -5,8 +7,11 @@ import FollowButton from './client-components/FollowButton'
 import ConditionalButtons from './client-components/ConditionalButtons'
 import { Project, User } from '~/types/types'
 import ProjectNotification from './client-components/ProjectNotification'
+import { usePathname } from 'next/navigation'
 
 export default function ProfileTab({ user, projectNotifications }: { user: User | null, projectNotifications: Project[] | null }) {
+    const pathname = usePathname();
+
     return (
         <>
             <section className='flex flex-1 w-full flex-col gap-4 my-4 md:ml-10 self-start'>
@@ -21,7 +26,7 @@ export default function ProfileTab({ user, projectNotifications }: { user: User 
                 </div>
                 <div className='ml-4 self-center md:self-start'>
                     <div className='flex relative rounded-md items-center border text-pink-300 border-pink-300 dark:text-pink-950 dark:border-pink-950'>
-                        <FollowButton />
+                        {pathname === "/profile" && <FollowButton />}
                         <span className='px-2 text-black dark:text-white'>{user ? user.followers === 1 ? `${user.followers} follower` : `${user.followers} followers` : null}</span>
                     </div>
                 </div>
@@ -37,7 +42,7 @@ export default function ProfileTab({ user, projectNotifications }: { user: User 
                     <p className='text-4xl'>Recent Project Activity</p>
                     {
                         projectNotifications?.length !== 0 ? projectNotifications?.map((project, index) => {
-                            return <ProjectNotification key={index} project={project}/>
+                            return <ProjectNotification key={index} project={project} />
                         }) : <p>No Projects</p>
                     }
                 </div>

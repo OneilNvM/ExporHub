@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import React from 'react'
 import GlobeSVG from '~/public/globe.svg'
-import FavouriteButton from './FavouriteButton'
+import FavouriteButton from '../profile-tabs/client-components/FavouriteButton'
 import Link from 'next/link'
 import { Project, User } from '~/types/types'
 

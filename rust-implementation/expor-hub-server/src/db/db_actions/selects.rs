@@ -277,8 +277,6 @@ pub fn find_projects_by_user_id_udate_desc(
         .select(User::as_select())
         .get_result::<User>(conn)?;
 
-    println!("User Id: {}", user.user_id);
-
     let projects = Project::belonging_to(&user)
         .filter(projects::columns::date_updated.is_not_null())
         .order(projects::columns::date_updated.desc())
@@ -287,7 +285,6 @@ pub fn find_projects_by_user_id_udate_desc(
 
     match projects {
         Ok(projects) => {
-            println!("Projects: {:?}", projects);
             Ok(projects)
         }
         Err(error) => Err(error.into()),
@@ -311,7 +308,6 @@ pub fn find_favourites_by_user_id(
 
     match favourites {
         Ok(favourites) => {
-            println!("Favourites: {:?}", favourites);
             Ok(favourites)
         }
         Err(error) => Err(error.into()),
@@ -328,9 +324,25 @@ pub fn find_favourite_by_ids(conn: &mut MysqlConnection, in_user_id: i32, in_pro
 
     match result {
         Ok(result) => {
-            println!("Favourites: {:?}", result);
             Ok(result)
         }
         Err(error) => Err(error.into()),
+    }
+}
+
+pub fn find_user_followings(conn: &mut MysqlConnection, in_follower_id: i32) -> Result<Vec<Follow>, anyhow::Error> {
+    use crate::schema::follows::dsl::*;
+
+    let results = follows
+        .select(Follow::as_select())
+        .filter(follower.eq(in_follower_id))
+        .get_results(conn);
+
+    match results {
+        Ok(results) => {
+            println!("Follows: {:?}", results);
+            Ok(results)
+        },
+        Err(error) => Err(error.into())
     }
 }

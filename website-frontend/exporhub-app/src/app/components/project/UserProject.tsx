@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import React from 'react'
-import FavouriteButton from './FavouriteButton'
+import FavouriteButton from '../profile-tabs/client-components/FavouriteButton'
 import { Project, User } from '~/types/types'
 
 export default function UserProject({ user, isFavourited, project }: { user: User | null, isFavourited: boolean, project: Project }) {

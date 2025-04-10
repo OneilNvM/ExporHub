@@ -35,3 +35,10 @@ export type Favourite = {
     project_id: number,
     date_favourited: Date,
 }
+
+export type Follow = {
+    follow_id: number,
+    follower: number,
+    following: number,
+    date_followed: Date,
+}

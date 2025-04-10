@@ -3,7 +3,6 @@ use actix_web::{
     http::header::{ACCESS_CONTROL_ALLOW_HEADERS, ACCESS_CONTROL_ALLOW_METHODS},
     options, post, web, HttpResponse, Responder, Result,
 };
-use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 
 use crate::{
@@ -11,22 +10,8 @@ use crate::{
         connection::establish_connection,
         inserts::insert_user,
         selects::{find_user_by_email, find_user_by_username},
-    },
-    errors::error::LoginError,
-    DbPool,
+    }, errors::error::LoginError, routes::{ServerResponse, UserCredentials, UserData}, DbPool
 };
-
-#[derive(Deserialize)]
-struct UserCredentials {
-    username_or_email: String,
-    password: String,
-}
-
-#[derive(Serialize)]
-struct LoginResponse {
-    code: u8,
-    message: String,
-}
 
 #[post("/login")]
 pub async fn login(
@@ -55,13 +40,13 @@ pub async fn login(
                 if hex == user.password {
                     Ok(HttpResponse::Ok().json(user))
                 } else {
-                    Ok(HttpResponse::Ok().json(LoginResponse {
+                    Ok(HttpResponse::Ok().json(ServerResponse {
                         code: 1,
                         message: LoginError::InvalidCredentials.to_string(),
                     }))
                 }
             }
-            Err(error) => Ok(HttpResponse::Ok().json(LoginResponse {
+            Err(error) => Ok(HttpResponse::Ok().json(ServerResponse {
                 code: 2,
                 message: error.to_string(),
             })),
@@ -86,13 +71,13 @@ pub async fn login(
                 if hex == user.password {
                     Ok(HttpResponse::Ok().json(user))
                 } else {
-                    Ok(HttpResponse::Ok().json(LoginResponse {
+                    Ok(HttpResponse::Ok().json(ServerResponse {
                         code: 1,
                         message: LoginError::InvalidCredentials.to_string(),
                     }))
                 }
             }
-            Err(error) => Ok(HttpResponse::Ok().json(LoginResponse {
+            Err(error) => Ok(HttpResponse::Ok().json(ServerResponse {
                 code: 2,
                 message: error.to_string(),
             })),
@@ -108,18 +93,6 @@ pub async fn login_options() -> impl Responder {
         .finish()
 }
 
-#[derive(Deserialize)]
-struct UserData {
-    username: String,
-    email: String,
-    password: String,
-}
-
-#[derive(Serialize)]
-struct CreateAccountResponse {
-    code: u8,
-    message: String,
-}
 
 #[post("/create-account")]
 pub async fn create_account(
@@ -139,7 +112,7 @@ pub async fn create_account(
     match user {
         Ok(user) => Ok(HttpResponse::Ok().json(user.unwrap())),
         Err(error) => Ok(
-            HttpResponse::Ok().json(CreateAccountResponse {
+            HttpResponse::Ok().json(ServerResponse {
                 code: 1,
                 message: error.to_string(),
             }),

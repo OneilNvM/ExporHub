@@ -6,15 +6,15 @@ import ProfileTab from '@/app/components/profile-tabs/ProfileTab'
 import ProjectsTab from '@/app/components/profile-tabs/ProjectsTab'
 import { useSearchParams } from 'next/navigation'
 import React from 'react'
-import { Project, User } from '~/types/types'
+import { Follow, Project, User } from '~/types/types'
 
-export default function AccountTab({ user, projects, projectNotifications, favouriteProjects }: {user: User | null, projects: Project[] | null, projectNotifications: Project[] | null, favouriteProjects: Project[] | null}) {
+export default function AccountTab({ user, session, followings, projects, favouritesArr, projectNotifications, favouriteProjects }: {user: User | null, session: {userId: number, expiresAt: Date}, followings: User[] | null, favouritesArr: boolean[], projects: Project[] | null, projectNotifications: Project[] | null, favouriteProjects: Project[] | null}) {
     const searchParams = useSearchParams()
 
     switch (searchParams.get('tab')) {
         case 'projects':
             return (
-                <ProjectsTab user={user} projects={projects} />
+                <ProjectsTab favouritesArr={favouritesArr} user={user} projects={projects} />
             )
         case 'favourites':
             return (
@@ -22,7 +22,7 @@ export default function AccountTab({ user, projects, projectNotifications, favou
             )
         case 'following':
             return (
-                <FollowingTab />
+                <FollowingTab session={session} followings={followings} />
             )
         default:
             return (
