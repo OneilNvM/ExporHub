@@ -26,7 +26,15 @@ export default function ProfileTab({ user, projectNotifications, profileUserId, 
                 </div>
                 <div className='ml-4 self-center md:self-start'>
                     <div className='flex relative rounded-md items-center border text-pink-300 border-pink-300 dark:text-pink-950 dark:border-pink-950'>
-                        {pathname.includes("/profile") && profileUserId && sessionUserId && isFollowed ? <FollowButton isFollowed={isFollowed} profileUserId={profileUserId} sessionUserId={sessionUserId}/> : null}
+                        {
+                            pathname.includes("/profile") && profileUserId && sessionUserId ?
+                                user?.user_id !== sessionUserId ?
+                                    isFollowed ?
+                                        <FollowButton isFollowed={isFollowed} profileUserId={profileUserId} sessionUserId={sessionUserId} /> :
+                                        <FollowButton isFollowed={false} profileUserId={profileUserId} sessionUserId={sessionUserId} /> :
+                                    null :
+                                null
+                        }
                         <span className='px-2 text-black dark:text-white'>{user ? user.followers === 1 ? `${user.followers} follower` : `${user.followers} followers` : null}</span>
                     </div>
                 </div>

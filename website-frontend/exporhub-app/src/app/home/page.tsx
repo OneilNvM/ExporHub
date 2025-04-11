@@ -19,11 +19,12 @@ export default async function Home() {
       const projects = await fetchProjects()
 
       let favouritesArr = []
+
       if (projects) {
         for (const project of projects) {
           const favouriteObj = await fetchFavourite(result.userId, project.project_id)
-  
-          favouriteObj && favouritesArr.push(true)
+
+          favouriteObj && favouritesArr.push(project.name)
         }
       }
 
@@ -46,7 +47,7 @@ export default async function Home() {
                 </div>
                 <div className='flex w-full flex-col gap-8'>
                   {projects?.length === 0 ? <p>Nothing here today</p> : projects?.map((project, index) => {
-                    return <ProjectItem key={project.project_id} sessionUserId={result.userId} isFavourited={favouritesArr[index]} project={project}/>
+                    return <ProjectItem key={project.project_id} sessionUserId={result.userId} isFavourited={favouritesArr.includes(project.name) ? true : false} project={project} />
                   })}
                 </div>
               </div>

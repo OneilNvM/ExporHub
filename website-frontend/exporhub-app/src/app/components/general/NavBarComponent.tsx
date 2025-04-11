@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import React, { useEffect, useState } from 'react'
+import React, { FormEvent, useEffect, useState } from 'react'
 import LogoSVG from '~/public/logo_draft_3.svg'
 import { Search } from 'lucide-react'
 import Link from 'next/link'
@@ -13,7 +13,8 @@ export default function NavBarComponent() {
   const queryParams = useSearchParams()
   const router = useRouter()
 
-  const handleSearch = () => {
+  const handleSearch = (e: FormEvent) => {
+    e.preventDefault()
     router.push(`/search?q=${query}`)
   }
 
@@ -74,11 +75,14 @@ export default function NavBarComponent() {
           <Link href={"/"}>
             <Image src={LogoSVG} width={36} className='rounded-full' alt='Logo Image' />
           </Link>
-          <div onClick={handleSearch} className='flex items-center gap-4 w-1/2 rounded-full pl-6 p-2 bg-transparent border border-pink-200 dark:border-pink-900'>
-            <button className='text-pink-200 dark:text-pink-950'>
-              <Search size={24} absoluteStrokeWidth={true} />
-            </button>
-            <input id='search-input' onChange={e => setQuery(e.target.value)} type="text" className='w-full bg-transparent outline-none' placeholder='Explore and indulge' value={query} />
+          <div className='flex items-center gap-4 w-1/2 rounded-full pl-6 p-2 bg-transparent border border-pink-200 dark:border-pink-900'>
+            <form className='flex w-full gap-4' action="/search">
+              <button type='submit' onSubmit={handleSearch} className='text-pink-200 dark:text-pink-950'>
+                <Search size={24} absoluteStrokeWidth={true} />
+              </button>
+              <input id='search-input' name='q' onChange={e => setQuery(e.target.value)} type="text" className='w-full bg-transparent outline-none' placeholder='Explore and indulge' value={query} />
+            </form>
+
           </div>
           <button>
             <Link href={"/account"}>
@@ -117,10 +121,12 @@ export default function NavBarComponent() {
           <Image src={LogoSVG} width={36} className='rounded-full' alt='Logo Image' />
         </Link>
         <div className='flex items-center gap-4 w-1/2 rounded-full pl-6 p-2 bg-transparent border border-pink-200 dark:border-pink-900'>
-          <button onClick={handleSearch} className='text-pink-200 dark:text-pink-950'>
-            <Search size={24} absoluteStrokeWidth={true} />
-          </button>
-          <input id='search-input' onChange={e => setQuery(e.target.value)} type="text" className='w-full bg-transparent outline-none' placeholder='Explore and indulge' value={query} />
+          <form className='flex w-full gap-4' action="/search">
+            <button type='submit' onSubmit={handleSearch} className='text-pink-200 dark:text-pink-950'>
+              <Search size={24} absoluteStrokeWidth={true} />
+            </button>
+            <input id='search-input' name='q' onChange={e => setQuery(e.target.value)} type="text" className='w-full bg-transparent outline-none' placeholder='Explore and indulge' value={query} />
+          </form>
         </div>
         <button>
           <Link href={"/account"}>

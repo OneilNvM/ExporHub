@@ -57,7 +57,7 @@ export default function ProfileItem({ user, followedUsers, profileUserId, sessio
 
     return (
         <div className='flex rounded-2xl p-4 w-full max-w-[52rem] items-center gap-4 border border-pink-200 dark:border-pink-900'>
-            <Link href={'/profile'} className='self-start'>
+            <Link href={`/profile/${user.username}`} className='self-start'>
                 <Image src={GlobeSVG} className='rounded-full' width={56} alt='Profile Picture' />
             </Link>
             <div className='flex flex-col w-full'>
