@@ -42,7 +42,7 @@ export default async function Account() {
         <div className='grid auto-rows-auto size-full overflow-auto'>
           <NavBarComponent />
           <main className='flex flex-col md:flex-row items-center row-span-1'>
-            <AccountTab session={result} followings={followings} favouritesArr={favouritesArr} favouriteProjects={favouriteProjects} user={user} projects={projects} projectNotifications={projectNotifications} />
+            <AccountTab sessionUserId={result.userId} followings={followings} favouritesArr={favouritesArr} favouriteProjects={favouriteProjects} user={user} projects={projects} projectNotifications={projectNotifications} />
           </main>
           <FooterComponent />
         </div>

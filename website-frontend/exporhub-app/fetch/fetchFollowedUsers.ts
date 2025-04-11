@@ -5,7 +5,7 @@ export default async function fetchFollowedUsers(userId: number): Promise<User[]
         const followings = await fetch(`https://api.exporhub.com:9000/api/follow/user-id?user_id=${userId}`)
 
         if (!followings.ok) {
-            throw new Error(`Failed to find followings`)
+            throw new Error(`Failed to find followings ${followings.status} ${followings.statusText}`)
         }
 
         const follows = await followings.json() as Array<Follow>

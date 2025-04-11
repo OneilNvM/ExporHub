@@ -8,25 +8,25 @@ import { useSearchParams } from 'next/navigation'
 import React from 'react'
 import { Follow, Project, User } from '~/types/types'
 
-export default function AccountTab({ user, session, followings, projects, favouritesArr, projectNotifications, favouriteProjects }: {user: User | null, session: {userId: number, expiresAt: Date}, followings: User[] | null, favouritesArr: boolean[], projects: Project[] | null, projectNotifications: Project[] | null, favouriteProjects: Project[] | null}) {
+export default function AccountTab({ user, sessionUserId, followings, projects, favouritesArr, projectNotifications, favouriteProjects }: { user: User | null, sessionUserId: number, followings: User[] | null, favouritesArr: boolean[], projects: Project[] | null, projectNotifications: Project[] | null, favouriteProjects: Project[] | null }) {
     const searchParams = useSearchParams()
 
     switch (searchParams.get('tab')) {
         case 'projects':
             return (
-                <ProjectsTab favouritesArr={favouritesArr} user={user} projects={projects} />
+                <ProjectsTab favouritesArr={favouritesArr} sessionUserId={sessionUserId} projects={projects} />
             )
         case 'favourites':
             return (
-                <FavouritesTab user={user} favouriteProjects={favouriteProjects} />
+                <FavouritesTab sessionUserId={sessionUserId} favouriteProjects={favouriteProjects} />
             )
         case 'following':
             return (
-                <FollowingTab session={session} followings={followings} />
+                <FollowingTab sessionUserId={sessionUserId} followings={followings} />
             )
         default:
             return (
-                <ProfileTab projectNotifications={projectNotifications} user={user}/>
+                <ProfileTab projectNotifications={projectNotifications} user={user} />
             )
     }
 }

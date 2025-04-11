@@ -9,7 +9,7 @@ import { Project, User } from '~/types/types'
 import ProjectNotification from './client-components/ProjectNotification'
 import { usePathname } from 'next/navigation'
 
-export default function ProfileTab({ user, projectNotifications }: { user: User | null, projectNotifications: Project[] | null }) {
+export default function ProfileTab({ user, projectNotifications, profileUserId, sessionUserId, isFollowed }: { user: User | null, projectNotifications: Project[] | null, sessionUserId?: number, profileUserId?: number, isFollowed?: boolean }) {
     const pathname = usePathname();
 
     return (
@@ -26,7 +26,7 @@ export default function ProfileTab({ user, projectNotifications }: { user: User 
                 </div>
                 <div className='ml-4 self-center md:self-start'>
                     <div className='flex relative rounded-md items-center border text-pink-300 border-pink-300 dark:text-pink-950 dark:border-pink-950'>
-                        {pathname === "/profile" && <FollowButton />}
+                        {pathname.includes("/profile") && profileUserId && sessionUserId && isFollowed ? <FollowButton isFollowed={isFollowed} profileUserId={profileUserId} sessionUserId={sessionUserId}/> : null}
                         <span className='px-2 text-black dark:text-white'>{user ? user.followers === 1 ? `${user.followers} follower` : `${user.followers} followers` : null}</span>
                     </div>
                 </div>

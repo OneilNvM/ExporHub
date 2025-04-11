@@ -1,17 +1,23 @@
 'use client'
 
 import Image from 'next/image'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import LogoSVG from '~/public/logo_draft_3.svg'
 import { Search } from 'lucide-react'
 import Link from 'next/link'
-import { usePathname, useSearchParams } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 export default function NavBarComponent() {
+  const [query, setQuery] = useState("")
   const pathName = usePathname()
   const queryParams = useSearchParams()
+  const router = useRouter()
 
-  if (pathName == "/account" || pathName == "/profile") {
+  const handleSearch = () => {
+    router.push(`/search?q=${query}`)
+  }
+
+  if (pathName == "/account" || pathName.includes("/profile")) {
     useEffect(() => {
       const profileTab = document.getElementById('profile-tab');
       const projectsTab = document.getElementById('projects-tab');
@@ -68,34 +74,36 @@ export default function NavBarComponent() {
           <Link href={"/"}>
             <Image src={LogoSVG} width={36} className='rounded-full' alt='Logo Image' />
           </Link>
-          <div className='flex items-center gap-4 w-1/2 rounded-full pl-6 p-2 bg-transparent border border-pink-200 dark:border-pink-900'>
+          <div onClick={handleSearch} className='flex items-center gap-4 w-1/2 rounded-full pl-6 p-2 bg-transparent border border-pink-200 dark:border-pink-900'>
             <button className='text-pink-200 dark:text-pink-950'>
               <Search size={24} absoluteStrokeWidth={true} />
             </button>
-            <input type="text" className='w-full bg-transparent outline-none' placeholder='Explore and indulge' />
+            <input id='search-input' onChange={e => setQuery(e.target.value)} type="text" className='w-full bg-transparent outline-none' placeholder='Explore and indulge' value={query} />
           </div>
           <button>
-            <Image src={LogoSVG} className='rounded-full' width={56} alt='Profile Pic' />
+            <Link href={"/account"}>
+              <Image src={LogoSVG} className='rounded-full' width={56} alt='Profile Pic' />
+            </Link>
           </button>
         </div>
         <div className='flex relative bottom-[1.8rem] text-lg'>
           <div id='profile-tab' className='absolute border-e border-b border-t rounded-e-full z-30 transition-colors duration-500 ease-in-out border-pink-300 bg-pink-200 dark:border-pink-800 dark:bg-pink-950'>
-            <Link href={pathName == "/account" ? "/account" : "/profile"} className='px-14'>
+            <Link href={pathName == "/account" ? "/account" : pathName} className='px-14'>
               Profile
             </Link>
           </div>
           <div id='projects-tab' className='absolute left-32 border rounded-full z-20 transition-colors duration-500 ease-in-out border-pink-300 bg-pink-200 dark:border-pink-800 dark:bg-pink-950'>
-            <Link href={pathName == "/account" ? "/account?tab=projects" : "/profile?tab=projects"} className='px-14'>
+            <Link href={pathName == "/account" ? "/account?tab=projects" : `${pathName}?tab=projects`} className='px-14'>
               Projects
             </Link>
           </div>
           <div id='favourites-tab' className='absolute left-[16.5rem] border rounded-full z-10 transition-colors duration-500 ease-in-out border-pink-300 bg-pink-200 dark:border-pink-800 dark:bg-pink-950'>
-            <Link href={pathName == "/account" ? "/account?tab=favourites" : "/profile?tab=favourites"} className='px-14'>
+            <Link href={pathName == "/account" ? "/account?tab=favourites" : `${pathName}?tab=favourites`} className='px-14'>
               Favourites
             </Link>
           </div>
           <div id='following-tab' className='absolute left-[26rem] border rounded-full z-0 transition-colors duration-500 ease-in-out border-pink-300 bg-pink-200 dark:border-pink-800 dark:bg-pink-950'>
-            <Link href={pathName == "/account" ? "/account?tab=following" : "/profile?tab=following"} className='px-14'>
+            <Link href={pathName == "/account" ? "/account?tab=following" : `${pathName}?tab=following`} className='px-14'>
               Following
             </Link>
           </div>
@@ -109,13 +117,15 @@ export default function NavBarComponent() {
           <Image src={LogoSVG} width={36} className='rounded-full' alt='Logo Image' />
         </Link>
         <div className='flex items-center gap-4 w-1/2 rounded-full pl-6 p-2 bg-transparent border border-pink-200 dark:border-pink-900'>
-          <button className='text-pink-200 dark:text-pink-950'>
+          <button onClick={handleSearch} className='text-pink-200 dark:text-pink-950'>
             <Search size={24} absoluteStrokeWidth={true} />
           </button>
-          <input type="text" className='w-full bg-transparent outline-none' placeholder='Explore and indulge' />
+          <input id='search-input' onChange={e => setQuery(e.target.value)} type="text" className='w-full bg-transparent outline-none' placeholder='Explore and indulge' value={query} />
         </div>
         <button>
-          <Image src={LogoSVG} className='rounded-full' width={56} alt='Profile Pic' />
+          <Link href={"/account"}>
+            <Image src={LogoSVG} className='rounded-full' width={56} alt='Profile Pic' />
+          </Link>
         </button>
       </nav>
     )

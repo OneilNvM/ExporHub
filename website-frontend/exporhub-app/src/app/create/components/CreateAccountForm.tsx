@@ -55,9 +55,9 @@ export default function CreateAccountForm({ setError }: { setError: React.Dispat
               throw new Error(`${response.statusText}`)
             }
 
-            const json = await response.json() as ResponseStatus
+            const json = await response.json()
 
-            if (json.code === 0) {
+            if (!json.code) {
               setError("Username already taken")
 
               container.current.classList.contains("after:transparent") ? container.current.classList.replace("after:transparent", "after:bg-red-500") : container.current.classList.replace("after:bg-green-400", "after:bg-red-500")
@@ -78,9 +78,9 @@ export default function CreateAccountForm({ setError }: { setError: React.Dispat
               throw new Error(`${response.statusText}`)
             }
 
-            const json = await response.json() as ResponseStatus
+            const json = await response.json()
 
-            if (json.code === 0) {
+            if (!json.code) {
               setError("Email already taken")
 
               container.current.classList.contains("after:transparent") ? container.current.classList.replace("after:transparent", "after:bg-red-500") : container.current.classList.replace("after:bg-green-400", "after:bg-red-500")

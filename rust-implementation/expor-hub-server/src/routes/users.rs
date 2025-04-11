@@ -50,10 +50,7 @@ pub async fn get_user_by_username(
     .map_err(error::ErrorInternalServerError);
 
     match user {
-        Ok(_) => Ok(HttpResponse::Ok().json(ServerResponse {
-            code: 0,
-            message: "Success".to_owned(),
-        })),
+        Ok(user) => Ok(HttpResponse::Ok().json(user)),
         Err(error) => Ok(HttpResponse::Ok().json(ServerResponse {
             code: 1,
             message: error.to_string(),
@@ -82,10 +79,7 @@ pub async fn get_user_by_email(
     .map_err(error::ErrorInternalServerError);
 
     match user {
-        Ok(_) => Ok(HttpResponse::Ok().json(ServerResponse {
-            code: 0,
-            message: "Success".to_owned(),
-        })),
+        Ok(user) => Ok(HttpResponse::Ok().json(user)),
         Err(error) => Ok(HttpResponse::Ok().json(ServerResponse {
             code: 1,
             message: error.to_string(),

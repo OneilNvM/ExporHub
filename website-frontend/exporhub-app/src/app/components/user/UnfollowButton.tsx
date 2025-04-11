@@ -3,16 +3,49 @@
 import React from 'react'
 import { User } from '~/types/types'
 
-export default function UnfollowButton({ user, session, setFollowedUsers }: { user: User, session: {userId: number, expiresAt: Date}, setFollowedUsers: React.Dispatch<React.SetStateAction<User[] | null>> }) {
+export default function UnfollowButton({ user, profileUserId, sessionUserId, followedUsers, setFollowedUsers }: { user: User, followedUsers: User[] | null, profileUserId?: number, sessionUserId?: number, setFollowedUsers: React.Dispatch<React.SetStateAction<User[] | null>> }) {
     const handleUnfollow = async () => {
         try {
-            const deleteFollow = await fetch(`https://api.exporhub.com:9000/api/follow/unfollow?follower=${session.userId}&following=${user.user_id}`)
-
-            if (!deleteFollow.ok) {
-                throw new Error(`Failed to delete follow`)
+            if (profileUserId) {
+                const deleteFollow = await fetch(`https://api.exporhub.com:9000/api/follow/unfollow?follower=${profileUserId}&following=${user.user_id}`, {
+                    method: "post"
+                })
+    
+                if (!deleteFollow.ok) {
+                    throw new Error(`Failed to delete follow`)
+                }
+    
+                if (followedUsers) {
+                    let index = followedUsers.indexOf(user)
+    
+                    followedUsers.splice(index, 1)
+                }
+    
+    
+                setFollowedUsers(followedUsers)
+    
+                console.log("Successful delete")
+            } else {
+                const deleteFollow = await fetch(`https://api.exporhub.com:9000/api/follow/unfollow?follower=${sessionUserId}&following=${user.user_id}`, {
+                    method: "post"
+                })
+    
+                if (!deleteFollow.ok) {
+                    throw new Error(`Failed to delete follow`)
+                }
+    
+                if (followedUsers) {
+                    let index = followedUsers.indexOf(user)
+    
+                    followedUsers.splice(index, 1)
+                }
+    
+    
+                setFollowedUsers(followedUsers)
+    
+                console.log("Successful delete")
             }
 
-            console.log("Successful delete")
         } catch (error) {
             console.error(error)
         }

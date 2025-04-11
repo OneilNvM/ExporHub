@@ -6,26 +6,27 @@ import ProfileTab from '@/app/components/profile-tabs/ProfileTab'
 import ProjectsTab from '@/app/components/profile-tabs/ProjectsTab'
 import { useSearchParams } from 'next/navigation'
 import React from 'react'
+import { Project, User } from '~/types/types'
 
-export default function ProfileTabs() {
+export default function ProfileTabs({ user, favouritesArr, favouritedProjectsArr, projects, favouriteProjects, followings, profileUserId, sessionUserId, projectNotifications, isFollowed }: { user: User | null, profileUserId: number, sessionUserId: number, followings: User[] | null, favouritesArr: boolean[], favouritedProjectsArr: boolean[], projects: Project[] | null, projectNotifications: Project[] | null, favouriteProjects: Project[] | null, isFollowed: boolean }) {
     const searchParams = useSearchParams()
 
     switch (searchParams.get('tab')) {
         case 'projects':
             return (
-                <ProjectsTab />
+                <ProjectsTab sessionUserId={sessionUserId} favouritesArr={favouritesArr} projects={projects} />
             )
         case 'favourites':
             return (
-                <FavouritesTab />
+                <FavouritesTab favouritedProjectsArr={favouritedProjectsArr} favouriteProjects={favouriteProjects} sessionUserId={sessionUserId} />
             )
         case 'following':
             return (
-                <FollowingTab />
+                <FollowingTab followings={followings} profileUserId={profileUserId} />
             )
         default:
             return (
-                <ProfileTab />
+                <ProfileTab sessionUserId={sessionUserId} profileUserId={profileUserId} isFollowed={isFollowed} user={user} projectNotifications={projectNotifications} />
             )
     }
 }

@@ -2,9 +2,9 @@
 
 import { Star } from 'lucide-react'
 import React, { useEffect, useId } from 'react'
-import { Project, User } from '~/types/types'
+import { Project } from '~/types/types'
 
-export default function FavouriteButton({ user, isFavourited, project }: { user: User | null, isFavourited: boolean, project: Project }) {
+export default function FavouriteButton({ sessionUserId, isFavourited, project }: { sessionUserId: number, isFavourited: boolean, project: Project }) {
     const uniqueId = useId()
 
     useEffect(() => {
@@ -25,16 +25,8 @@ export default function FavouriteButton({ user, isFavourited, project }: { user:
         const favouriteButton = document.getElementById(uniqueId)
 
         try {
-            const favouriteResponse = await fetch(`https://api.exporhub.com:9000/api/favourite/u-p-id?user_id=${user?.user_id}&project_id=${project.project_id}`)
-
-            if (!favouriteResponse.ok) {
-                throw new Error(`Failed to find favourite`)
-            }
-
-            const json = await favouriteResponse.json()
-
-            if (json.code) {
-                const newFavourite = await fetch(`https://api.exporhub.com:9000/api/favourite/new?user_id=${user?.user_id}&project_id=${project.project_id}`, {
+            if (!isFavourited) {
+                const newFavourite = await fetch(`https://api.exporhub.com:9000/api/favourite/new?user_id=${sessionUserId}&project_id=${project.project_id}`, {
                     method: "post"
                 })
 
@@ -49,7 +41,7 @@ export default function FavouriteButton({ user, isFavourited, project }: { user:
                     favouriteButton.classList.remove("unfavourited")
                 }
             } else {
-                const deleteFavourite = await fetch(`https://api.exporhub.com:9000/api/favourite/unfavourite?user_id=${user?.user_id}&project_id=${project.project_id}`, {
+                const deleteFavourite = await fetch(`https://api.exporhub.com:9000/api/favourite/unfavourite?user_id=${sessionUserId}&project_id=${project.project_id}`, {
                     method: "post"
                 })
             

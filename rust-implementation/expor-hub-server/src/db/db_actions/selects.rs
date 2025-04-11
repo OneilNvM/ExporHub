@@ -1,5 +1,5 @@
-use crate::db::models::*;
-use diesel::prelude::*;
+use crate::{db::models::*, SearchResultsTypes};
+use diesel::{prelude::*, sql_query, sql_types::Text};
 
 pub fn find_users(conn: &mut MysqlConnection) -> Result<Vec<User>, anyhow::Error> {
     use crate::schema::users::dsl::*;
@@ -345,4 +345,46 @@ pub fn find_user_followings(conn: &mut MysqlConnection, in_follower_id: i32) -> 
         },
         Err(error) => Err(error.into())
     }
+}
+
+pub fn find_number_of_projects_by_user(conn: &mut MysqlConnection, in_user_id: i32) -> Result<i64, anyhow::Error> {
+    use crate::schema::users;
+
+    let user = users::table
+        .filter(users::columns::user_id.eq(in_user_id))
+        .select(User::as_select())
+        .get_result::<User>(conn)?;
+
+    let result = Project::belonging_to(&user)
+    .count()
+    .get_result(conn);
+
+    match result {
+        Ok(num) => Ok(num),
+        Err(error) => Err(error.into())
+    }
+}
+
+pub fn find_follow_by_ids(conn: &mut MysqlConnection, in_follower_id: i32, in_following_id: i32) -> Result<Follow, anyhow::Error> {
+    use crate::schema::follows::dsl::*;
+
+    let follow = follows
+        .select(Follow::as_select())
+        .filter(follower.eq(in_follower_id).and(following.eq(in_following_id)))
+        .get_result(conn);
+
+    match follow {
+        Ok(follow) => Ok(follow),
+        Err(error) => Err(error.into())
+    }
+}
+
+pub fn find_search_results(conn: &mut MysqlConnection, in_query: String) -> Result<Vec<SearchResultsTypes>, anyhow::Error> {
+    use SearchResultsTypes::*;
+    let users = sql_query(format!("SELECT * FROM users WHERE MATCH(username, bio) AGAINST('{}' WITH QUERY EXPANSION)", &in_query)).bind::<Text, _>(&in_query).load::<User>(conn)?;
+    let projects = sql_query(format!("SELECT * FROM projects WHERE MATCH(name, description) AGAINST('{}' WITH QUERY EXPANSION)", &in_query)).bind::<Text, _>(&in_query).load::<Project>(conn)?;
+
+    let search_results = vec![Users(users), Projects(projects)];
+
+    Ok(search_results)
 }

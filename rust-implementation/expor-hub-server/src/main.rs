@@ -8,13 +8,17 @@ use expor_hub_server::{
     routes::{
         account::{create_account, create_account_options, login, login_options},
         api::*,
-        favourite::{
+        favourites::{
             create_new_favourite, get_favourite_by_ids, get_favourites_by_user_id,
             unfavourite_project,
         },
-        follow::get_user_followings,
-        projects::{get_project_by_id, get_projects_by_date_updated, get_projects_by_user_id},
+        follows::{get_follow_by_ids, get_user_followings, new_follow, unfollow},
+        projects::{
+            get_num_of_projects_by_user, get_project_by_id, get_projects_by_date_updated,
+            get_projects_by_user_id,
+        },
         root::*,
+        searches::process_search_query,
         users::{
             email_options, get_user_by_email, get_user_by_id, get_user_by_username,
             user_id_options, username_options,
@@ -110,7 +114,8 @@ async fn main() -> Result<(), std::io::Error> {
                         web::scope("/project")
                             .service(get_project_by_id)
                             .service(get_projects_by_user_id)
-                            .service(get_projects_by_date_updated),
+                            .service(get_projects_by_date_updated)
+                            .service(get_num_of_projects_by_user),
                     )
                     .service(
                         web::scope("/favourite")
@@ -119,7 +124,14 @@ async fn main() -> Result<(), std::io::Error> {
                             .service(get_favourite_by_ids)
                             .service(get_favourites_by_user_id),
                     )
-                    .service(web::scope("/follow").service(get_user_followings))
+                    .service(
+                        web::scope("/follow")
+                            .service(get_user_followings)
+                            .service(unfollow)
+                            .service(new_follow)
+                            .service(get_follow_by_ids),
+                    )
+                    .service(web::scope("/search").service(process_search_query))
                     .service(all_tables)
                     .service(show_users)
                     .service(show_projects)

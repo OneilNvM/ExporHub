@@ -35,6 +35,12 @@ pub enum TableTypes {
     ReplyDislikes(Vec<ReplyDislike>),
 }
 
+#[derive(Serialize, Deserialize)]
+pub enum SearchResultsTypes {
+    Users(Vec<User>),
+    Projects(Vec<Project>),
+}
+
 pub fn initialize_db_pool() -> DbPool {
     dotenv().unwrap();
 

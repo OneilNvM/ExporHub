@@ -4,7 +4,7 @@ use diesel::mysql::Mysql;
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Queryable, Selectable, Identifiable, Debug, Default, Serialize, Deserialize)]
+#[derive(Queryable, QueryableByName, Selectable, Identifiable, Debug, Default, Serialize, Deserialize)]
 #[diesel(table_name = users)]
 #[diesel(primary_key(user_id))]
 #[diesel(check_for_backend(Mysql))]
@@ -41,7 +41,7 @@ impl<'a> NewUser<'a> {
     }
 }
 
-#[derive(Queryable, Selectable, Identifiable, Associations, Debug, Default, Serialize, Deserialize)]
+#[derive(Queryable, QueryableByName, Selectable, Identifiable, Associations, Debug, Default, Serialize, Deserialize)]
 #[diesel(table_name = projects)]
 #[diesel(belongs_to(User))]
 #[diesel(primary_key(project_id))]

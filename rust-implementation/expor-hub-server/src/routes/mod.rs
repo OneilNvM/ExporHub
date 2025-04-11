@@ -2,11 +2,12 @@ use serde::{Deserialize, Serialize};
 
 pub mod account;
 pub mod api;
-pub mod favourite;
-pub mod follow;
+pub mod favourites;
+pub mod follows;
 pub mod projects;
 pub mod root;
 pub mod users;
+pub mod searches;
 
 #[derive(Serialize)]
 struct ServerResponse {
@@ -54,4 +55,15 @@ struct UserData {
     username: String,
     email: String,
     password: String,
+}
+
+#[derive(Deserialize)]
+struct FollowIds {
+    follower: i32,
+    following: i32,
+}
+
+#[derive(Deserialize)]
+struct SearchQuery {
+    q: String
 }
