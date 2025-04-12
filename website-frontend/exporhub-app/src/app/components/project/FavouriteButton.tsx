@@ -20,8 +20,8 @@ export default function FavouriteButton() {
     }
 
     return (
-        <div id={uniqueId} className='w-fit border rounded-md transition-colors duration-200 ease-in-out border-pink-300 dark:border-pink-950'>
-            <button onClick={handleFavourite} className='flex px-4 items-center gap-4 text-pink-400 dark:text-pink-950'>
+        <div id={uniqueId} className='w-fit border rounded-md transition-colors duration-200 text-pink-400 ease-in-out border-pink-300 dark:border-pink-950'>
+            <button onClick={handleFavourite} className='flex px-4 items-center gap-4 dark:text-pink-950'>
                 <Star size={16} absoluteStrokeWidth={true} />
                 <span>Favourite</span>
             </button>
