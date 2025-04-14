@@ -123,3 +123,4 @@ Route::post('/login', function(Request $request) {
 
     return $identity;
 });
+

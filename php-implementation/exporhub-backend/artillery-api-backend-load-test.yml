@@ -1,7 +1,9 @@
 config:
-  target: "http://api.exporhub.com:9000"
+  target: "https://api.exporhub.com:443"
   tls:
     rejectUnauthorized: false
+  http:
+    timeout: 60
   phases:
     - duration: 60
       arrivalRate: 1
@@ -22,5 +24,31 @@ scenarios:
         - get:
             url: '/'
         - get:
-            url: '/api/user'
-      count: 100
+            url: '/api/users'
+        - get:
+            url: '/api/projects'
+        - get:
+            url: '/api/images'
+        - get:
+            url: '/api/follows'
+        - get:
+            url: '/api/favourites'
+        - get:
+            url: '/api/comments'
+        - get:
+            url: '/api/replies'
+        - get:
+            url: '/api/threads'
+        - get:
+            url: '/api/likes'
+        - get:
+            url: '/api/dislikes'
+        - get:
+            url: '/api/comment-likes'
+        - get:
+            url: '/api/comment-dislikes'
+        - get:
+            url: '/api/reply-likes'
+        - get:
+            url: '/api/reply-dislikes'
+      count: 20

@@ -1,6 +1,7 @@
 # Use PHP 8.2
-FROM php:8.2-fpm
+FROM php:8.4-fpm
 
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 
 # Install PHP extension dependencies
 RUN apt-get update && apt-get install -y \
@@ -13,7 +14,8 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install pdo pdo_mysql \
 	&& docker-php-ext-configure gd --with-freetype --with-jpeg \
 	&& docker-php-ext-install -j$(nproc) gd \
-    && docker-php-ext-install zip
+    && docker-php-ext-install zip \
+    && install-php-extensions xdebug
 
 # Copy application source and set working directory
 COPY . /var/www/app
@@ -21,6 +23,7 @@ WORKDIR /var/www/app
 
 RUN mkdir -p /etc/nginx/ssl
 
+COPY ./xdebug/xdebug.ini /usr/local/etc/php/conf.d
 COPY ./nginx/nginx.conf /etc/nginx
 
 RUN --mount=type=bind,source=certificates,target=/etc/nginx/ssl
