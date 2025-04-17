@@ -1,0 +1,52 @@
+config:
+  target: https://api.exporhub.com:9000
+  tls:
+    rejectUnauthorized: false
+  phases:
+    - duration: 60
+      arrivalRate: 1
+      rampTo: 5
+      name: Warm up phase
+    - duration: 60
+      arrivalRate: 10
+      rampTo: 20
+      name: Ramp up load
+    - duration: 30
+      arrivalRate: 30
+      rampTo: 60
+      name: Spike phase
+
+scenarios:
+  - flow:
+      - loop:
+          - get:
+              url: '/api/'
+          - get:
+              url: '/api/users'
+          - get:
+              url: '/api/projects'
+          - get:
+              url: '/api/images'
+          - get:
+              url: '/api/follows'
+          - get:
+              url: '/api/favourites'
+          - get:
+              url: '/api/comments'
+          - get:
+              url: '/api/replies'
+          - get:
+              url: '/api/threads'
+          - get:
+              url: '/api/likes'
+          - get:
+              url: '/api/dislikes'
+          - get:
+              url: '/api/comment-likes'
+          - get:
+              url: '/api/comment-dislikes'
+          - get:
+              url: '/api/reply-likes'
+          - get:
+              url: '/api/reply-dislikes'
+        count: 10

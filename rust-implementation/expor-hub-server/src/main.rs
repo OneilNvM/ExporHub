@@ -141,6 +141,8 @@ async fn main() -> Result<(), std::io::Error> {
                     .service(show_comments)
                     .service(show_replies)
                     .service(show_threads)
+                    .service(show_likes)
+                    .service(show_dislikes)
                     .service(show_comment_likes)
                     .service(show_comment_dislikes)
                     .service(show_reply_likes)
@@ -148,7 +150,7 @@ async fn main() -> Result<(), std::io::Error> {
             )
     })
     .bind_rustls_0_23(("api.exporhub.com", 9000), tls_config)?
-    .workers(8)
+    .workers(12)
     .run()
     .await
 }

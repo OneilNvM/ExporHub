@@ -26,4 +26,9 @@ sha2 = "0.10.8"
 thiserror = "2.0.12"
 
 [dev-dependencies]
+criterion = { version = "0.5.1", features = ["async_futures"] }
 diesel_migrations = { version = "2.2.0", features = ["mysql"] }
+
+[[bench]]
+name = "server_api_benchmark"
+harness = false
