@@ -1,54 +1,109 @@
 config:
-  target: "https://api.exporhub.com:443"
-  tls:
-    rejectUnauthorized: false
-  http:
-    timeout: 60
-  phases:
-    - duration: 60
-      arrivalRate: 1
-      rampTo: 5
-      name: Warm Up Phase
-    - duration: 60
-      arrivalRate: 5
-      rampTo: 10
-      name: Ramp Up Load Phase
-    - duration: 30
-      arrivalRate: 10
-      rampTo: 30
-      name: Spike Phase
+    target: https://api.exporhub.com:443
+    tls:
+        rejectUnauthorized: false
+    phases:
+        - duration: 60
+          arrivalRate: 1
+          rampTo: 5
+          name: Warm up phase
+        - duration: 60
+          arrivalRate: 10
+          rampTo: 20
+          name: Ramp up load
+        - duration: 30
+          arrivalRate: 30
+          rampTo: 60
+          name: Spike phase
+    plugins:
+        expect:
+            reportFailuresAsErrors: true
+            outputFormat: prettyError
+            useOnlyRequestNames: true
+        ensure:
+          thresholds:
+            - http.response_time.p95: 400
+            - http.response_time.p99: 600
+        metrics-by-endpoint:
+          metricsNamespace: plugins.metrics-by-endpoint
+          useOnlyRequestNames: true
 
 scenarios:
-  - flow:
-    - loop:
-        - get:
-            url: '/'
-        - get:
-            url: '/api/users'
-        - get:
-            url: '/api/projects'
-        - get:
-            url: '/api/images'
-        - get:
-            url: '/api/follows'
-        - get:
-            url: '/api/favourites'
-        - get:
-            url: '/api/comments'
-        - get:
-            url: '/api/replies'
-        - get:
-            url: '/api/threads'
-        - get:
-            url: '/api/likes'
-        - get:
-            url: '/api/dislikes'
-        - get:
-            url: '/api/comment-likes'
-        - get:
-            url: '/api/comment-dislikes'
-        - get:
-            url: '/api/reply-likes'
-        - get:
-            url: '/api/reply-dislikes'
-      count: 20
+    - flow:
+          - loop:
+                - get:
+                      url: "/api/all"
+                      name: "GET /api/all"
+                      expect:
+                          statusCode: 200
+                - get:
+                      url: "/api/users"
+                      name: "GET /api/users"
+                      expect:
+                          statusCode: 200
+                - get:
+                      url: "/api/projects"
+                      name: "GET /api/projects"
+                      expect:
+                          statusCode: 200
+                - get:
+                      url: "/api/images"
+                      name: "GET /api/images"
+                      expect:
+                        statusCode: 200
+                - get:
+                      url: "/api/follows"
+                      name: "GET /api/follows"
+                      expect:
+                        statusCode: 200
+                - get:
+                      url: "/api/favourites"
+                      name: "GET /api/favourites"
+                      expect:
+                        statusCode: 200
+                - get:
+                      url: "/api/comments"
+                      name: "GET /api/comments"
+                      expect:
+                        statusCode: 200
+                - get:
+                      url: "/api/replies"
+                      name: "GET /api/replies"
+                      expect:
+                        statusCode: 200
+                - get:
+                      url: "/api/threads"
+                      name: "GET /api/threads"
+                      expect:
+                        statusCode: 200
+                - get:
+                      url: "/api/likes"
+                      name: "GET /api/likes"
+                      expect:
+                        statusCode: 200
+                - get:
+                      url: "/api/dislikes"
+                      name: "GET /api/dislikes"
+                      expect:
+                        statusCode: 200
+                - get:
+                      url: "/api/comment-likes"
+                      name: "GET /api/comment-likes"
+                      expect:
+                        statusCode: 200
+                - get:
+                      url: "/api/comment-dislikes"
+                      name: "GET /api/comment-dislikes"
+                      expect:
+                        statusCode: 200
+                - get:
+                      url: "/api/reply-likes"
+                      name: "GET /api/reply-likes"
+                      expect:
+                        statusCode: 200
+                - get:
+                      url: "/api/reply-dislikes"
+                      name: "GET /api/reply-dislikes"
+                      expect:
+                        statusCode: 200
+            count: 5

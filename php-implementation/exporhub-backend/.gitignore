@@ -23,3 +23,10 @@ yarn-error.log
 /.vscode
 /.zed
 /xdebug
+**/caddy
+frankenphp
+frankenphp-worker.php
+
+**/caddy
+frankenphp
+frankenphp-worker.php
