@@ -8,6 +8,11 @@ pub mod projects;
 pub mod root;
 pub mod users;
 pub mod searches;
+pub mod images;
+pub mod comments;
+pub mod replies;
+pub mod likes;
+pub mod dislikes;
 
 #[derive(Serialize)]
 struct ServerResponse {

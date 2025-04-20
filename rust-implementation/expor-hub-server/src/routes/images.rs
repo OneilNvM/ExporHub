@@ -1,0 +1,52 @@
+use actix_web::{
+    error::ErrorInternalServerError, get, post, web, HttpResponse, Result
+};
+
+use crate::{db::db_actions::selects::{find_profile_image, find_project_images}, routes::{ProjectId, ServerResponse, UserId}, DbPool};
+
+#[get("/profile-image")]
+pub async fn get_profile_image(pool: web::Data<DbPool>, user_id: web::Query<UserId>) -> Result<HttpResponse> {
+    let user_id = user_id.into_inner().user_id;
+
+    let image = web::block(move || {
+        let conn = &mut pool.get()?;
+
+        find_profile_image(conn, user_id)
+    }).await?.map_err(ErrorInternalServerError);
+
+    match image {
+        Ok(image) => Ok(HttpResponse::Ok().json(image)),
+        Err(_) => Ok(HttpResponse::Ok().json(ServerResponse {
+            code: 1, message: "Image not found".to_owned()
+        }))
+    }
+}
+
+#[get("/project-images")]
+pub async fn get_project_images(pool: web::Data<DbPool>, user_id: web::Query<UserId>, project_id: web::Query<ProjectId>) -> Result<HttpResponse> {
+    let user_id = user_id.into_inner().user_id;
+    let project_id = project_id.into_inner().project_id;
+
+    let images = web::block(move || {
+        let conn = &mut pool.get()?;
+
+        find_project_images(conn, user_id, project_id)
+    }).await?.map_err(ErrorInternalServerError);
+
+    match images {
+        Ok(images) => Ok(HttpResponse::Ok().json(images)),
+        Err(_) => Ok(HttpResponse::Ok().json(ServerResponse {
+            code: 1, message: "Project images not found".to_owned()
+        }))
+    }
+}
+
+#[post("/upload")]
+pub async fn upload_profile_image(_pool: web::Data<DbPool>, ) -> Result<HttpResponse> {
+    Ok(HttpResponse::Ok().finish())
+}
+
+#[post("/uploads")]
+pub async fn upload_project_images(_pool: web::Data<DbPool>,) -> Result<HttpResponse> {
+    Ok(HttpResponse::Ok().finish())
+}

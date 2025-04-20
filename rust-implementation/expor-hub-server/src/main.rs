@@ -1,6 +1,6 @@
 use std::{env, fs::File, io::BufReader};
 
-use actix_web::{http::header::ACCESS_CONTROL_ALLOW_ORIGIN, middleware, web, App, HttpServer};
+use actix_web::{http::header::{ACCESS_CONTROL_ALLOW_ORIGIN, CACHE_CONTROL, CONTENT_SECURITY_POLICY}, middleware, web, App, HttpServer};
 use actix_web_lab::{header::StrictTransportSecurity, middleware::RedirectHttps};
 use expor_hub_server::{
     db::seeder,
@@ -83,6 +83,8 @@ async fn main() -> Result<(), std::io::Error> {
         App::new()
             .app_data(web::Data::new(pool.clone()))
             .wrap(mw.clone())
+            .wrap(middleware::DefaultHeaders::new().add((CACHE_CONTROL, "max-age=1200, no-cache, public")))
+            .wrap(middleware::DefaultHeaders::new().add((CONTENT_SECURITY_POLICY, "default-src 'none'; script-src 'self'; connect-src 'self'; img-src 'self'; style-src 'self'; frame-ancestors 'self'; form-action 'self';")))
             .service(index)
             .service(
                 web::scope("/account")

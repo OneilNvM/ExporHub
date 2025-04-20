@@ -284,9 +284,7 @@ pub fn find_projects_by_user_id_udate_desc(
         .get_results::<Project>(conn);
 
     match projects {
-        Ok(projects) => {
-            Ok(projects)
-        }
+        Ok(projects) => Ok(projects),
         Err(error) => Err(error.into()),
     }
 }
@@ -307,14 +305,16 @@ pub fn find_favourites_by_user_id(
         .get_results::<Favourite>(conn);
 
     match favourites {
-        Ok(favourites) => {
-            Ok(favourites)
-        }
+        Ok(favourites) => Ok(favourites),
         Err(error) => Err(error.into()),
     }
 }
 
-pub fn find_favourite_by_ids(conn: &mut MysqlConnection, in_user_id: i32, in_project_id: i32) -> Result<Favourite, anyhow::Error> {
+pub fn find_favourite_by_ids(
+    conn: &mut MysqlConnection,
+    in_user_id: i32,
+    in_project_id: i32,
+) -> Result<Favourite, anyhow::Error> {
     use crate::schema::favourites::dsl::*;
 
     let result = favourites
@@ -323,14 +323,15 @@ pub fn find_favourite_by_ids(conn: &mut MysqlConnection, in_user_id: i32, in_pro
         .first::<Favourite>(conn);
 
     match result {
-        Ok(result) => {
-            Ok(result)
-        }
+        Ok(result) => Ok(result),
         Err(error) => Err(error.into()),
     }
 }
 
-pub fn find_user_followings(conn: &mut MysqlConnection, in_follower_id: i32) -> Result<Vec<Follow>, anyhow::Error> {
+pub fn find_user_followings(
+    conn: &mut MysqlConnection,
+    in_follower_id: i32,
+) -> Result<Vec<Follow>, anyhow::Error> {
     use crate::schema::follows::dsl::*;
 
     let results = follows
@@ -342,12 +343,15 @@ pub fn find_user_followings(conn: &mut MysqlConnection, in_follower_id: i32) -> 
         Ok(results) => {
             println!("Follows: {:?}", results);
             Ok(results)
-        },
-        Err(error) => Err(error.into())
+        }
+        Err(error) => Err(error.into()),
     }
 }
 
-pub fn find_number_of_projects_by_user(conn: &mut MysqlConnection, in_user_id: i32) -> Result<i64, anyhow::Error> {
+pub fn count_projects_by_user(
+    conn: &mut MysqlConnection,
+    in_user_id: i32,
+) -> Result<i64, anyhow::Error> {
     use crate::schema::users;
 
     let user = users::table
@@ -355,9 +359,189 @@ pub fn find_number_of_projects_by_user(conn: &mut MysqlConnection, in_user_id: i
         .select(User::as_select())
         .get_result::<User>(conn)?;
 
-    let result = Project::belonging_to(&user)
-    .count()
-    .get_result(conn);
+    let result = Project::belonging_to(&user).count().get_result(conn);
+
+    match result {
+        Ok(num) => Ok(num),
+        Err(error) => Err(error.into()),
+    }
+}
+
+pub fn find_follow_by_ids(
+    conn: &mut MysqlConnection,
+    in_follower_id: i32,
+    in_following_id: i32,
+) -> Result<Follow, anyhow::Error> {
+    use crate::schema::follows::dsl::*;
+
+    let follow = follows
+        .select(Follow::as_select())
+        .filter(
+            follower
+                .eq(in_follower_id)
+                .and(following.eq(in_following_id)),
+        )
+        .get_result(conn);
+
+    match follow {
+        Ok(follow) => Ok(follow),
+        Err(error) => Err(error.into()),
+    }
+}
+
+pub fn find_search_results(
+    conn: &mut MysqlConnection,
+    in_query: String,
+) -> Result<Vec<SearchResultsTypes>, anyhow::Error> {
+    use SearchResultsTypes::*;
+    let users = sql_query(format!(
+        "SELECT * FROM users WHERE MATCH(username, bio) AGAINST('{}' WITH QUERY EXPANSION)",
+        &in_query
+    ))
+    .bind::<Text, _>(&in_query)
+    .load::<User>(conn)?;
+    let projects = sql_query(format!(
+        "SELECT * FROM projects WHERE MATCH(name, description) AGAINST('{}' WITH QUERY EXPANSION)",
+        &in_query
+    ))
+    .bind::<Text, _>(&in_query)
+    .load::<Project>(conn)?;
+
+    let search_results = vec![Users(users), Projects(projects)];
+
+    Ok(search_results)
+}
+
+pub fn find_profile_image(
+    conn: &mut MysqlConnection,
+    in_user_id: i32,
+) -> Result<Image, anyhow::Error> {
+    use crate::schema::images::dsl::*;
+
+    let image = images
+        .select(Image::as_select())
+        .filter(user_id.eq(in_user_id).and(project_id.is_null()))
+        .first(conn);
+
+    match image {
+        Ok(image) => Ok(image),
+        Err(error) => Err(error.into()),
+    }
+}
+
+pub fn find_project_images(
+    conn: &mut MysqlConnection,
+    in_user_id: i32,
+    in_project_id: i32,
+) -> Result<Vec<Image>, anyhow::Error> {
+    use crate::schema::images::dsl::*;
+
+    let results = images
+        .select(Image::as_select())
+        .filter(user_id.eq(in_user_id).and(project_id.eq(in_project_id)))
+        .get_results(conn);
+
+    match results {
+        Ok(results) => Ok(results),
+        Err(error) => Err(error.into()),
+    }
+}
+
+pub fn find_project_comments(
+    conn: &mut MysqlConnection,
+    in_project_id: i32,
+) -> Result<Vec<Comment>, anyhow::Error> {
+    use crate::schema::comments::dsl::*;
+
+    let results = comments
+        .select(Comment::as_select())
+        .filter(project_id.eq(in_project_id))
+        .order(date.asc())
+        .get_results(conn);
+
+    match results {
+        Ok(results) => Ok(results),
+        Err(error) => Err(error.into()),
+    }
+}
+
+pub fn find_project_replies(
+    conn: &mut MysqlConnection,
+    in_comment_id: i32,
+) -> Result<Vec<Reply>, anyhow::Error> {
+    use crate::schema::replies::dsl::*;
+    use crate::schema::threads::dsl::{comment_id as th_comment_id, threads};
+
+    let mut reply_results: Vec<Reply> = vec![];
+
+    let thread_results = threads
+        .select(Thread::as_select())
+        .filter(th_comment_id.eq(in_comment_id))
+        .get_results::<Thread>(conn)?;
+
+    for thread in thread_results {
+        let reply = replies
+            .select(Reply::as_select())
+            .filter(reply_id.eq(thread.reply_id))
+            .first::<Reply>(conn);
+
+        match reply {
+            Ok(reply) => reply_results.push(reply),
+            Err(error) => return Err(error.into()),
+        }
+    }
+
+    Ok(reply_results)
+}
+
+pub fn find_user_likes(
+    conn: &mut MysqlConnection,
+    in_user_id: i32,
+) -> Result<Vec<Like>, anyhow::Error> {
+    use crate::schema::likes::dsl::*;
+
+    let results = likes
+        .select(Like::as_select())
+        .filter(user_id.eq(in_user_id))
+        .get_results::<Like>(conn);
+
+    match results {
+        Ok(results) => Ok(results),
+        Err(error) => Err(error.into()),
+    }
+}
+
+pub fn find_user_dislikes(
+    conn: &mut MysqlConnection,
+    in_user_id: i32,
+) -> Result<Vec<Dislike>, anyhow::Error> {
+    use crate::schema::dislikes::dsl::*;
+
+    let results = dislikes
+        .select(Dislike::as_select())
+        .filter(user_id.eq(in_user_id))
+        .get_results::<Dislike>(conn);
+
+    match results {
+        Ok(results) => Ok(results),
+        Err(error) => Err(error.into()),
+    }
+}
+
+pub fn count_comment_likes(
+    conn: &mut MysqlConnection,
+    in_comment_id: i32,
+) -> Result<i64, anyhow::Error> {
+    use crate::schema::comments::dsl::*;
+
+    let comment = comments
+        .select(Comment::as_select())
+        .filter(comment_id.eq(in_comment_id))
+        .first::<Comment>(conn)?;
+
+    let result = CommentLike::belonging_to(&comment)
+        .count()
+        .get_result::<i64>(conn);
 
     match result {
         Ok(num) => Ok(num),
@@ -365,26 +549,65 @@ pub fn find_number_of_projects_by_user(conn: &mut MysqlConnection, in_user_id: i
     }
 }
 
-pub fn find_follow_by_ids(conn: &mut MysqlConnection, in_follower_id: i32, in_following_id: i32) -> Result<Follow, anyhow::Error> {
-    use crate::schema::follows::dsl::*;
+pub fn count_comment_dislikes(
+    conn: &mut MysqlConnection,
+    in_comment_id: i32,
+) -> Result<i64, anyhow::Error> {
+    use crate::schema::comments::dsl::*;
 
-    let follow = follows
-        .select(Follow::as_select())
-        .filter(follower.eq(in_follower_id).and(following.eq(in_following_id)))
-        .get_result(conn);
+    let comment = comments
+        .select(Comment::as_select())
+        .filter(comment_id.eq(in_comment_id))
+        .first::<Comment>(conn)?;
 
-    match follow {
-        Ok(follow) => Ok(follow),
+    let result = CommentDislike::belonging_to(&comment)
+        .count()
+        .get_result::<i64>(conn);
+
+    match result {
+        Ok(num) => Ok(num),
         Err(error) => Err(error.into())
     }
 }
 
-pub fn find_search_results(conn: &mut MysqlConnection, in_query: String) -> Result<Vec<SearchResultsTypes>, anyhow::Error> {
-    use SearchResultsTypes::*;
-    let users = sql_query(format!("SELECT * FROM users WHERE MATCH(username, bio) AGAINST('{}' WITH QUERY EXPANSION)", &in_query)).bind::<Text, _>(&in_query).load::<User>(conn)?;
-    let projects = sql_query(format!("SELECT * FROM projects WHERE MATCH(name, description) AGAINST('{}' WITH QUERY EXPANSION)", &in_query)).bind::<Text, _>(&in_query).load::<Project>(conn)?;
+pub fn count_reply_likes(
+    conn: &mut MysqlConnection,
+    in_reply_id: i32,
+) -> Result<i64, anyhow::Error> {
+    use crate::schema::replies::dsl::*;
 
-    let search_results = vec![Users(users), Projects(projects)];
+    let reply = replies
+        .select(Reply::as_select())
+        .filter(reply_id.eq(in_reply_id))
+        .first::<Reply>(conn)?;
 
-    Ok(search_results)
+    let result = ReplyLike::belonging_to(&reply)
+        .count()
+        .get_result::<i64>(conn);
+
+    match result {
+        Ok(num) => Ok(num),
+        Err(error) => Err(error.into())
+    }
+}
+
+pub fn count_reply_dislikes(
+    conn: &mut MysqlConnection,
+    in_reply_id: i32,
+) -> Result<i64, anyhow::Error> {
+    use crate::schema::replies::dsl::*;
+
+    let reply = replies
+        .select(Reply::as_select())
+        .filter(reply_id.eq(in_reply_id))
+        .first::<Reply>(conn)?;
+
+    let result = ReplyDislike::belonging_to(&reply)
+        .count()
+        .get_result::<i64>(conn);
+
+    match result {
+        Ok(num) => Ok(num),
+        Err(error) => Err(error.into())
+    }
 }

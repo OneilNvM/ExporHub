@@ -5,7 +5,7 @@ use actix_web::{
     HttpResponse, Result,
 };
 
-use crate::{db::db_actions::selects::{find_number_of_projects_by_user, find_project_by_id, find_projects_by_user_id, find_projects_by_user_id_udate_desc}, routes::{NoDates, ProjectId, ServerResponse, UserId}, DbPool};
+use crate::{db::db_actions::selects::{count_projects_by_user, find_project_by_id, find_projects_by_user_id, find_projects_by_user_id_udate_desc}, routes::{NoDates, ProjectId, ServerResponse, UserId}, DbPool};
 
 #[get("/project-id")]
 pub async fn get_project_by_id(pool: web::Data<DbPool>, project_id: Query<ProjectId>) -> Result<HttpResponse> {
@@ -65,7 +65,7 @@ pub async fn get_num_of_projects_by_user(pool: web::Data<DbPool>, user_id: web::
     let result = web::block(move || {
         let conn = &mut pool.get()?;
 
-        find_number_of_projects_by_user(conn, user_id.into_inner().user_id)
+        count_projects_by_user(conn, user_id.into_inner().user_id)
     }).await?.map_err(ErrorInternalServerError);
 
     match result {
