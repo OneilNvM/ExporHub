@@ -1,5 +1,5 @@
 config:
-    target: https://api.exporhub.com:443
+    target: https://api.exporhub.com
     tls:
         rejectUnauthorized: false
     phases:
