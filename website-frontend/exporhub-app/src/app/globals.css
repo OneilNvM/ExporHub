@@ -25,11 +25,15 @@
 }
 
 .favourited {
-  @apply !bg-pink-400
+  @apply !bg-pink-400 !text-white
 }
 
 .unfavourited {
   @apply bg-transparent
+}
+
+.input {
+  @apply w-full px-5 py-2 text-lg rounded-3xl shadow-lg shadow-pink-300/40 bg-gradient-to-b from-transparent to-pink-300/30 dark:bg-none dark:bg-pink-950/10 dark:border dark:border-pink-800 dark:shadow-none transition-all duration-1000 ease-in-out
 }
 
 @media (prefers-color-scheme: dark) {
