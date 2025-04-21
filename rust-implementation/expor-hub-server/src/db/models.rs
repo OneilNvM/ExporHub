@@ -4,7 +4,9 @@ use diesel::mysql::Mysql;
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Queryable, QueryableByName, Selectable, Identifiable, Debug, Default, Serialize, Deserialize)]
+#[derive(
+    Queryable, QueryableByName, Selectable, Identifiable, Debug, Default, Serialize, Deserialize,
+)]
 #[diesel(table_name = users)]
 #[diesel(primary_key(user_id))]
 #[diesel(check_for_backend(Mysql))]
@@ -41,7 +43,17 @@ impl<'a> NewUser<'a> {
     }
 }
 
-#[derive(Queryable, QueryableByName, Selectable, Identifiable, Associations, Debug, Default, Serialize, Deserialize)]
+#[derive(
+    Queryable,
+    QueryableByName,
+    Selectable,
+    Identifiable,
+    Associations,
+    Debug,
+    Default,
+    Serialize,
+    Deserialize,
+)]
 #[diesel(table_name = projects)]
 #[diesel(belongs_to(User))]
 #[diesel(primary_key(project_id))]
@@ -78,7 +90,9 @@ impl<'a> NewProject<'a> {
     }
 }
 
-#[derive(Queryable, Selectable, Identifiable, Associations, Debug, Default, Serialize, Deserialize)]
+#[derive(
+    Queryable, Selectable, Identifiable, Associations, Debug, Default, Serialize, Deserialize,
+)]
 #[diesel(table_name = images)]
 #[diesel(belongs_to(User))]
 #[diesel(belongs_to(Project))]
@@ -130,7 +144,9 @@ impl<'a> NewProjectImage<'a> {
     }
 }
 
-#[derive(Queryable, Selectable, Identifiable, Associations, Debug, Default, Serialize, Deserialize)]
+#[derive(
+    Queryable, Selectable, Identifiable, Associations, Debug, Default, Serialize, Deserialize,
+)]
 #[diesel(table_name = favourites)]
 #[diesel(belongs_to(User))]
 #[diesel(belongs_to(Project))]
@@ -161,7 +177,9 @@ impl NewFavourite {
     }
 }
 
-#[derive(Queryable, Selectable, Identifiable, Associations, Debug, Default, Serialize, Deserialize)]
+#[derive(
+    Queryable, Selectable, Identifiable, Associations, Debug, Default, Serialize, Deserialize,
+)]
 #[diesel(table_name = follows)]
 #[diesel(belongs_to(User, foreign_key = following))]
 #[diesel(primary_key(follow_id))]
@@ -191,7 +209,9 @@ impl NewFollow {
     }
 }
 
-#[derive(Queryable, Selectable, Identifiable, Associations, Debug, Default, Serialize, Deserialize)]
+#[derive(
+    Queryable, Selectable, Identifiable, Associations, Debug, Default, Serialize, Deserialize,
+)]
 #[diesel(table_name = comments)]
 #[diesel(belongs_to(User))]
 #[diesel(belongs_to(Project))]
@@ -228,7 +248,9 @@ impl<'a> NewComment<'a> {
     }
 }
 
-#[derive(Queryable, Selectable, Identifiable, Associations, Debug, Default, Serialize, Deserialize)]
+#[derive(
+    Queryable, Selectable, Identifiable, Associations, Debug, Default, Serialize, Deserialize,
+)]
 #[diesel(table_name = replies)]
 #[diesel(belongs_to(User))]
 #[diesel(primary_key(reply_id))]
@@ -258,7 +280,9 @@ impl<'a> NewReply<'a> {
     }
 }
 
-#[derive(Queryable, Selectable, Identifiable, Associations, Debug, Default, Serialize, Deserialize)]
+#[derive(
+    Queryable, Selectable, Identifiable, Associations, Debug, Default, Serialize, Deserialize,
+)]
 #[diesel(table_name = threads)]
 #[diesel(belongs_to(Comment))]
 #[diesel(belongs_to(Reply))]
@@ -286,7 +310,9 @@ impl NewThread {
     }
 }
 
-#[derive(Queryable, Selectable, Identifiable, Associations, Debug, Default, Serialize, Deserialize)]
+#[derive(
+    Queryable, Selectable, Identifiable, Associations, Debug, Default, Serialize, Deserialize,
+)]
 #[diesel(table_name = likes)]
 #[diesel(belongs_to(User))]
 #[diesel(primary_key(like_id))]
@@ -304,7 +330,9 @@ pub struct NewLike {
     pub date_liked: NaiveDate,
 }
 
-#[derive(Queryable, Selectable, Identifiable, Associations, Debug, Default, Serialize, Deserialize)]
+#[derive(
+    Queryable, Selectable, Identifiable, Associations, Debug, Default, Serialize, Deserialize,
+)]
 #[diesel(table_name = dislikes)]
 #[diesel(belongs_to(User))]
 #[diesel(primary_key(dislike_id))]
@@ -322,7 +350,9 @@ pub struct NewDislike {
     pub date_disliked: NaiveDate,
 }
 
-#[derive(Queryable, Selectable, Identifiable, Associations, Debug, Default, Serialize, Deserialize)]
+#[derive(
+    Queryable, Selectable, Identifiable, Associations, Debug, Default, Serialize, Deserialize,
+)]
 #[diesel(table_name = comment_likes)]
 #[diesel(belongs_to(Comment))]
 #[diesel(belongs_to(Like))]
@@ -340,7 +370,9 @@ pub struct NewCommentLike {
     pub like_id: i32,
 }
 
-#[derive(Queryable, Selectable, Identifiable, Associations, Debug, Default, Serialize, Deserialize)]
+#[derive(
+    Queryable, Selectable, Identifiable, Associations, Debug, Default, Serialize, Deserialize,
+)]
 #[diesel(table_name = comment_dislikes)]
 #[diesel(belongs_to(Comment))]
 #[diesel(belongs_to(Dislike))]
@@ -358,7 +390,9 @@ pub struct NewCommentDislike {
     pub dislike_id: i32,
 }
 
-#[derive(Queryable, Selectable, Identifiable, Associations, Debug, Default, Serialize, Deserialize)]
+#[derive(
+    Queryable, Selectable, Identifiable, Associations, Debug, Default, Serialize, Deserialize,
+)]
 #[diesel(table_name = reply_likes)]
 #[diesel(belongs_to(Reply))]
 #[diesel(belongs_to(Like))]
@@ -376,7 +410,9 @@ pub struct NewReplyLike {
     pub like_id: i32,
 }
 
-#[derive(Queryable, Selectable, Identifiable, Associations, Debug, Default, Serialize, Deserialize)]
+#[derive(
+    Queryable, Selectable, Identifiable, Associations, Debug, Default, Serialize, Deserialize,
+)]
 #[diesel(table_name = reply_dislikes)]
 #[diesel(belongs_to(Reply))]
 #[diesel(belongs_to(Dislike))]

@@ -10,7 +10,10 @@ use crate::{
         connection::establish_connection,
         inserts::insert_user,
         selects::{find_user_by_email, find_user_by_username},
-    }, errors::error::LoginError, routes::{ServerResponse, UserCredentials, UserData}, DbPool
+    },
+    errors::error::LoginError,
+    routes::{ServerResponse, UserCredentials, UserData},
+    DbPool,
 };
 
 #[post("/login")]
@@ -93,7 +96,6 @@ pub async fn login_options() -> impl Responder {
         .finish()
 }
 
-
 #[post("/create-account")]
 pub async fn create_account(
     pool: web::Data<DbPool>,
@@ -111,12 +113,10 @@ pub async fn create_account(
 
     match user {
         Ok(user) => Ok(HttpResponse::Ok().json(user.unwrap())),
-        Err(error) => Ok(
-            HttpResponse::Ok().json(ServerResponse {
-                code: 1,
-                message: error.to_string(),
-            }),
-        ),
+        Err(error) => Ok(HttpResponse::Ok().json(ServerResponse {
+            code: 1,
+            message: error.to_string(),
+        })),
     }
 }
 

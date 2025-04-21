@@ -545,7 +545,7 @@ pub fn count_comment_likes(
 
     match result {
         Ok(num) => Ok(num),
-        Err(error) => Err(error.into())
+        Err(error) => Err(error.into()),
     }
 }
 
@@ -566,7 +566,7 @@ pub fn count_comment_dislikes(
 
     match result {
         Ok(num) => Ok(num),
-        Err(error) => Err(error.into())
+        Err(error) => Err(error.into()),
     }
 }
 
@@ -587,7 +587,7 @@ pub fn count_reply_likes(
 
     match result {
         Ok(num) => Ok(num),
-        Err(error) => Err(error.into())
+        Err(error) => Err(error.into()),
     }
 }
 
@@ -608,6 +608,6 @@ pub fn count_reply_dislikes(
 
     match result {
         Ok(num) => Ok(num),
-        Err(error) => Err(error.into())
+        Err(error) => Err(error.into()),
     }
 }

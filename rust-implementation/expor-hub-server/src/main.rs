@@ -1,6 +1,9 @@
 use std::{env, fs::File, io::BufReader};
 
-use actix_web::{http::header::{ACCESS_CONTROL_ALLOW_ORIGIN, CACHE_CONTROL, CONTENT_SECURITY_POLICY}, middleware, web, App, HttpServer};
+use actix_web::{
+    http::header::{ACCESS_CONTROL_ALLOW_ORIGIN, CACHE_CONTROL, CONTENT_SECURITY_POLICY},
+    middleware, web, App, HttpServer,
+};
 use actix_web_lab::{header::StrictTransportSecurity, middleware::RedirectHttps};
 use expor_hub_server::{
     db::seeder,
@@ -8,14 +11,21 @@ use expor_hub_server::{
     routes::{
         account::{create_account, create_account_options, login, login_options},
         api::*,
+        comments::get_project_comments,
+        dislikes::{get_comment_dislikes, get_reply_dislikes, get_user_dislikes},
         favourites::{
             create_new_favourite, get_favourite_by_ids, get_favourites_by_user_id,
             unfavourite_project,
         },
         follows::{get_follow_by_ids, get_user_followings, new_follow, unfollow},
+        images::{
+            get_profile_image, get_project_images, upload_profile_image,
+            upload_profile_image_options,
+        },
+        likes::{get_comment_likes, get_reply_likes, get_user_likes},
         projects::{
-            get_num_of_projects_by_user, get_project_by_id, get_projects_by_date_updated,
-            get_projects_by_user_id,
+            create_project, create_project_options, get_num_of_projects_by_user, get_project_by_id,
+            get_projects_by_date_updated, get_projects_by_user_id,
         },
         root::*,
         searches::process_search_query,
@@ -29,7 +39,7 @@ use expor_hub_server::{
 
 #[actix_web::main]
 async fn main() -> Result<(), std::io::Error> {
-    let mut args = env::args().into_iter();
+    let mut args = env::args();
 
     if args.len() > 1 {
         args.next();
@@ -117,7 +127,9 @@ async fn main() -> Result<(), std::io::Error> {
                             .service(get_project_by_id)
                             .service(get_projects_by_user_id)
                             .service(get_projects_by_date_updated)
-                            .service(get_num_of_projects_by_user),
+                            .service(get_num_of_projects_by_user)
+                            .service(create_project)
+                            .service(create_project_options)
                     )
                     .service(
                         web::scope("/favourite")
@@ -132,6 +144,26 @@ async fn main() -> Result<(), std::io::Error> {
                             .service(unfollow)
                             .service(new_follow)
                             .service(get_follow_by_ids),
+                    )
+                    .service(
+                        web::scope("/image")
+                            .service(get_profile_image)
+                            .service(get_project_images)
+                            .service(upload_profile_image)
+                            .service(upload_profile_image_options)
+                    )
+                    .service(web::scope("/comment").service(get_project_comments))
+                    .service(
+                        web::scope("like")
+                            .service(get_user_likes)
+                            .service(get_comment_likes)
+                            .service(get_reply_likes)
+                    )
+                    .service(
+                        web::scope("dislike")
+                            .service(get_user_dislikes)
+                            .service(get_comment_dislikes)
+                            .service(get_reply_dislikes)
                     )
                     .service(web::scope("/search").service(process_search_query))
                     .service(all_tables)

@@ -285,7 +285,10 @@ pub fn insert_thread(
     }
 }
 
-pub fn insert_like(conn: &mut MysqlConnection, in_user_id: i32) -> Result<Option<Like>, anyhow::Error> {
+pub fn insert_like(
+    conn: &mut MysqlConnection,
+    in_user_id: i32,
+) -> Result<Option<Like>, anyhow::Error> {
     use crate::schema::likes;
 
     let new_like = NewLike {
@@ -311,7 +314,10 @@ pub fn insert_like(conn: &mut MysqlConnection, in_user_id: i32) -> Result<Option
     }
 }
 
-pub fn insert_dislike(conn: &mut MysqlConnection, in_user_id: i32) -> Result<Option<Dislike>, anyhow::Error> {
+pub fn insert_dislike(
+    conn: &mut MysqlConnection,
+    in_user_id: i32,
+) -> Result<Option<Dislike>, anyhow::Error> {
     use crate::schema::dislikes;
 
     let new_dislike = NewDislike {

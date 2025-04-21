@@ -2,17 +2,17 @@ use serde::{Deserialize, Serialize};
 
 pub mod account;
 pub mod api;
+pub mod comments;
+pub mod dislikes;
 pub mod favourites;
 pub mod follows;
-pub mod projects;
-pub mod root;
-pub mod users;
-pub mod searches;
 pub mod images;
-pub mod comments;
-pub mod replies;
 pub mod likes;
-pub mod dislikes;
+pub mod projects;
+pub mod replies;
+pub mod root;
+pub mod searches;
+pub mod users;
 
 #[derive(Serialize)]
 struct ServerResponse {
@@ -70,5 +70,29 @@ struct FollowIds {
 
 #[derive(Deserialize)]
 struct SearchQuery {
-    q: String
+    q: String,
+}
+
+#[derive(Deserialize)]
+struct ProjectDetails {
+    project_name: String,
+    description: String,
+    user_id: i32,
+    images: Vec<String>,
+}
+
+#[derive(Deserialize)]
+struct ProfileImageUpload {
+    user_id: i32,
+    image: String,
+}
+
+#[derive(Deserialize)]
+struct CommentId {
+    comment_id: i32,
+}
+
+#[derive(Deserialize)]
+struct ReplyId {
+    reply_id: i32,
 }

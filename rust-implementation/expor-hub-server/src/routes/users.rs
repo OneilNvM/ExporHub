@@ -4,7 +4,9 @@ use actix_web::{
 };
 
 use crate::{
-    db::db_actions::selects::{find_user_by_email, find_user_by_id, find_user_by_username}, routes::{Email, ServerResponse, UserId, Username}, DbPool
+    db::db_actions::selects::{find_user_by_email, find_user_by_id, find_user_by_username},
+    routes::{Email, ServerResponse, UserId, Username},
+    DbPool,
 };
 
 #[get("/user-id")]

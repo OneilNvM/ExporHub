@@ -167,7 +167,7 @@ export default function CreateAccountForm({ setError }: { setError: React.Dispat
         </div>
         <div className='flex flex-row-reverse items-center gap-4'>
           <label htmlFor="terms-privacy">By ticking this checkbox, you confirm that you agree to the <Link className='text-blue-400 underline visited:text-purple-500' href={'/terms-and-conditions'}>Terms and Conditions</Link> and the <Link className='text-blue-400 underline visited:text-purple-500' href={'/privacy-policy'}>Privacy Policy</Link></label>
-          <input className='min-w-20 h-9 appearance-none transition-all before:transition-all before:block before:size-7 before:relative before:top-1 before:left-1 before:bg-gray-200 before:rounded-full before:checked:translate-x-[2.75rem] rounded-full bg-gray-300 checked:bg-pink-600 dark:bg-pink-950/30' required type="checkbox" name="" id="terms-privacy" />
+          <input className='min-w-20 h-9 appearance-none transition-all before:transition-all before:block before:size-7 before:relative before:top-1 before:left-1 before:bg-gray-200 before:rounded-full before:checked:translate-x-[2.75rem] rounded-full bg-gray-300 checked:bg-pink-600 dark:bg-pink-950/30' required type="checkbox" id="terms-privacy" />
         </div>
 
         <input className='mt-12 px-6 py-2 text-lg rounded-3xl self-center cursor-pointer shadow-lg transition-all hover:translate-y-[-5px] hover:bg-pink-400 hover:shadow-pink-300/90 hover:shadow-xl bg-pink-200 dark:bg-[#030303] dark:hover:shadow-pink-900/20 dark:hover:shadow-lg dark:hover:bg-pink-900' type="submit" value="Create Account" />
