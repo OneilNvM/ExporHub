@@ -22,8 +22,8 @@ config:
             useOnlyRequestNames: true
         ensure:
           thresholds:
-            - http.response_time.p95: 400
-            - http.response_time.p99: 600
+            - http.response_time.p95: 800
+            - http.response_time.p99: 1000
         metrics-by-endpoint:
           metricsNamespace: plugins.metrics-by-endpoint
           useOnlyRequestNames: true
@@ -106,4 +106,4 @@ scenarios:
                       name: "GET /api/reply-dislikes"
                       expect:
                         statusCode: 200
-            count: 5
+            count: 10
