@@ -2,17 +2,20 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
-class DatabaseTest extends TestCase {
+class DatabaseTest extends TestCase
+{
     use RefreshDatabase;
 
-    public function test_find_all_rows() {
+    public function test_find_all_rows()
+    {
 
-        $this->seed();
-        
+        $this->expectsDatabaseQueryCount(14);
+
         $users = DB::table('users')->get();
         $projects = DB::table('projects')->get();
         $images = DB::table('images')->get();
@@ -45,9 +48,47 @@ class DatabaseTest extends TestCase {
             "reply_dislikes" => $reply_dislikes,
         ];
 
-        print($users);
+        clock($results);
 
-        $this->assertArrayHasKey("users", $results);
-        
+        assert(count($results) == 14);
+    }
+
+    public function test_user_model()
+    {
+        $this->expectsDatabaseQueryCount(7501);
+
+        $user1 = User::where('user_id', 1)->firstOrFail();
+
+        clock($user1);
+
+        for ($i = 0; $i < 500; $i++) {
+            $user2 = User::where('username', $user1->username)->firstOrFail();
+
+            print$user2;
+        }
+
+        for ($i = 0; $i < 1000; $i++) {
+            $user2 = User::where('email', $user1->email)->firstOrFail();
+
+            print$user2;
+        }
+
+        for ($i = 0; $i < 1500; $i++) {
+            $user2 = User::where('username', $user1->username)->firstOrFail();
+
+            print$user2;
+        }
+
+        for ($i = 0; $i < 2000; $i++) {
+            $user2 = User::where('email', $user1->email)->firstOrFail();
+
+            print$user2;
+        }
+
+        for ($i = 0; $i < 2500; $i++) {
+            $user2 = User::where('email', $user1->email)->firstOrFail();
+
+            print$user2;
+        }
     }
 }

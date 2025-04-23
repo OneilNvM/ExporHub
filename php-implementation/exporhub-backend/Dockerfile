@@ -49,5 +49,9 @@ COPY --from=composer:2.6.5 /usr/bin/composer /usr/local/bin/composer
 COPY composer.json ./
 RUN composer install
 
+RUN php artisan route:clear && \
+    php artisan config:clear && \
+    php artisan optimize
+
 # Set the default command to run php-fpm
 ENTRYPOINT ["php", "artisan", "octane:frankenphp"]

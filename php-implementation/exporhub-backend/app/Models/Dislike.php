@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
-class User extends Model
+class Dislike extends Model
 {
-    protected $table = 'users';
-    protected $primaryKey = 'user_id';
+    protected $table = 'dislikes';
+    protected $primaryKey = 'dislike_id';
     public $incrementing = true;
 
     public $timestamps = false;

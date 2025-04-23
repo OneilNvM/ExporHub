@@ -6,7 +6,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\support\Facades\DB;
 use Illuminate\support\Facades\Hash;
-use Carbon\Carbon;
+use Faker\Factory as Faker;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,267 +15,167 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Users
-        $users = [
-            [
-                'username' => 'john_doe',
-                'email' => 'john.doe@example.com',
-                'password' => Hash::make('password123'),
-                'bio' => 'A passionate developer and creator.',
-                'profile_img' => 'uploads/profiles/john.jpg',
-                'followers' => 150,
-                'date_created' => Carbon::now(),
-            ],
-            [
-                'username' => 'jane_smith',
-                'email' => 'jane.smith@example.com',
-                'password' => Hash::make('secure_pass'),
-                'bio' => 'Loves designing beautiful and functional things.',
-                'profile_img' => 'uploads/profiles/jane.png',
-                'followers' => 210,
-                'date_created' => Carbon::now()->subDays(5),
-            ],
-            [
-                'username' => 'peter_pan',
-                'email' => 'peter.pan@neverland.com',
-                'password' => Hash::make('flyhigh'),
-                'bio' => 'Always young at heart.',
-                'profile_img' => null,
-                'followers' => 50,
-                'date_created' => Carbon::now()->subWeeks(2),
-            ],
-            [
-                'username' => 'alice_wonder',
-                'email' => 'alice@wonderland.net',
-                'password' => Hash::make('downtherabbithole'),
-                'bio' => 'Curious and always exploring.',
-                'profile_img' => 'uploads/profiles/alice.gif',
-                'followers' => 300,
-                'date_created' => Carbon::now()->subMonths(1),
-            ],
-        ];
+        $faker = Faker::create();
+
+        // Seed Users table
+        $users = [];
+        for ($i = 0; $i < 25; $i++) {
+            $username = $faker->unique()->userName;
+            $email = $faker->unique()->safeEmail;
+            $users[] = [
+                'username' => $username,
+                'email' => $email,
+                'password' => Hash::make('password'), // Default password for all users
+                'bio' => $faker->paragraph(3),
+                'profile_img' => $faker->imageUrl(200, 200, 'people'),
+                'followers' => $faker->numberBetween(0, 500),
+                'date_created' => now(),
+            ];
+        }
         DB::table('users')->insert($users);
+        $user_ids = DB::table('users')->pluck('user_id')->toArray();
 
-        // Projects
-        $projects = [
-            [
-                'name' => 'Awesome Portfolio Website',
-                'description' => 'My personal portfolio showcasing my skills and projects.',
-                'favourites' => 25,
-                'user_id' => 1,
-                'date_created' => Carbon::now()->subDays(2),
-                'date_updated' => Carbon::now(),
-            ],
-            [
-                'name' => 'Mobile App Concept',
-                'description' => 'A concept for a new social networking mobile application.',
-                'favourites' => 55,
-                'user_id' => 2,
-                'date_created' => Carbon::now()->subDays(7),
-                'date_updated' => Carbon::now()->subDays(3),
-            ],
-            [
-                'name' => 'Open Source Library',
-                'description' => 'A collection of useful functions for PHP development.',
-                'favourites' => 120,
-                'user_id' => 1,
-                'date_created' => Carbon::now()->subWeeks(3),
-                'date_updated' => null,
-            ],
-            [
-                'name' => 'Creative Illustration Series',
-                'description' => 'A series of digital illustrations exploring different themes.',
-                'favourites' => 80,
-                'user_id' => 2,
-                'date_created' => Carbon::now()->subMonths(1)->addDays(5),
-                'date_updated' => Carbon::now()->subDays(10),
-            ],
-            [
-                'name' => 'Data Analysis Dashboard',
-                'description' => 'A dashboard for visualizing key business metrics.',
-                'favourites' => 30,
-                'user_id' => 3,
-                'date_created' => Carbon::now()->subDays(10),
-                'date_updated' => Carbon::now()->subDays(1),
-            ],
-        ];
+        // Seed Projects table
+        $projects = [];
+        for ($i = 0; $i < 25; $i++) {
+            $projects[] = [
+                'user_id' => $faker->randomElement($user_ids),
+                'name' => $faker->unique()->sentence(3),
+                'description' => $faker->paragraph(5),
+                'favourites' => $faker->numberBetween(0, 200),
+                'date_created' => now(),
+                'date_updated' => $faker->optional()->dateTimeBetween('-1 month', 'now'),
+            ];
+        }
         DB::table('projects')->insert($projects);
+        $project_ids = DB::table('projects')->pluck('project_id')->toArray();
 
-        // Images
-        $images = [
-            [
-                'file_path' => 'uploads/images/portfolio_screenshot.png',
-                'user_id' => 1,
-                'project_id' => 1,
-                'date_uploaded' => Carbon::now()->subDays(2),
-            ],
-            [
-                'file_path' => 'uploads/images/mobile_app_ui.jpg',
-                'user_id' => 2,
-                'project_id' => 2,
-                'date_uploaded' => Carbon::now()->subDays(6),
-            ],
-            [
-                'file_path' => 'uploads/images/library_logo.svg',
-                'user_id' => 1,
-                'project_id' => 3,
-                'date_uploaded' => Carbon::now()->subWeeks(3),
-            ],
-            [
-                'file_path' => 'uploads/images/illustration_01.jpg',
-                'user_id' => 2,
-                'project_id' => 4,
-                'date_uploaded' => Carbon::now()->subMonths(1)->addDays(6),
-            ],
-            [
-                'file_path' => 'uploads/images/dashboard_view.png',
-                'user_id' => 3,
-                'project_id' => 5,
-                'date_uploaded' => Carbon::now()->subDays(9),
-            ],
-            [
-                'file_path' => 'uploads/profiles/john_full.jpg',
-                'user_id' => 1,
-                'project_id' => null,
-                'date_uploaded' => Carbon::now()->subDays(3),
-            ],
-            [
-                'file_path' => 'uploads/profiles/jane_full.png',
-                'user_id' => 2,
-                'project_id' => null,
-                'date_uploaded' => Carbon::now()->subDays(8),
-            ],
-        ];
+        // Seed Images table
+        $images = [];
+        for ($i = 0; $i < 25; $i++) {
+            $images[] = [
+                'file_path' => $faker->unique()->imageUrl(),
+                'user_id' => $faker->optional()->randomElement($user_ids),
+                'project_id' => $faker->optional()->randomElement($project_ids),
+                'date_uploaded' => now(),
+            ];
+        }
         DB::table('images')->insert($images);
 
-        // Follows
-        $follows = [
-            ['follower' => 1, 'following' => 2, 'date_followed' => Carbon::now()->subDays(1)],
-            ['follower' => 1, 'following' => 4, 'date_followed' => Carbon::now()->subDays(4)],
-            ['follower' => 2, 'following' => 1, 'date_followed' => Carbon::now()->subDays(3)],
-            ['follower' => 3, 'following' => 1, 'date_followed' => Carbon::now()->subWeeks(1)],
-            ['follower' => 4, 'following' => 2, 'date_followed' => Carbon::now()->subDays(7)],
-        ];
+        // Seed Follows table
+        $follows = [];
+        for ($i = 0; $i < 30; $i++) {
+            $follower_id = $faker->randomElement($user_ids);
+            $following_id = $faker->randomElement($user_ids);
+            if ($follower_id !== $following_id && !in_array(['follower' => $follower_id, 'following' => $following_id], $follows)) {
+                $follows[] = [
+                    'follower' => $follower_id,
+                    'following' => $following_id,
+                    'date_followed' => now(),
+                ];
+            }
+        }
         DB::table('follows')->insert($follows);
 
-        // Favourites
-        $favourites = [
-            ['user_id' => 2, 'project_id' => 1, 'date_favourited' => Carbon::now()->subDays(1)],
-            ['user_id' => 1, 'project_id' => 2, 'date_favourited' => Carbon::now()->subDays(4)],
-            ['user_id' => 4, 'project_id' => 1, 'date_favourited' => Carbon::now()->subDays(2)],
-            ['user_id' => 2, 'project_id' => 3, 'date_favourited' => Carbon::now()->subWeeks(1)],
-            ['user_id' => 3, 'project_id' => 4, 'date_favourited' => Carbon::now()->subDays(5)],
-        ];
+        // Seed Favourites table
+        $favourites = [];
+        for ($i = 0; $i < 30; $i++) {
+            $favourites[] = [
+                'user_id' => $faker->randomElement($user_ids),
+                'project_id' => $faker->randomElement($project_ids),
+                'date_favourited' => now(),
+            ];
+        }
         DB::table('favourites')->insert($favourites);
 
-        // Comments
-        $comments = [
-            [
-                'text' => 'This is a fantastic portfolio!',
-                'user_id' => 2,
-                'project_id' => 1,
-                'date' => Carbon::now()->subDays(1)->toDateString(),
-                'replies' => 1,
-            ],
-            [
-                'text' => 'Great concept for the mobile app.',
-                'user_id' => 1,
-                'project_id' => 2,
-                'date' => Carbon::now()->subDays(3)->toDateString(),
-                'replies' => 0,
-            ],
-            [
-                'text' => 'Love the clean design of the library logo.',
-                'user_id' => 4,
-                'project_id' => 3,
-                'date' => Carbon::now()->subWeeks(1)->toDateString(),
-                'replies' => 0,
-            ],
-            [
-                'text' => 'The illustration series is very inspiring.',
-                'user_id' => 3,
-                'project_id' => 4,
-                'date' => Carbon::now()->subDays(6)->toDateString(),
-                'replies' => 2,
-            ],
-            [
-                'text' => 'Useful dashboard!',
-                'user_id' => 1,
-                'project_id' => 5,
-                'date' => Carbon::now()->subDays(2)->toDateString(),
-                'replies' => 0,
-            ],
-        ];
+        // Seed Comments table
+        $comments = [];
+        for ($i = 0; $i < 25; $i++) {
+            $comments[] = [
+                'user_id' => $faker->randomElement($user_ids),
+                'project_id' => $faker->randomElement($project_ids),
+                'text' => $faker->sentence(10),
+                'date' => now()->toDateString(),
+                'replies' => $faker->numberBetween(0, 10),
+            ];
+        }
         DB::table('comments')->insert($comments);
+        $comment_ids = DB::table('comments')->pluck('comment_id')->toArray();
 
-        // Replies
-        $replies = [
-            [
-                'text' => 'Thank you!',
-                'user_id' => 1,
-                'date' => Carbon::now()->subDays(1)->toDateString(),
-            ],
-            [
-                'text' => 'Glad you like it!',
-                'user_id' => 2,
-                'date' => Carbon::now()->subDays(5)->toDateString(),
-            ],
-            [
-                'text' => 'Which one is your favorite?',
-                'user_id' => 2,
-                'date' => Carbon::now()->subDays(4)->toDateString(),
-            ],
-        ];
+        // Seed Replies table
+        $replies = [];
+        for ($i = 0; $i < 30; $i++) {
+            $replies[] = [
+                'user_id' => $faker->randomElement($user_ids),
+                'text' => $faker->sentence(7),
+                'date' => now()->toDateString(),
+            ];
+        }
         DB::table('replies')->insert($replies);
+        $reply_ids = DB::table('replies')->pluck('reply_id')->toArray();
 
-        // Threads (linking comments and replies)
-        $threads = [
-            ['comment_id' => 1, 'reply_id' => 1],
-            ['comment_id' => 4, 'reply_id' => 2],
-            ['comment_id' => 4, 'reply_id' => 3],
-        ];
+        // Seed Threads table
+        $threads = [];
+        for ($i = 0; $i < 30; $i++) {
+            $threads[] = [
+                'comment_id' => $faker->randomElement($comment_ids),
+                'reply_id' => $faker->randomElement($reply_ids),
+            ];
+        }
         DB::table('threads')->insert($threads);
 
-        // Likes
-        $likes = [
-            ['user_id' => 3, 'date' => Carbon::now()->subDays(1)->toDateString()],
-            ['user_id' => 4, 'date' => Carbon::now()->subDays(3)->toDateString()],
-            ['user_id' => 1, 'date' => Carbon::now()->subWeeks(1)->toDateString()],
-            ['user_id' => 2, 'date' => Carbon::now()->subDays(5)->toDateString()],
-        ];
+        // Seed Likes table
+        $likes = [];
+        for ($i = 0; $i < 30; $i++) {
+            $likes[] = [
+                'user_id' => $faker->randomElement($user_ids),
+                'date' => now()->toDateString(),
+            ];
+        }
         DB::table('likes')->insert($likes);
+        $like_ids = DB::table('likes')->pluck('like_id')->toArray();
 
-        // Dislikes
-        $dislikes = [
-            ['user_id' => 2, 'date' => Carbon::now()->subDays(2)->toDateString()],
-            ['user_id' => 3, 'date' => Carbon::now()->subDays(4)->toDateString()],
-        ];
+        // Seed Dislikes table
+        $dislikes = [];
+        for ($i = 0; $i < 30; $i++) {
+            $dislikes[] = [
+                'user_id' => $faker->randomElement($user_ids),
+                'date' => now()->toDateString(),
+            ];
+        }
         DB::table('dislikes')->insert($dislikes);
+        $dislike_ids = DB::table('dislikes')->pluck('dislike_id')->toArray();
 
-        // Comment Likes
-        $commentLikes = [
-            ['comment_id' => 1, 'like_id' => 1],
-            ['comment_id' => 1, 'like_id' => 2],
-            ['comment_id' => 2, 'like_id' => 3],
-        ];
-        DB::table('comment_likes')->insert($commentLikes);
+        // Seed Comment Likes table
+        for ($i = 0; $i < 30; $i++) {
+            DB::table('comment_likes')->insert([
+                'comment_id' => $faker->randomElement($comment_ids),
+                'like_id' => $faker->randomElement($like_ids),
+            ]);
+        }
 
-        // Comment Dislikes
-        $commentDislikes = [
-            ['comment_id' => 3, 'dislike_id' => 1],
-        ];
-        DB::table('comment_dislikes')->insert($commentDislikes);
+        // Seed Comment Dislikes table
+        for ($i = 0; $i < 30; $i++) {
+            DB::table('comment_dislikes')->insert([
+                'comment_id' => $faker->randomElement($comment_ids),
+                'dislike_id' => $faker->randomElement($dislike_ids),
+            ]);
+        }
 
-        // Reply Likes
-        $replyLikes = [
-            ['reply_id' => 1, 'like_id' => 4],
-        ];
-        DB::table('reply_likes')->insert($replyLikes);
+        // Seed Reply Likes table
+        for ($i = 0; $i < 30; $i++) {
+            DB::table('reply_likes')->insert([
+                'reply_id' => $faker->randomElement($reply_ids),
+                'like_id' => $faker->randomElement($like_ids),
+            ]);
+        }
 
-        // Reply Dislikes
-        $replyDislikes = [
-            ['reply_id' => 2, 'dislike_id' => 2],
-        ];
-        DB::table('reply_dislikes')->insert($replyDislikes);
+        // Seed Reply Dislikes table
+        for ($i = 0; $i < 30; $i++) {
+            DB::table('reply_dislikes')->insert([
+                'reply_id' => $faker->randomElement($reply_ids),
+                'dislike_id' => $faker->randomElement($dislike_ids),
+            ]);
+        }
     }
 }
