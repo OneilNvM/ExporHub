@@ -32,53 +32,58 @@ scenarios:
     - flow:
           - loop:
                 - get:
-                      url: "/api/follow/unique-follow?follower=3&following=4"
-                      name: "GET /api/follow/unique-follow"
+                      url: "/api/user/user-id?user_id=1"
+                      name: "GET /api/user/user-id"
                       expect:
                           statusCode: 200
                 - get:
-                      url: "/api/image/profile-image?user_id=3"
-                      name: "GET /api/image/profile-image"
+                      url: "/api/user/username?username=user_2"
+                      name: "GET /api/user/username"
                       expect:
                           statusCode: 200
                 - get:
-                      url: "/api/image/project-images?user_id=1&project_id=5"
-                      name: "GET /api/image/project-images"
+                      url: "/api/user/email?email=user.3@example.com"
+                      name: "GET /api/user/email"
                       expect:
                           statusCode: 200
                 - get:
-                      url: "/api/like/user-likes?user_id=2"
-                      name: "GET /api/like/user-likes"
+                      url: "/api/project/project-id?project_id=1"
+                      name: "GET /api/project/project-id"
                       expect:
                         statusCode: 200
                 - get:
-                      url: "/api/like/comment-likes?comment_id=3"
-                      name: "GET /api/like/comment-likes"
+                      url: "/api/project/user-id?user_id=4"
+                      name: "GET /api/project/user-id"
                       expect:
                         statusCode: 200
                 - get:
-                      url: "/api/like/reply-likes?reply_id=1"
+                      url: "/api/project/date-updated?user_id=13"
                       name: "GET /api/project/date-updated"
                       expect:
                         statusCode: 200
                 - get:
-                      url: "/api/dislike/user-dislikes?user_id=3"
-                      name: "GET /api/dislike/user-dislikes"
+                      url: "/api/project/num-of-projects?user_id=15"
+                      name: "GET /api/project/num-of-projects"
                       expect:
                         statusCode: 200
                 - get:
-                      url: "/api/dislike/comment-dislikes?comment_id=3"
-                      name: "GET /api/dislike/comment-dislikes"
+                      url: "/api/favourite/user-id?user_id=1"
+                      name: "GET /api/favourite/user-id"
                       expect:
                         statusCode: 200
                 - get:
-                      url: "/api/dislike/reply-dislikes?reply_id=1"
-                      name: "GET /api/dislike/reply-dislikes"
+                      url: "/api/favourite/u-p-id?user_id=7&project_id=2"
+                      name: "GET /api/favourite/u-p-id"
                       expect:
                         statusCode: 200
                 - get:
-                      url: "/api/search/query?q=website"
-                      name: "GET /api/search/query"
+                      url: "/api/follow/user-id?user_id=1"
+                      name: "GET /api/follow/user-id"
                       expect:
+                        statusCode: 200
+                - get:
+                      url: "/api/comment/project-comments?project_id=2"
+                      name: "GET /api/comment/project-comments"
+                      expect: 
                         statusCode: 200
             count: 10

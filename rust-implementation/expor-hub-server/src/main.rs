@@ -27,6 +27,7 @@ use expor_hub_server::{
             create_project, create_project_options, get_num_of_projects_by_user, get_project_by_id,
             get_projects_by_date_updated, get_projects_by_user_id,
         },
+        replies::get_comment_replies,
         root::*,
         searches::process_search_query,
         users::{
@@ -153,6 +154,7 @@ async fn main() -> Result<(), std::io::Error> {
                             .service(upload_profile_image_options)
                     )
                     .service(web::scope("/comment").service(get_project_comments))
+                    .service(web::scope("/reply").service(get_comment_replies))
                     .service(
                         web::scope("like")
                             .service(get_user_likes)
