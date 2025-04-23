@@ -1,7 +1,8 @@
-use std::{env, fs::File, io::BufReader};
+use std::{env, fs::File, io::BufReader, time::Duration};
 
+use actix_extensible_rate_limit::{backend::{memory::InMemoryBackend, SimpleInputFunctionBuilder}, RateLimiter};
 use actix_web::{
-    http::header::{ACCESS_CONTROL_ALLOW_ORIGIN, CACHE_CONTROL, CONTENT_SECURITY_POLICY},
+    http::header::{ACCESS_CONTROL_ALLOW_ORIGIN, CACHE_CONTROL, CONTENT_SECURITY_POLICY, X_CONTENT_TYPE_OPTIONS},
     middleware, web, App, HttpServer,
 };
 use actix_web_lab::{header::StrictTransportSecurity, middleware::RedirectHttps};
@@ -88,13 +89,20 @@ async fn main() -> Result<(), std::io::Error> {
     let mw = RedirectHttps::with_hsts(StrictTransportSecurity::default().include_subdomains());
     let _auth_mw = actix_web_httpauth::middleware::HttpAuthentication::basic(validate_auth);
 
+    let backend = InMemoryBackend::builder().build();
+
     println!("Server running at https://api.exporhub.com:9000");
 
     HttpServer::new(move || {
+        let input = SimpleInputFunctionBuilder::new(Duration::from_secs(20), 50).real_ip_key().build();
+        let rate_limit_mw = RateLimiter::builder(backend.clone(), input).add_headers().build();
+
         App::new()
             .app_data(web::Data::new(pool.clone()))
+            .wrap(rate_limit_mw)
             .wrap(mw.clone())
             .wrap(middleware::DefaultHeaders::new().add((CACHE_CONTROL, "max-age=1200, no-cache, public")))
+            .wrap(middleware::DefaultHeaders::new().add((X_CONTENT_TYPE_OPTIONS, "nosniff")))
             .wrap(middleware::DefaultHeaders::new().add((CONTENT_SECURITY_POLICY, "default-src 'none'; script-src 'self'; connect-src 'self'; img-src 'self'; style-src 'self'; frame-ancestors 'self'; form-action 'self';")))
             .service(index)
             .service(
