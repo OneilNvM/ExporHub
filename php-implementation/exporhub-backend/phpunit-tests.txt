@@ -1,0 +1,46 @@
+First PHPUnit Test:
+
+all_rows: 35.83s (5000 iterations)
+	- mean: 7.17ms
+
+users: 5.16s (11000 iterations)
+	- mean: 0.47ms or 470µs
+
+projects: 5.83s (11000 iterations)
+	- mean: 0.53ms or 530µs
+
+images: 5.51s (11000 iterations)
+	- mean: 0.50ms or 500µs
+
+follows: 5.27s (11000 iterations)
+	- mean: 0.48ms or 480µs
+
+favourites: 5.09s (11000 iterations)
+	- mean: 0.46ms or 460µs
+
+comments: 4.92s (11000 iterations)
+	- mean: 0.45ms or 450µs
+
+replies: 5.01s (11000 iterations)
+	- mean: 0.46ms or 460µs
+
+threads: 4.79s (11000 iterations)
+	- mean: 0.44ms or 440µs
+
+likes: 4.85s (11000 iterations)
+	- mean: 0.44ms or 440µs
+
+dislikes: 4.86s (11000 iterations)
+	- mean: 0.44ms or 440µs
+
+comment-likes: 4.77s (11000 iterations)
+	- mean: 0.43ms or 430µs
+
+comment-dislikes: 4.77s (11000 iterations)
+	- mean: 0.43ms or 430µs
+
+reply-likes: 5.05s (11000 iterations)
+	- mean: 0.46ms or 460µs
+
+reply-dislikes: 4.89s (11000 iterations)
+	- mean: 0.44ms or 440µs

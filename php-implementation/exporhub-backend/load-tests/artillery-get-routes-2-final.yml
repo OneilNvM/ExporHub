@@ -32,17 +32,17 @@ scenarios:
     - flow:
           - loop:
                 - get:
-                      url: "/api/follow/unique-follow?follower=3&following=4"
+                      url: "/api/follow/unique-follow?follower=25&following=12"
                       name: "GET /api/follow/unique-follow"
                       expect:
                           statusCode: 200
                 - get:
-                      url: "/api/image/profile-image?user_id=3"
+                      url: "/api/image/profile-image?user_id=7"
                       name: "GET /api/image/profile-image"
                       expect:
                           statusCode: 200
                 - get:
-                      url: "/api/image/project-images?user_id=1&project_id=5"
+                      url: "/api/image/project-images?user_id=11&project_id=2"
                       name: "GET /api/image/project-images"
                       expect:
                           statusCode: 200
@@ -57,7 +57,7 @@ scenarios:
                       expect:
                         statusCode: 200
                 - get:
-                      url: "/api/like/reply-likes?reply_id=1"
+                      url: "/api/like/reply-likes?reply_id=8"
                       name: "GET /api/project/date-updated"
                       expect:
                         statusCode: 200
@@ -77,8 +77,13 @@ scenarios:
                       expect:
                         statusCode: 200
                 - get:
-                      url: "/api/search/query?q=website"
+                      url: "/api/search/query?q=tempora"
                       name: "GET /api/search/query"
                       expect:
                         statusCode: 200
-            count: 1
+                - get:
+                      url: "/api/reply/thread-replies?comment_id=3"
+                      name: "GET /api/reply/thread-replies"
+                      expect:
+                        statusCode: 200
+            count: 10

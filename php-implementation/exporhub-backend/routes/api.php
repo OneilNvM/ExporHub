@@ -62,85 +62,85 @@ Route::get('/all', function () {
 });
 
 Route::get('/users', function () {
-    $users = clock(User::all());
+    $users = DB::table('users')->get();
 
     return $users;
 });
 
 Route::get('/projects', function () {
-    $projects = Project::all();
+    $projects = DB::table('projects')->get();
 
     return $projects;
 });
 
 Route::get('/images', function () {
-    $images = Image::all();
+    $images = DB::table('images')->get();
 
     return $images;
 });
 
 Route::get('/follows', function () {
-    $follows = Follow::all();
+    $follows = DB::table('follows')->get();
 
     return $follows;
 });
 
 Route::get('/favourites', function () {
-    $favourites = Favourite::all();
+    $favourites = DB::table('favourites')->get();
 
     return $favourites;
 });
 
 Route::get('/comments', function () {
-    $comments = Comment::all();
+    $comments = DB::table('comments')->get();
 
     return $comments;
 });
 
 Route::get('/replies', function () {
-    $replies = Reply::all();
+    $replies = DB::table('replies')->get();
 
     return $replies;
 });
 
 Route::get('/threads', function () {
-    $threads = Thread::all();
+    $threads = DB::table('threads')->get();
 
     return $threads;
 });
 
 Route::get('/likes', function () {
-    $likes = Like::all();
+    $likes = DB::table('likes')->get();
 
     return $likes;
 });
 
 Route::get('/dislikes', function () {
-    $dislikes = Dislike::all();
+    $dislikes = DB::table('dislikes')->get();
 
     return $dislikes;
 });
 
 Route::get('/comment-likes', function () {
-    $comment_likes = CommentLike::all();
+    $comment_likes = DB::table('comment_likes')->get();
 
     return $comment_likes;
 });
 
 Route::get('/comment-dislikes', function () {
-    $comment_dislikes = CommentDislike::all();
+    $comment_dislikes = DB::table('comment_dislikes')->get();
 
     return $comment_dislikes;
 });
 
 Route::get('/reply-likes', function () {
-    $reply_likes = ReplyLike::all();
+    $reply_likes = DB::table('reply_likes')->get();
 
     return $reply_likes;
 });
 
 Route::get('/reply-dislikes', function () {
-    $reply_dislikes = ReplyDislike::all();
+    $reply_dislikes = DB::table('reply_dislikes')->get();
 
     return $reply_dislikes;
 });
@@ -283,7 +283,7 @@ Route::get('/like/user-likes', function (Request $request) {
 Route::get('/like/comment-likes', function (Request $request) {
     $comment_id = $request->query('comment_id');
 
-    $count = Like::where('comment_id', intval($comment_id))->count();
+    $count = CommentLike::where('comment_id', intval($comment_id))->count();
 
     return response()->json([
         'num_of_likes' => $count
@@ -293,7 +293,7 @@ Route::get('/like/comment-likes', function (Request $request) {
 Route::get('/like/reply-likes', function (Request $request) {
     $reply_id = $request->query('reply_id');
 
-    $count = Like::where('reply_id', intval($reply_id))->count();
+    $count = ReplyLike::where('reply_id', intval($reply_id))->count();
 
     return response()->json([
         'num_of_likes' => $count
@@ -311,7 +311,7 @@ Route::get('/dislike/user-dislikes', function (Request $request) {
 Route::get('/dislike/comment-dislikes', function (Request $request) {
     $comment_id = $request->query('comment_id');
 
-    $count = Dislike::where('comment_id', intval($comment_id))->count();
+    $count = CommentDislike::where('comment_id', intval($comment_id))->count();
 
     return response()->json([
         'num_of_dislikes' => $count
@@ -321,7 +321,7 @@ Route::get('/dislike/comment-dislikes', function (Request $request) {
 Route::get('/dislike/reply-dislikes', function (Request $request) {
     $reply_id = $request->query('reply_id');
 
-    $count = Dislike::where('reply_id', intval($reply_id))->count();
+    $count = ReplyDislike::where('reply_id', intval($reply_id))->count();
 
     return response()->json([
         'num_of_dislikes' => $count

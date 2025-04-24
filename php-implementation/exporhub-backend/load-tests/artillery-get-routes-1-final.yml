@@ -37,12 +37,12 @@ scenarios:
                       expect:
                           statusCode: 200
                 - get:
-                      url: "/api/user/username?username=jane_smith"
+                      url: "/api/user/username?username=christop.kling"
                       name: "GET /api/user/username"
                       expect:
                           statusCode: 200
                 - get:
-                      url: "/api/user/email?email=peter.pan@neverland.com"
+                      url: "/api/user/email?email=alind@example.com"
                       name: "GET /api/user/email"
                       expect:
                           statusCode: 200
@@ -57,7 +57,7 @@ scenarios:
                       expect:
                         statusCode: 200
                 - get:
-                      url: "/api/project/date-updated?user_id=3"
+                      url: "/api/project/date-updated?user_id=18"
                       name: "GET /api/project/date-updated"
                       expect:
                         statusCode: 200
@@ -72,7 +72,7 @@ scenarios:
                       expect:
                         statusCode: 200
                 - get:
-                      url: "/api/favourite/u-p-id?user_id=3&project_id=2"
+                      url: "/api/favourite/u-p-id?user_id=9&project_id=15"
                       name: "GET /api/favourite/u-p-id"
                       expect:
                         statusCode: 200
@@ -81,4 +81,9 @@ scenarios:
                       name: "GET /api/follow/user-id"
                       expect:
                         statusCode: 200
-            count: 1
+                - get:
+                      url: "/api/comment/project-comments?project_id=3"
+                      name: "GET /api/comment/project-comments"
+                      expect:
+                        statusCode: 200
+            count: 10

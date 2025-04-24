@@ -2,6 +2,19 @@
 
 namespace Tests\Feature;
 
+use App\Models\Comment;
+use App\Models\CommentDislike;
+use App\Models\CommentLike;
+use App\Models\Dislike;
+use App\Models\Favourite;
+use App\Models\Follow;
+use App\Models\Image;
+use App\Models\Like;
+use App\Models\Project;
+use App\Models\Reply;
+use App\Models\ReplyDislike;
+use App\Models\ReplyLike;
+use App\Models\Thread;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
@@ -14,81 +27,136 @@ class DatabaseTest extends TestCase
     public function test_find_all_rows()
     {
 
-        $this->expectsDatabaseQueryCount(14);
+        $this->expectsDatabaseQueryCount(70000);
 
-        $users = DB::table('users')->get();
-        $projects = DB::table('projects')->get();
-        $images = DB::table('images')->get();
-        $follows = DB::table('follows')->get();
-        $favourites = DB::table('favourites')->get();
-        $comments = DB::table('comments')->get();
-        $replies = DB::table('replies')->get();
-        $threads = DB::table('threads')->get();
-        $likes = DB::table('likes')->get();
-        $dislikes = DB::table('dislikes')->get();
-        $comment_likes = DB::table('comment_likes')->get();
-        $comment_dislikes = DB::table('comment_dislikes')->get();
-        $reply_likes = DB::table('reply_likes')->get();
-        $reply_dislikes = DB::table('reply_dislikes')->get();
-
-        $results = [
-            "users" => $users,
-            "projects" => $projects,
-            "images" => $images,
-            "follows" => $follows,
-            "favourites" => $favourites,
-            "comments" => $comments,
-            "replies" => $replies,
-            "threads" => $threads,
-            "likes" => $likes,
-            "dislikes" => $dislikes,
-            "comment_likes" => $comment_likes,
-            "comment_dislikes" => $comment_dislikes,
-            "reply_likes" => $reply_likes,
-            "reply_dislikes" => $reply_dislikes,
-        ];
-
-        clock($results);
-
-        assert(count($results) == 14);
+        for ($i = 0; $i < 5000; $i++) {
+            DB::table('users')->get();
+            DB::table('projects')->get();
+            DB::table('images')->get();
+            DB::table('follows')->get();
+            DB::table('favourites')->get();
+            DB::table('comments')->get();
+            DB::table('replies')->get();
+            DB::table('threads')->get();
+            DB::table('likes')->get();
+            DB::table('dislikes')->get();
+            DB::table('comment_likes')->get();
+            DB::table('comment_dislikes')->get();
+            DB::table('reply_likes')->get();
+            DB::table('reply_dislikes')->get();
+        }
     }
 
     public function test_user_model()
     {
-        $this->expectsDatabaseQueryCount(7501);
+        $this->expectsDatabaseQueryCount(11000);
 
-        $user1 = User::where('user_id', 1)->firstOrFail();
-
-        clock($user1);
-
-        for ($i = 0; $i < 500; $i++) {
-            $user2 = User::where('username', $user1->username)->firstOrFail();
-
-            print$user2;
+        for ($i = 0; $i < 11000; $i++) {
+            User::all();
         }
+    }
+    public function test_project_model()
+    {
+        $this->expectsDatabaseQueryCount(11000);
 
-        for ($i = 0; $i < 1000; $i++) {
-            $user2 = User::where('email', $user1->email)->firstOrFail();
-
-            print$user2;
+        for ($i = 0; $i < 11000; $i++) {
+            Project::all();
         }
+    }
+    public function test_image_model()
+    {
+        $this->expectsDatabaseQueryCount(11000);
 
-        for ($i = 0; $i < 1500; $i++) {
-            $user2 = User::where('username', $user1->username)->firstOrFail();
-
-            print$user2;
+        for ($i = 0; $i < 11000; $i++) {
+            Image::all();
         }
+    }
+    public function test_follow_model()
+    {
+        $this->expectsDatabaseQueryCount(11000);
 
-        for ($i = 0; $i < 2000; $i++) {
-            $user2 = User::where('email', $user1->email)->firstOrFail();
-
-            print$user2;
+        for ($i = 0; $i < 11000; $i++) {
+            Follow::all();
         }
+    }
+    public function test_favourite_model()
+    {
+        $this->expectsDatabaseQueryCount(11000);
 
-        for ($i = 0; $i < 2500; $i++) {
-            $user2 = User::where('email', $user1->email)->firstOrFail();
+        for ($i = 0; $i < 11000; $i++) {
+            Favourite::all();
+        }
+    }
+    public function test_comment_model()
+    {
+        $this->expectsDatabaseQueryCount(11000);
 
-            print$user2;
+        for ($i = 0; $i < 11000; $i++) {
+            Comment::all();
+        }
+    }
+    public function test_reply_model()
+    {
+        $this->expectsDatabaseQueryCount(11000);
+
+        for ($i = 0; $i < 11000; $i++) {
+            Reply::all();
+        }
+    }
+    public function test_thread_model()
+    {
+        $this->expectsDatabaseQueryCount(11000);
+
+        for ($i = 0; $i < 11000; $i++) {
+            Thread::all();
+        }
+    }
+    public function test_like_model()
+    {
+        $this->expectsDatabaseQueryCount(11000);
+
+        for ($i = 0; $i < 11000; $i++) {
+            Like::all();
+        }
+    }
+    public function test_dislike_model()
+    {
+        $this->expectsDatabaseQueryCount(11000);
+
+        for ($i = 0; $i < 11000; $i++) {
+            Dislike::all();
+        }
+    }
+    public function test_comment_like_model()
+    {
+        $this->expectsDatabaseQueryCount(11000);
+
+        for ($i = 0; $i < 11000; $i++) {
+            CommentLike::all();
+        }
+    }
+    public function test_comment_dislike_model()
+    {
+        $this->expectsDatabaseQueryCount(11000);
+
+        for ($i = 0; $i < 11000; $i++) {
+            CommentDislike::all();
+        }
+    }
+    public function test_reply_like_model()
+    {
+        $this->expectsDatabaseQueryCount(11000);
+
+        for ($i = 0; $i < 11000; $i++) {
+            ReplyLike::all();
+        }
+    }
+    public function test_reply_dislike_model()
+    {
+        $this->expectsDatabaseQueryCount(11000);
+
+        for ($i = 0; $i < 11000; $i++) {
+            ReplyDislike::all();
         }
     }
 }
