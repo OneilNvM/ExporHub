@@ -1,8 +1,67 @@
+<<<<<<< HEAD
 import ProjectItem from '@/app/components/project/ProjectItem'
 import ProfileItem from '@/app/components/user/ProfileItem'
 import React from 'react'
 
 export default function SearchResults() {
+=======
+'use client'
+
+import ProjectItem from '@/app/components/project/ProjectItem'
+import ProfileItem from '@/app/components/user/ProfileItem'
+import { useSearchParams } from 'next/navigation'
+import React, { useEffect, useState } from 'react'
+import fetchFavourite from '~/fetch/fetchFavourite'
+import { Project, User } from '~/types/types'
+
+export default function SearchResults({ sessionUserId }: {
+    sessionUserId: number,
+}) {
+    const [results, setResults] = useState<Array<{ Users: User[], Projects: Project[] }> | null>(null)
+    const [projects, setProjects] = useState<Project[] | null>(null)
+    const [users, setUsers] = useState<User[] | null>(null)
+    const [favouritesArr, setFavouritesArr] = useState<boolean[]>([])
+    const queryParams = useSearchParams()
+
+    useEffect(() => {
+        fetch(`https://api.exporhub.com:9000/api/search/query?q=${queryParams.get("q")}`)
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error(`Failed to process search`)
+                }
+
+                return res.json()
+            })
+            .then(vals => {
+                setResults(vals)
+
+                console.log(vals)
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }, [queryParams])
+
+    useEffect(() => {
+        const setStates = async () => {
+            if (results) {
+                let arr: boolean[] = []
+    
+                for (const project of results[1].Projects) {
+                    const favouriteObj = await fetchFavourite(sessionUserId, project.project_id)
+    
+                    favouriteObj && arr.push(true)
+                }
+
+                setFavouritesArr(arr)
+                setUsers(results[0].Users)
+                setProjects(results[1].Projects)
+            }
+        }
+
+        setStates()
+    }, [results])
+>>>>>>> origin/main
     return (
         <>
             <section className='flex w-full justify-evenly'>
@@ -11,6 +70,7 @@ export default function SearchResults() {
                     <button className='text-lg px-6 py-1'>Filter</button>
                 </div>
             </section>
+<<<<<<< HEAD
             <section className='flex flex-col gap-8'>
                 <ProjectItem />
                 <ProfileItem />
@@ -22,6 +82,16 @@ export default function SearchResults() {
                 <ProfileItem />
                 <ProjectItem />
                 <ProfileItem />
+=======
+            <section className='flex w-full items-center flex-col gap-8'>
+                {users ? users.map((user, index) => {
+                    return <ProfileItem key={user.user_id} user={user} followedUsers={null} profileUserId={user.user_id} />
+                }) : null}
+                {projects ? projects.map((project, index) => {
+                    return <ProjectItem key={project.project_id} project={project} sessionUserId={sessionUserId} isFavourited={favouritesArr[index]} />
+                }) : null}
+                {projects && users ? users.length === 0 && projects.length === 0 && <p>No Results</p> : null}
+>>>>>>> origin/main
             </section>
         </>
     )

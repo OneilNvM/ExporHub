@@ -1,8 +1,10 @@
 'use client'
 
+import { signIn } from '@/app/actions/auth'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { FormEvent, useRef, useState } from 'react'
+import { ResponseStatus, User } from '~/types/types'
 
 export default function LoginFormComponent() {
     const [identity, setIdentity] = useState("")
@@ -21,7 +23,7 @@ export default function LoginFormComponent() {
         e.preventDefault()
 
         try {
-            const response = await fetch("https://api.exporhub.com:9443/api/login", {
+            const response = await fetch("https://api.exporhub.com:9000/account/login", {
                 method: "post",
                 headers: {
                     "Content-Type": "application/json",
@@ -36,9 +38,19 @@ export default function LoginFormComponent() {
             let json = await response.json();
     
             if (json.code) {
-
+                const status = json as ResponseStatus;
+    
+                console.log(status.code, status.message)
+    
+                if (status.code === 1) {
+                    setError(status.message)
+                } else if (status.code === 2) {
+                    setError("Invalid login credentials")
+                }
             } else {
-                
+                const user = json as User;
+                await signIn(user)
+                router.push('/account')
             }
         } catch (error) {
             console.error(error)
