@@ -1,0 +1,14 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Favourite extends Model
+{
+    protected $table = 'favourites';
+    protected $primaryKey = 'favourite_id';
+    public $incrementing = true;
+
+    public $timestamps = false;
+}

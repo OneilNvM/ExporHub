@@ -1,0 +1,89 @@
+config:
+    target: https://api.exporhub.com
+    tls:
+        rejectUnauthorized: false
+    phases:
+        - duration: 60
+          arrivalRate: 1
+          rampTo: 5
+          name: Warm up phase
+        - duration: 60
+          arrivalRate: 10
+          rampTo: 20
+          name: Ramp up load
+        - duration: 30
+          arrivalRate: 30
+          rampTo: 60
+          name: Spike phase
+    plugins:
+        expect:
+            reportFailuresAsErrors: true
+            outputFormat: prettyError
+            useOnlyRequestNames: true
+        ensure:
+          thresholds:
+            - http.response_time.p95: 800
+            - http.response_time.p99: 1000
+        metrics-by-endpoint:
+          metricsNamespace: plugins.metrics-by-endpoint
+          useOnlyRequestNames: true
+
+scenarios:
+    - flow:
+          - loop:
+                - get:
+                      url: "/api/follow/unique-follow?follower=25&following=12"
+                      name: "GET /api/follow/unique-follow"
+                      expect:
+                          statusCode: 200
+                - get:
+                      url: "/api/image/profile-image?user_id=7"
+                      name: "GET /api/image/profile-image"
+                      expect:
+                          statusCode: 200
+                - get:
+                      url: "/api/image/project-images?user_id=11&project_id=2"
+                      name: "GET /api/image/project-images"
+                      expect:
+                          statusCode: 200
+                - get:
+                      url: "/api/like/user-likes?user_id=2"
+                      name: "GET /api/like/user-likes"
+                      expect:
+                        statusCode: 200
+                - get:
+                      url: "/api/like/comment-likes?comment_id=3"
+                      name: "GET /api/like/comment-likes"
+                      expect:
+                        statusCode: 200
+                - get:
+                      url: "/api/like/reply-likes?reply_id=8"
+                      name: "GET /api/project/date-updated"
+                      expect:
+                        statusCode: 200
+                - get:
+                      url: "/api/dislike/user-dislikes?user_id=3"
+                      name: "GET /api/dislike/user-dislikes"
+                      expect:
+                        statusCode: 200
+                - get:
+                      url: "/api/dislike/comment-dislikes?comment_id=3"
+                      name: "GET /api/dislike/comment-dislikes"
+                      expect:
+                        statusCode: 200
+                - get:
+                      url: "/api/dislike/reply-dislikes?reply_id=1"
+                      name: "GET /api/dislike/reply-dislikes"
+                      expect:
+                        statusCode: 200
+                - get:
+                      url: "/api/search/query?q=tempora"
+                      name: "GET /api/search/query"
+                      expect:
+                        statusCode: 200
+                - get:
+                      url: "/api/reply/thread-replies?comment_id=3"
+                      name: "GET /api/reply/thread-replies"
+                      expect:
+                        statusCode: 200
+            count: 10

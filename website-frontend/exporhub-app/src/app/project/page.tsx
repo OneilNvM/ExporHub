@@ -1,4 +1,10 @@
 import React from 'react'
+<<<<<<< HEAD
+
+export default function Project() {
+  return (
+    <div>Project</div>
+=======
 import NavBarComponent from '../components/general/NavBarComponent'
 import FooterComponent from '../components/general/FooterComponent'
 
@@ -11,5 +17,6 @@ export default function Project() {
       </main>
       <FooterComponent />
     </div>
+>>>>>>> origin/main
   )
 }

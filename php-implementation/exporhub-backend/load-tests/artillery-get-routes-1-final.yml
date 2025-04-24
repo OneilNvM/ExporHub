@@ -1,0 +1,89 @@
+config:
+    target: https://api.exporhub.com
+    tls:
+        rejectUnauthorized: false
+    phases:
+        - duration: 60
+          arrivalRate: 1
+          rampTo: 5
+          name: Warm up phase
+        - duration: 60
+          arrivalRate: 10
+          rampTo: 20
+          name: Ramp up load
+        - duration: 30
+          arrivalRate: 30
+          rampTo: 60
+          name: Spike phase
+    plugins:
+        expect:
+            reportFailuresAsErrors: true
+            outputFormat: prettyError
+            useOnlyRequestNames: true
+        ensure:
+          thresholds:
+            - http.response_time.p95: 800
+            - http.response_time.p99: 1000
+        metrics-by-endpoint:
+          metricsNamespace: plugins.metrics-by-endpoint
+          useOnlyRequestNames: true
+
+scenarios:
+    - flow:
+          - loop:
+                - get:
+                      url: "/api/user/user-id?user_id=1"
+                      name: "GET /api/user/user-id"
+                      expect:
+                          statusCode: 200
+                - get:
+                      url: "/api/user/username?username=christop.kling"
+                      name: "GET /api/user/username"
+                      expect:
+                          statusCode: 200
+                - get:
+                      url: "/api/user/email?email=alind@example.com"
+                      name: "GET /api/user/email"
+                      expect:
+                          statusCode: 200
+                - get:
+                      url: "/api/project/project-id?project_id=1"
+                      name: "GET /api/project/project-id"
+                      expect:
+                        statusCode: 200
+                - get:
+                      url: "/api/project/user-id?user_id=4"
+                      name: "GET /api/project/user-id"
+                      expect:
+                        statusCode: 200
+                - get:
+                      url: "/api/project/date-updated?user_id=18"
+                      name: "GET /api/project/date-updated"
+                      expect:
+                        statusCode: 200
+                - get:
+                      url: "/api/project/num-of-projects?user_id=2"
+                      name: "GET /api/project/num-of-projects"
+                      expect:
+                        statusCode: 200
+                - get:
+                      url: "/api/favourite/user-id?user_id=1"
+                      name: "GET /api/favourite/user-id"
+                      expect:
+                        statusCode: 200
+                - get:
+                      url: "/api/favourite/u-p-id?user_id=9&project_id=15"
+                      name: "GET /api/favourite/u-p-id"
+                      expect:
+                        statusCode: 200
+                - get:
+                      url: "/api/follow/user-id?user_id=1"
+                      name: "GET /api/follow/user-id"
+                      expect:
+                        statusCode: 200
+                - get:
+                      url: "/api/comment/project-comments?project_id=3"
+                      name: "GET /api/comment/project-comments"
+                      expect:
+                        statusCode: 200
+            count: 10
