@@ -1,10 +1,4 @@
 import React from 'react'
-<<<<<<< HEAD
-
-export default function AboutUs() {
-  return (
-    <div>AboutUs</div>
-=======
 import NavBarComponent from '../components/general/NavBarComponent'
 
 export default function AboutUs() {
@@ -26,6 +20,5 @@ export default function AboutUs() {
         </div>
       </main>
     </div>
->>>>>>> origin/main
   )
 }
