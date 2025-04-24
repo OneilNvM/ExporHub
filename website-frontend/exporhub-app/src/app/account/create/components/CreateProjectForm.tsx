@@ -1,22 +1,5 @@
 'use client'
 
-<<<<<<< HEAD
-import React from 'react'
-
-export default function CreateProjectForm() {
-  return (
-    <div>
-        <form action="">
-            <div>
-                <p>Project Name</p>
-                <input type="text" />
-            </div>
-            <div>
-                <p>Description</p>
-                <input type="text" />
-            </div>
-        </form>
-=======
 import { useRouter } from 'next/navigation'
 import React, { FormEvent, useState } from 'react'
 import { Project } from '~/types/types'
@@ -89,7 +72,6 @@ export default function CreateProjectForm({ sessionUserId }: {sessionUserId: num
 
         <input className='border-none rounded-full cursor-pointer px-8 py-2 transition-colors duration-300 ease-in-out bg-pink-600 text-white hover:bg-pink-700 dark:bg-pink-800' type="submit" value="Create Project" />
       </form>
->>>>>>> origin/main
     </div>
   )
 }

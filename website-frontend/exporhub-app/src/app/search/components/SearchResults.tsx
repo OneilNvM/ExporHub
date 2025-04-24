@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-import ProjectItem from '@/app/components/project/ProjectItem'
-import ProfileItem from '@/app/components/user/ProfileItem'
-import React from 'react'
-
-export default function SearchResults() {
-=======
 'use client'
 
 import ProjectItem from '@/app/components/project/ProjectItem'
@@ -61,7 +54,6 @@ export default function SearchResults({ sessionUserId }: {
 
         setStates()
     }, [results])
->>>>>>> origin/main
     return (
         <>
             <section className='flex w-full justify-evenly'>
@@ -70,19 +62,6 @@ export default function SearchResults({ sessionUserId }: {
                     <button className='text-lg px-6 py-1'>Filter</button>
                 </div>
             </section>
-<<<<<<< HEAD
-            <section className='flex flex-col gap-8'>
-                <ProjectItem />
-                <ProfileItem />
-                <ProjectItem />
-                <ProfileItem />
-                <ProjectItem />
-                <ProfileItem />
-                <ProjectItem />
-                <ProfileItem />
-                <ProjectItem />
-                <ProfileItem />
-=======
             <section className='flex w-full items-center flex-col gap-8'>
                 {users ? users.map((user, index) => {
                     return <ProfileItem key={user.user_id} user={user} followedUsers={null} profileUserId={user.user_id} />
@@ -91,7 +70,6 @@ export default function SearchResults({ sessionUserId }: {
                     return <ProjectItem key={project.project_id} project={project} sessionUserId={sessionUserId} isFavourited={favouritesArr[index]} />
                 }) : null}
                 {projects && users ? users.length === 0 && projects.length === 0 && <p>No Results</p> : null}
->>>>>>> origin/main
             </section>
         </>
     )
