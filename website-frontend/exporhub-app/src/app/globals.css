@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --border-color: #0a0a0a;
+}
+
+.active-tab {
+  @apply !bg-pink-400;
+}
+
+.inactive-tab {
+  @apply bg-pink-200;
+}
+
+.followed {
+  @apply !bg-pink-400
+}
+
+.unfollowed {
+  @apply bg-transparent
+}
+
+.favourited {
+  @apply !bg-pink-400 !text-white
+}
+
+.unfavourited {
+  @apply bg-transparent
+}
+
+.input {
+  @apply w-full px-5 py-2 text-lg rounded-3xl shadow-lg shadow-pink-300/40 bg-gradient-to-b from-transparent to-pink-300/30 dark:bg-none dark:bg-pink-950/10 dark:border dark:border-pink-800 dark:shadow-none transition-all duration-1000 ease-in-out
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+    --border-color: #ffffff;
+  }
+  .active-tab {
+    @apply !bg-pink-800;
+  }
+
+  .inactive-tab {
+    @apply bg-pink-950;
+  }
+
+  .followed {
+    @apply !bg-pink-800
+  }
+  
+  .unfollowed {
+    @apply bg-transparent
+  }
+
+  .favourited {
+    @apply !bg-pink-800
+  }
+  
+  .unfavourited {
+    @apply bg-transparent
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
