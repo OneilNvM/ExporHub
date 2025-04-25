@@ -1,8 +1,27 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Exporhub Website Frontend
 
-## Getting Started
+This directory contains all of the source code for the website frontend for Exporhub, developed in NextJs
 
-First, run the development server:
+## Prerequisites
+
+- Install latest Node.js version
+
+First, make sure that you have run 'npm i' in order to install the dependencies for this application.
+
+Create a 'certificates' folder and create a Certificate Authority called 'rootCA.crt', a TLS certificate called 'exporhub.crt', and an elliptic-curve private key called 'private.key'.
+Make sure to install the rootCA as a 'Trusted Certificate Authority' and the server certificate afterwards.
+
+This can be done through the use of OpenSSL, or any other cryptographic library which can make certificates and keys.
+
+Next, create a '.env' file and add a 'SESSION_KEY' variable, with a base64 encoded string value, this value can be generated online or with OpenSSL
+
+## IMPORTANT
+
+Make sure to add 'exporhub.com' and 'api.exporhub.com' as 127.0.0.1 to your 'hosts' file on Windows, the certificates will not work for 'localhost'.
+
+## Running the server
+
+Then, run the development server:
 
 ```bash
 npm run dev
@@ -14,23 +33,8 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [https://exporhub.com:3000](https://exporhub.com:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## API Server
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+After starting up the frontend server, you will then need to either start up the Rust API server, or the PHP API server through the Dockerfile.
