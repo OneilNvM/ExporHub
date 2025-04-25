@@ -1,19 +1,5 @@
 import React from 'react'
 import CreateProjectForm from './components/CreateProjectForm'
-<<<<<<< HEAD
-
-export default function CreateProject() {
-    return (
-        <div className='grid auto-rows-auto size-full overflow-auto'>
-            <main className='flex flex-col mx-96 my-20 p-8 border rounded-xl'>
-                <div className='flex flex-col items-center w-full'>
-                    <h2>Create a Project</h2>
-                    <CreateProjectForm />
-                </div>
-            </main>
-        </div>
-    )
-=======
 import { cookies } from 'next/headers'
 import { decrypt } from '@/app/lib/session'
 import { redirect } from 'next/navigation'
@@ -38,5 +24,4 @@ export default async function CreateProject() {
     } else {
         redirect("/login")
     }
->>>>>>> origin/main
 }

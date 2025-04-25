@@ -19,7 +19,9 @@ class SecurityHeaders
 
         $response->headers->set('X-Frame-Options', 'DENY');
         $response->headers->set('X-Content-Type-Options', 'nosniff');
+        $response->headers->set('Strict-Transport-Security', 'max-age=300; includeSubDomains');
         $response->headers->set('Content-Security-Policy', "default-src 'none'; script-src 'self'; connect-src 'self'; img-src 'self'; style-src 'self'; frame-ancestors 'self'; form-action 'self';");
+
 
         return $response;
     }
