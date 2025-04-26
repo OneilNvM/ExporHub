@@ -94,7 +94,7 @@ async fn main() -> Result<(), std::io::Error> {
     println!("Server running at https://api.exporhub.com:9000");
 
     HttpServer::new(move || {
-        let input = SimpleInputFunctionBuilder::new(Duration::from_secs(20), 50).real_ip_key().build();
+        let input = SimpleInputFunctionBuilder::new(Duration::from_secs(20), 1000).real_ip_key().build();
         let rate_limit_mw = RateLimiter::builder(backend.clone(), input).add_headers().build();
 
         App::new()

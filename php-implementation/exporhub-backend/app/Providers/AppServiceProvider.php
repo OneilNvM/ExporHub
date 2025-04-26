@@ -27,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
             return config('app.frontend_url') . "/password-reset/$token?email={$notifiable->getEmailForPasswordReset()}";
         });
 
-        RateLimiter::for('api', fn (Request $request) => $request->user() ? Limit::perMinute(200)->by($request->user()->id) : Limit::perMinute(50)->by($request->ip())
+        RateLimiter::for('api', fn (Request $request) => $request->user() ? Limit::perMinute(5000)->by($request->user()->id) : Limit::perMinute(1000)->by($request->ip())
         );
     }
 }
