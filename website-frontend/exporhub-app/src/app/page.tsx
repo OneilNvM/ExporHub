@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function Landing() {
   return (
     <div className="m-10">
-      <main className="flex flex-col items-start gap-10 font-[font-family:var(--font-geist-sans)]">
+      <main className="flex flex-col items-start gap-10 font-(family-name:--font-geist-sans)">
         <Link href={"/login"}>Login Page</Link>
         <Link href={"/create"}>Register Page</Link>
         <Link href={"/forgot-password"}>Forgot Password Page</Link>

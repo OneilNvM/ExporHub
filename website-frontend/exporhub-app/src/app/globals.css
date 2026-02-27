@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 :root {
   --background: #ffffff;
@@ -9,7 +7,7 @@
 }
 
 .active-tab {
-  @apply !bg-pink-400;
+  @apply bg-pink-400!;
 }
 
 .inactive-tab {
@@ -17,7 +15,7 @@
 }
 
 .followed {
-  @apply !bg-pink-400
+  @apply bg-pink-400!
 }
 
 .unfollowed {
@@ -25,7 +23,7 @@
 }
 
 .favourited {
-  @apply !bg-pink-400 !text-white
+  @apply bg-pink-400! text-white!
 }
 
 .unfavourited {
@@ -33,7 +31,7 @@
 }
 
 .input {
-  @apply w-full px-5 py-2 text-lg rounded-3xl shadow-lg shadow-pink-300/40 bg-gradient-to-b from-transparent to-pink-300/30 dark:bg-none dark:bg-pink-950/10 dark:border dark:border-pink-800 dark:shadow-none transition-all duration-1000 ease-in-out
+  @apply w-full px-5 py-2 text-lg rounded-3xl shadow-lg shadow-pink-300/40 bg-linear-to-b from-transparent to-pink-300/30 dark:bg-none dark:bg-pink-950/10 dark:border dark:border-pink-800 dark:shadow-none transition-all duration-1000 ease-in-out
 }
 
 @media (prefers-color-scheme: dark) {
@@ -43,7 +41,7 @@
     --border-color: #ffffff;
   }
   .active-tab {
-    @apply !bg-pink-800;
+    @apply bg-pink-800!;
   }
 
   .inactive-tab {
@@ -51,7 +49,7 @@
   }
 
   .followed {
-    @apply !bg-pink-800
+    @apply bg-pink-800!
   }
   
   .unfollowed {
@@ -59,7 +57,7 @@
   }
 
   .favourited {
-    @apply !bg-pink-800
+    @apply bg-pink-800!
   }
   
   .unfavourited {
