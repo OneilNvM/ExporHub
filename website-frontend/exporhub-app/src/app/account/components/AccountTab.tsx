@@ -1,26 +1,26 @@
-'use client'
-
 import FavouritesTab from '@/app/components/profile-tabs/FavouritesTab'
 import FollowingTab from '@/app/components/profile-tabs/FollowingTab'
 import ProfileTab from '@/app/components/profile-tabs/ProfileTab'
 import ProjectsTab from '@/app/components/profile-tabs/ProjectsTab'
-import { useSearchParams } from 'next/navigation'
+import { headers } from 'next/headers'
 import React from 'react'
-import { Follow, Project, User } from '~/types/types'
+import { Project, User } from '~/types/types'
 
-export default function AccountTab({ user, sessionUserId, followings, projects, favouritesArr, projectNotifications, favouriteProjects }: { user: User | null, sessionUserId: number, followings: User[] | null, favouritesArr: boolean[], projects: Project[] | null, projectNotifications: Project[] | null, favouriteProjects: Project[] | null }) {
-    const searchParams = useSearchParams()
+export default async function AccountTab({ user, sessionUserId, followings, projects, projectNotifications, favouriteProjects }: { user: User | null, sessionUserId: number, followings: User[] | null, projects: Project[] | null, projectNotifications: Project[] | null, favouriteProjects: Project[] | null }) {
+    const headerList = await headers()
 
-    switch (searchParams.get('tab')) {
-        case 'projects':
+    const searchParams = headerList.get("x-search-params")
+
+    switch (searchParams) {
+        case 'tab=projects':
             return (
-                <ProjectsTab favouritesArr={favouritesArr} sessionUserId={sessionUserId} projects={projects} />
+                <ProjectsTab user={user} sessionUserId={sessionUserId} projects={projects} />
             )
-        case 'favourites':
+        case 'tab=favourites':
             return (
                 <FavouritesTab sessionUserId={sessionUserId} favouriteProjects={favouriteProjects} />
             )
-        case 'following':
+        case 'tab=following':
             return (
                 <FollowingTab sessionUserId={sessionUserId} followings={followings} />
             )

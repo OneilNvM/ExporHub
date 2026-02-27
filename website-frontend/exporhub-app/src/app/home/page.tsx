@@ -6,8 +6,9 @@ import { ChevronRight } from 'lucide-react'
 import ProjectItem from '../components/project/ProjectItem'
 import { cookies } from 'next/headers'
 import { decrypt } from '../lib/session'
-import fetchProjects from '~/fetch/fetchProjects'
+import fetchProjects from '~/fetch/fetchAllProjects'
 import fetchFavourite from '~/fetch/fetchFavourite'
+import { fetchUser } from '~/fetch/fetchUser'
 
 export default async function Home() {
   try {
@@ -18,7 +19,7 @@ export default async function Home() {
     if (result) {
       const projects = await fetchProjects()
 
-      let favouritesArr = []
+      const favouritesArr: string[] = []
 
       if (projects) {
         for (const project of projects) {
@@ -46,8 +47,9 @@ export default async function Home() {
                   </div>
                 </div>
                 <div className='flex w-full flex-col gap-8'>
-                  {projects?.length === 0 ? <p>Nothing here today</p> : projects?.map((project, index) => {
-                    return <ProjectItem key={project.project_id} sessionUserId={result.userId} isFavourited={favouritesArr.includes(project.name) ? true : false} project={project} />
+                  {projects?.length === 0 ? <p>Nothing here today</p> : projects?.map(async project => {
+                    const user = await fetchUser(project.user_id)
+                    return <ProjectItem key={project.project_id} user={user} sessionUserId={result.userId} isFavourited={favouritesArr.includes(project.name) ? true : false} project={project} />
                   })}
                 </div>
               </div>
@@ -57,12 +59,10 @@ export default async function Home() {
         </div>
       )
     } else {
-
+      throw new Error(`Session is undefined`)
     }
-
-
   } catch (error) {
-
+    console.error(error)
   }
 
 }

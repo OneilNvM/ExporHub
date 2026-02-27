@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import React from 'react'
+import React, { Suspense } from 'react'
 import LogoSVG from '~/public/logo_draft_3.svg'
 import FollowButton from './client-components/FollowButton'
 import ConditionalButtons from './client-components/ConditionalButtons'
@@ -17,11 +17,15 @@ export default function ProfileTab({ user, projectNotifications, profileUserId, 
             <section className='flex flex-1 w-full flex-col gap-4 my-4 md:ml-10 self-start'>
                 <div className='flex flex-col gap-2 self-center md:self-start'>
                     <Image className='rounded-full' src={LogoSVG} width={256} alt='Profile Picture' />
-                    <ConditionalButtons option='picture' />
+                    <Suspense>
+                        <ConditionalButtons option='picture' />
+                    </Suspense>
                 </div>
                 <div className='flex flex-col w-4/5 md:w-[256px] ml-4 gap-2 self-center md:self-start'>
                     <p>Bio</p>
-                    <ConditionalButtons option='bio' />
+                    <Suspense>
+                        <ConditionalButtons option='bio' />
+                    </Suspense>
                     <p>{user ? user.bio : null}</p>
                 </div>
                 <div className='ml-4 self-center md:self-start'>
@@ -44,7 +48,9 @@ export default function ProfileTab({ user, projectNotifications, profileUserId, 
                     <div className='flex flex-col'>
                         <p className='text-5xl font-semibold'>{user ? user.username : "No Username"}</p>
                     </div>
-                    <ConditionalButtons option='username' />
+                    <Suspense>
+                        <ConditionalButtons option='username' />
+                    </Suspense>
                 </div>
                 <div className='flex flex-col gap-12 m-2'>
                     <p className='text-4xl'>Recent Project Activity</p>

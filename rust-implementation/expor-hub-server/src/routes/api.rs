@@ -9,6 +9,7 @@ use crate::{
         },
         models::*,
     },
+    routes::ServerResponse,
     DbPool,
     TableTypes::*,
 };
@@ -55,7 +56,10 @@ pub async fn show_users(pool: web::Data<DbPool>) -> Result<HttpResponse> {
 
     match users {
         Ok(users) => Ok(HttpResponse::Ok().json(users)),
-        Err(error) => Ok(HttpResponse::NoContent().body(error.to_string())),
+        Err(error) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
+            message: error.to_string(),
+        })),
     }
 }
 
@@ -70,7 +74,10 @@ pub async fn show_projects(pool: web::Data<DbPool>) -> Result<HttpResponse> {
 
     match projects {
         Ok(projects) => Ok(HttpResponse::Ok().json(projects)),
-        Err(error) => Ok(HttpResponse::NoContent().body(error.to_string())),
+        Err(error) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
+            message: error.to_string(),
+        })),
     }
 }
 
@@ -85,7 +92,10 @@ pub async fn show_images(pool: web::Data<DbPool>) -> Result<HttpResponse> {
 
     match images {
         Ok(images) => Ok(HttpResponse::Ok().json(images)),
-        Err(error) => Ok(HttpResponse::NoContent().body(error.to_string())),
+        Err(error) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
+            message: error.to_string(),
+        })),
     }
 }
 
@@ -100,7 +110,10 @@ pub async fn show_follows(pool: web::Data<DbPool>) -> Result<HttpResponse> {
 
     match follows {
         Ok(follows) => Ok(HttpResponse::Ok().json(follows)),
-        Err(error) => Ok(HttpResponse::NoContent().body(error.to_string())),
+        Err(error) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
+            message: error.to_string(),
+        })),
     }
 }
 
@@ -115,7 +128,10 @@ pub async fn show_favourites(pool: web::Data<DbPool>) -> Result<HttpResponse> {
 
     match favourites {
         Ok(favourites) => Ok(HttpResponse::Ok().json(favourites)),
-        Err(error) => Ok(HttpResponse::NoContent().body(error.to_string())),
+        Err(error) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
+            message: error.to_string(),
+        })),
     }
 }
 
@@ -130,7 +146,10 @@ pub async fn show_comments(pool: web::Data<DbPool>) -> Result<HttpResponse> {
 
     match comments {
         Ok(comments) => Ok(HttpResponse::Ok().json(comments)),
-        Err(error) => Ok(HttpResponse::NoContent().body(error.to_string())),
+        Err(error) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
+            message: error.to_string(),
+        })),
     }
 }
 
@@ -145,7 +164,10 @@ pub async fn show_replies(pool: web::Data<DbPool>) -> Result<HttpResponse> {
 
     match replies {
         Ok(replies) => Ok(HttpResponse::Ok().json(replies)),
-        Err(error) => Ok(HttpResponse::NoContent().body(error.to_string())),
+        Err(error) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
+            message: error.to_string(),
+        })),
     }
 }
 
@@ -160,7 +182,10 @@ pub async fn show_threads(pool: web::Data<DbPool>) -> Result<HttpResponse> {
 
     match threads {
         Ok(threads) => Ok(HttpResponse::Ok().json(threads)),
-        Err(error) => Ok(HttpResponse::NoContent().body(error.to_string())),
+        Err(error) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
+            message: error.to_string(),
+        })),
     }
 }
 
@@ -175,7 +200,10 @@ pub async fn show_likes(pool: web::Data<DbPool>) -> Result<HttpResponse> {
 
     match likes {
         Ok(likes) => Ok(HttpResponse::Ok().json(likes)),
-        Err(error) => Ok(HttpResponse::NoContent().body(error.to_string())),
+        Err(error) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
+            message: error.to_string(),
+        })),
     }
 }
 
@@ -190,7 +218,10 @@ pub async fn show_dislikes(pool: web::Data<DbPool>) -> Result<HttpResponse> {
 
     match dislikes {
         Ok(dislikes) => Ok(HttpResponse::Ok().json(dislikes)),
-        Err(error) => Ok(HttpResponse::NoContent().body(error.to_string())),
+        Err(error) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
+            message: error.to_string(),
+        })),
     }
 }
 
@@ -205,7 +236,10 @@ pub async fn show_comment_likes(pool: web::Data<DbPool>) -> Result<HttpResponse>
 
     match comment_likes {
         Ok(comment_likes) => Ok(HttpResponse::Ok().json(comment_likes)),
-        Err(error) => Ok(HttpResponse::NoContent().body(error.to_string())),
+        Err(error) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
+            message: error.to_string(),
+        })),
     }
 }
 
@@ -220,7 +254,10 @@ pub async fn show_comment_dislikes(pool: web::Data<DbPool>) -> Result<HttpRespon
 
     match comment_dislikes {
         Ok(comment_dislikes) => Ok(HttpResponse::Ok().json(comment_dislikes)),
-        Err(error) => Ok(HttpResponse::NoContent().body(error.to_string())),
+        Err(error) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
+            message: error.to_string(),
+        })),
     }
 }
 
@@ -235,7 +272,10 @@ pub async fn show_reply_likes(pool: web::Data<DbPool>) -> Result<HttpResponse> {
 
     match reply_likes {
         Ok(reply_likes) => Ok(HttpResponse::Ok().json(reply_likes)),
-        Err(error) => Ok(HttpResponse::NoContent().body(error.to_string())),
+        Err(error) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
+            message: error.to_string(),
+        })),
     }
 }
 
@@ -250,6 +290,9 @@ pub async fn show_reply_dislikes(pool: web::Data<DbPool>) -> Result<HttpResponse
 
     match reply_dislikes {
         Ok(reply_dislikes) => Ok(HttpResponse::Ok().json(reply_dislikes)),
-        Err(error) => Ok(HttpResponse::NoContent().body(error.to_string())),
+        Err(error) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
+            message: error.to_string(),
+        })),
     }
 }

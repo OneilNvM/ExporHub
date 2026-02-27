@@ -1,28 +1,11 @@
-'use client'
-
 import Image from 'next/image'
-import React, { useEffect, useState } from 'react'
+import React, { Suspense } from 'react'
 import GlobeSVG from '~/public/globe.svg'
 import FavouriteButton from '../profile-tabs/client-components/FavouriteButton'
 import Link from 'next/link'
 import { Project, User } from '~/types/types'
 
-export default function ProjectItem({ sessionUserId, project, isFavourited }: { sessionUserId: number, project: Project, isFavourited: boolean }) {
-    const [user, setUser] = useState<User | null>(null)
-
-    useEffect(() => {
-        fetch(`https://api.exporhub.com:9000/api/user/user-id?user_id=${project.user_id}`)
-            .then(async res => {
-                if (!res.ok) {
-                    throw new Error(`Failed to find user`)
-                }
-
-                return await res.json() as User
-            })
-            .then(user => {
-                setUser(user)
-            })
-    }, [project])
+export default function ProjectItem({ sessionUserId, project, isFavourited, user }: { sessionUserId: number, project: Project, isFavourited: boolean, user: User | null }) {
 
     return (
         <div className='flex w-full rounded-2xl max-w-[52rem] border border-pink-200 dark:border-pink-900'>
@@ -44,7 +27,9 @@ export default function ProjectItem({ sessionUserId, project, isFavourited }: { 
                         </div>
                     </div>
                     <div className='flex self-stretch justify-between items-center px-4'>
-                        <FavouriteButton sessionUserId={sessionUserId} project={project} isFavourited={isFavourited} />
+                        <Suspense>
+                            <FavouriteButton sessionUserId={sessionUserId} project={project} isFavourited={isFavourited} />
+                        </Suspense>
                         <p className='text-gray-700 text-sm'>{project.date_updated ? "Last Updated on " + new Date(project.date_updated).toDateString() : "Created on " + new Date(project.date_created).toDateString()}</p>
                     </div>
                 </div>

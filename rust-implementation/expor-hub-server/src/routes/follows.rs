@@ -33,8 +33,8 @@ pub async fn get_user_followings(
 
     match followings {
         Ok(results) => Ok(HttpResponse::Ok().json(results)),
-        Err(_error) => Ok(HttpResponse::Ok().json(ServerResponse {
-            code: 1,
+        Err(_error) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
             message: "No Followings".to_owned(),
         })),
     }
@@ -63,8 +63,8 @@ pub async fn unfollow(pool: web::Data<DbPool>, ids: web::Query<FollowIds>) -> Re
 
     match result {
         Ok(_) => Ok(HttpResponse::NoContent().finish()),
-        Err(error) => Ok(HttpResponse::Ok().json(ServerResponse {
-            code: 1,
+        Err(error) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
             message: error.to_string(),
         })),
     }
@@ -98,8 +98,8 @@ pub async fn new_follow(
 
     match follow {
         Ok(follow) => Ok(HttpResponse::Ok().json(follow.unwrap())),
-        Err(_) => Ok(HttpResponse::Ok().json(ServerResponse {
-            code: 1,
+        Err(_) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
             message: "Failed to follow".to_owned(),
         })),
     }
@@ -122,8 +122,8 @@ pub async fn get_follow_by_ids(
 
     match follow {
         Ok(follow) => Ok(HttpResponse::Ok().json(follow)),
-        Err(_) => Ok(HttpResponse::Ok().json(ServerResponse {
-            code: 1,
+        Err(_) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
             message: "Failed to find follow".to_owned(),
         })),
     }

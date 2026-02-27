@@ -25,8 +25,8 @@ pub async fn get_user_dislikes(
 
     match dislikes {
         Ok(dislikes) => Ok(HttpResponse::Ok().json(dislikes)),
-        Err(_) => Ok(HttpResponse::Ok().json(ServerResponse {
-            code: 1,
+        Err(_) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
             message: "Failed to retrieve user's dislikes".to_owned(),
         })),
     }
@@ -49,8 +49,8 @@ pub async fn get_comment_dislikes(
 
     match dislikes {
         Ok(dislikes) => Ok(HttpResponse::Ok().json(dislikes)),
-        Err(_) => Ok(HttpResponse::Ok().json(ServerResponse {
-            code: 1,
+        Err(_) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
             message: "Failed to retrieve comment dislikes".to_owned(),
         })),
     }
@@ -73,8 +73,8 @@ pub async fn get_reply_dislikes(
 
     match dislikes {
         Ok(dislikes) => Ok(HttpResponse::Ok().json(dislikes)),
-        Err(_) => Ok(HttpResponse::Ok().json(ServerResponse {
-            code: 1,
+        Err(_) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
             message: "Failed to retrieve reply dislikes".to_owned(),
         })),
     }

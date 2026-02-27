@@ -5,7 +5,7 @@ use chrono::NaiveDateTime;
 use diesel::prelude::*;
 
 pub fn update_user(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_user_id: i32,
     values_map: HashMap<&str, Option<&str>>,
 ) -> Result<Option<User>, anyhow::Error> {
@@ -64,7 +64,7 @@ pub fn update_user(
 }
 
 pub fn update_project(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_project_id: i32,
     values_map: HashMap<&str, Option<&str>>,
 ) -> Result<Option<Project>, UpdateError> {

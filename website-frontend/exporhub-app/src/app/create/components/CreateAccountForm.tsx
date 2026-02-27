@@ -131,7 +131,7 @@ export default function CreateAccountForm({ setError }: { setError: React.Dispat
         throw new Error(`${error.message}`)
       }
 
-      let json = await response.json() as User
+      const json = await response.json() as User
 
       console.dir(json)
 

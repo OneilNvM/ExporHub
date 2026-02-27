@@ -1,8 +1,8 @@
 import { Project, ResponseStatus } from "~/types/types"
 
-export default async function fetchUserProjects(userId: number): Promise<Project[] | null> {
+export default async function fetchAllProjects(): Promise<Project[] | null> {
     try {
-        const response = await fetch(`https://api.exporhub.com:9000/api/project/user-id?user_id=${userId}`, {
+        const projectsResponse = await fetch(`https://api.exporhub.com:9000/api/projects`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -10,16 +10,16 @@ export default async function fetchUserProjects(userId: number): Promise<Project
             }
         })
 
-        if (!response.ok) {
-            const error = await response.json() as ResponseStatus
+        if (!projectsResponse.ok) {
+            const error = await projectsResponse.json() as ResponseStatus
             throw new Error(`\nCode: ${error.code}\nMessage: ${error.message}`)
         }
 
-        const json = await response.json() as Array<Project>
+        const projects = await projectsResponse.json() as Array<Project>
 
-        return json
+        return projects
     } catch (error) {
-        console.error()
+        console.error(error)
 
         return null
     }

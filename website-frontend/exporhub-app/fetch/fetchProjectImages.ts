@@ -1,13 +1,13 @@
-import { Project, ResponseStatus } from "~/types/types"
+import { Image, ResponseStatus } from "~/types/types"
 
-export default async function fetchUserProjects(userId: number): Promise<Project[] | null> {
+export async function fetchProjectImages(user_id: number, project_id: number): Promise<Image[] | null> {
     try {
-        const response = await fetch(`https://api.exporhub.com:9000/api/project/user-id?user_id=${userId}`, {
+        const response = await fetch(`https://api.exporhub.com:9000/api/image/project-images?user_id=${user_id}&project_id=${project_id}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Basic ${process.env.NEXT_PUBLIC_EXPORHUB_API_KEY}`
-            }
+            },
         })
 
         if (!response.ok) {
@@ -15,11 +15,11 @@ export default async function fetchUserProjects(userId: number): Promise<Project
             throw new Error(`\nCode: ${error.code}\nMessage: ${error.message}`)
         }
 
-        const json = await response.json() as Array<Project>
+        const images = await response.json() as Image[]
 
-        return json
+        return images
     } catch (error) {
-        console.error()
+        console.error(error)
 
         return null
     }

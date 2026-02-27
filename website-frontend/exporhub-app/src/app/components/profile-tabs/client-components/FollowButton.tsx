@@ -17,7 +17,7 @@ export default function FollowButton({ isFollowed, sessionUserId, profileUserId 
                 followBtn.classList.remove("followed")
             }
         }
-    }, [])
+    }, [isFollowed])
 
     const handleFollow = async () => {
         const followBtn = document.getElementById('follow-btn')
@@ -25,7 +25,11 @@ export default function FollowButton({ isFollowed, sessionUserId, profileUserId 
         try {
             if (!isFollowed) {
                 const newFollow = await fetch(`https://api.exporhub.com:9000/api/follow/new?follower=${sessionUserId}&following=${profileUserId}`, {
-                    method: 'post'
+                    method: 'post',
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Basic ${process.env.NEXT_PUBLIC_EXPORHUB_API_KEY}`
+                    }
                 })
 
                 if (!newFollow.ok) {
@@ -40,7 +44,11 @@ export default function FollowButton({ isFollowed, sessionUserId, profileUserId 
                 }
             } else {
                 const deleteFollow = await fetch(`https://api.exporhub.com:9000/api/follow/unfollow?follower=${sessionUserId}&following=${profileUserId}`, {
-                    method: 'post'
+                    method: 'post',
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Basic ${process.env.NEXT_PUBLIC_EXPORHUB_API_KEY}`
+                    }
                 })
 
                 if (!deleteFollow.ok) {

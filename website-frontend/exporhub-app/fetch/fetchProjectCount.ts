@@ -1,8 +1,8 @@
-import { Project, ResponseStatus } from "~/types/types"
+import { ResponseStatus } from "~/types/types"
 
-export default async function fetchUserProjects(userId: number): Promise<Project[] | null> {
+export async function fetchProjectCount(user_id: number): Promise<number | null> {
     try {
-        const response = await fetch(`https://api.exporhub.com:9000/api/project/user-id?user_id=${userId}`, {
+        const response = await fetch(`https://api.exporhub.com:9000/api/project/num-of-projects?user_id=${user_id}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -15,11 +15,11 @@ export default async function fetchUserProjects(userId: number): Promise<Project
             throw new Error(`\nCode: ${error.code}\nMessage: ${error.message}`)
         }
 
-        const json = await response.json() as Array<Project>
+        const projectCount = await response.text()
 
-        return json
+        return Number(projectCount)
     } catch (error) {
-        console.error()
+        console.error(error)
 
         return null
     }

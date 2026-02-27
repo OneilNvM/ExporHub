@@ -1,6 +1,6 @@
 use crate::schema::*;
 use chrono::{Local, NaiveDate, NaiveDateTime};
-use diesel::mysql::Mysql;
+use diesel::pg::Pg;
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
 
@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 )]
 #[diesel(table_name = users)]
 #[diesel(primary_key(user_id))]
-#[diesel(check_for_backend(Mysql))]
+#[diesel(check_for_backend(Pg))]
 pub struct User {
     pub user_id: i32,
     pub username: String,
@@ -57,7 +57,7 @@ impl<'a> NewUser<'a> {
 #[diesel(table_name = projects)]
 #[diesel(belongs_to(User))]
 #[diesel(primary_key(project_id))]
-#[diesel(check_for_backend(Mysql))]
+#[diesel(check_for_backend(Pg))]
 pub struct Project {
     pub project_id: i32,
     pub name: String,
@@ -97,7 +97,7 @@ impl<'a> NewProject<'a> {
 #[diesel(belongs_to(User))]
 #[diesel(belongs_to(Project))]
 #[diesel(primary_key(image_id))]
-#[diesel(check_for_backend(Mysql))]
+#[diesel(check_for_backend(Pg))]
 pub struct Image {
     pub image_id: i32,
     pub file_path: String,
@@ -151,7 +151,7 @@ impl<'a> NewProjectImage<'a> {
 #[diesel(belongs_to(User))]
 #[diesel(belongs_to(Project))]
 #[diesel(primary_key(favourite_id))]
-#[diesel(check_for_backend(Mysql))]
+#[diesel(check_for_backend(Pg))]
 pub struct Favourite {
     pub favourite_id: i32,
     pub user_id: i32,
@@ -183,7 +183,7 @@ impl NewFavourite {
 #[diesel(table_name = follows)]
 #[diesel(belongs_to(User, foreign_key = following))]
 #[diesel(primary_key(follow_id))]
-#[diesel(check_for_backend(Mysql))]
+#[diesel(check_for_backend(Pg))]
 pub struct Follow {
     pub follow_id: i32,
     pub follower: i32,
@@ -216,7 +216,7 @@ impl NewFollow {
 #[diesel(belongs_to(User))]
 #[diesel(belongs_to(Project))]
 #[diesel(primary_key(comment_id))]
-#[diesel(check_for_backend(Mysql))]
+#[diesel(check_for_backend(Pg))]
 pub struct Comment {
     pub comment_id: i32,
     pub text: String,
@@ -254,7 +254,7 @@ impl<'a> NewComment<'a> {
 #[diesel(table_name = replies)]
 #[diesel(belongs_to(User))]
 #[diesel(primary_key(reply_id))]
-#[diesel(check_for_backend(Mysql))]
+#[diesel(check_for_backend(Pg))]
 pub struct Reply {
     pub reply_id: i32,
     pub text: String,
@@ -287,7 +287,7 @@ impl<'a> NewReply<'a> {
 #[diesel(belongs_to(Comment))]
 #[diesel(belongs_to(Reply))]
 #[diesel(primary_key(thread_id))]
-#[diesel(check_for_backend(Mysql))]
+#[diesel(check_for_backend(Pg))]
 pub struct Thread {
     pub thread_id: i32,
     pub comment_id: i32,
@@ -316,7 +316,7 @@ impl NewThread {
 #[diesel(table_name = likes)]
 #[diesel(belongs_to(User))]
 #[diesel(primary_key(like_id))]
-#[diesel(check_for_backend(Mysql))]
+#[diesel(check_for_backend(Pg))]
 pub struct Like {
     pub like_id: i32,
     pub user_id: i32,
@@ -336,7 +336,7 @@ pub struct NewLike {
 #[diesel(table_name = dislikes)]
 #[diesel(belongs_to(User))]
 #[diesel(primary_key(dislike_id))]
-#[diesel(check_for_backend(Mysql))]
+#[diesel(check_for_backend(Pg))]
 pub struct Dislike {
     pub dislike_id: i32,
     pub user_id: i32,
@@ -356,7 +356,7 @@ pub struct NewDislike {
 #[diesel(table_name = comment_likes)]
 #[diesel(belongs_to(Comment))]
 #[diesel(belongs_to(Like))]
-#[diesel(check_for_backend(Mysql))]
+#[diesel(check_for_backend(Pg))]
 pub struct CommentLike {
     pub id: i32,
     pub comment_id: i32,
@@ -376,7 +376,7 @@ pub struct NewCommentLike {
 #[diesel(table_name = comment_dislikes)]
 #[diesel(belongs_to(Comment))]
 #[diesel(belongs_to(Dislike))]
-#[diesel(check_for_backend(Mysql))]
+#[diesel(check_for_backend(Pg))]
 pub struct CommentDislike {
     pub id: i32,
     pub comment_id: i32,
@@ -396,7 +396,7 @@ pub struct NewCommentDislike {
 #[diesel(table_name = reply_likes)]
 #[diesel(belongs_to(Reply))]
 #[diesel(belongs_to(Like))]
-#[diesel(check_for_backend(Mysql))]
+#[diesel(check_for_backend(Pg))]
 pub struct ReplyLike {
     pub id: i32,
     pub reply_id: i32,
@@ -416,7 +416,7 @@ pub struct NewReplyLike {
 #[diesel(table_name = reply_dislikes)]
 #[diesel(belongs_to(Reply))]
 #[diesel(belongs_to(Dislike))]
-#[diesel(check_for_backend(Mysql))]
+#[diesel(check_for_backend(Pg))]
 pub struct ReplyDislike {
     pub id: i32,
     pub reply_id: i32,

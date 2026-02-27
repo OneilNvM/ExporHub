@@ -8,7 +8,11 @@ export default function UnfollowButton({ user, profileUserId, sessionUserId, fol
         try {
             if (profileUserId) {
                 const deleteFollow = await fetch(`https://api.exporhub.com:9000/api/follow/unfollow?follower=${profileUserId}&following=${user.user_id}`, {
-                    method: "post"
+                    method: "post",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Basic ${process.env.NEXT_PUBLIC_EXPORHUB_KEY}`
+                    }
                 })
     
                 if (!deleteFollow.ok) {
@@ -16,7 +20,7 @@ export default function UnfollowButton({ user, profileUserId, sessionUserId, fol
                 }
     
                 if (followedUsers) {
-                    let index = followedUsers.indexOf(user)
+                    const index = followedUsers.indexOf(user)
     
                     followedUsers.splice(index, 1)
                 }
@@ -27,7 +31,11 @@ export default function UnfollowButton({ user, profileUserId, sessionUserId, fol
                 console.log("Successful delete")
             } else {
                 const deleteFollow = await fetch(`https://api.exporhub.com:9000/api/follow/unfollow?follower=${sessionUserId}&following=${user.user_id}`, {
-                    method: "post"
+                    method: "post",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Basic ${process.env.NEXT_PUBLIC_EXPORHUB_API_KEY}`
+                    }
                 })
     
                 if (!deleteFollow.ok) {
@@ -35,7 +43,7 @@ export default function UnfollowButton({ user, profileUserId, sessionUserId, fol
                 }
     
                 if (followedUsers) {
-                    let index = followedUsers.indexOf(user)
+                    const index = followedUsers.indexOf(user)
     
                     followedUsers.splice(index, 1)
                 }

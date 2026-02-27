@@ -23,8 +23,8 @@ pub async fn get_user_likes(
 
     match likes {
         Ok(likes) => Ok(HttpResponse::Ok().json(likes)),
-        Err(_) => Ok(HttpResponse::Ok().json(ServerResponse {
-            code: 1,
+        Err(_) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
             message: "Failed to retrieve user's likes".to_owned(),
         })),
     }
@@ -47,8 +47,8 @@ pub async fn get_comment_likes(
 
     match likes {
         Ok(likes) => Ok(HttpResponse::Ok().content_type("text/plain").json(likes)),
-        Err(_) => Ok(HttpResponse::Ok().json(ServerResponse {
-            code: 1,
+        Err(_) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
             message: "Failed to retrieve comment likes".to_owned(),
         })),
     }
@@ -71,8 +71,8 @@ pub async fn get_reply_likes(
 
     match likes {
         Ok(likes) => Ok(HttpResponse::Ok().json(likes)),
-        Err(_) => Ok(HttpResponse::Ok().json(ServerResponse {
-            code: 1,
+        Err(_) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
             message: "Failed to retrieve reply likes".to_owned(),
         })),
     }

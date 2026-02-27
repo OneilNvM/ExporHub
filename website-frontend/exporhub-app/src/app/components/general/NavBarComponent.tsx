@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import React, { FormEvent, useEffect, useState } from 'react'
+import React, { FormEvent, Suspense, useEffect, useState } from 'react'
 import LogoSVG from '~/public/logo_draft_3.svg'
 import { Search } from 'lucide-react'
 import Link from 'next/link'
@@ -18,8 +18,9 @@ export default function NavBarComponent() {
     router.push(`/search?q=${query}`)
   }
 
-  if (pathName == "/account" || pathName.includes("/profile")) {
-    useEffect(() => {
+
+  useEffect(() => {
+    if (pathName == "/account" || pathName.includes("/profile")) {
       const profileTab = document.getElementById('profile-tab');
       const projectsTab = document.getElementById('projects-tab');
       const favouritesTab = document.getElementById('favourites-tab');
@@ -67,8 +68,10 @@ export default function NavBarComponent() {
           followingTab?.classList.remove("active-tab")
           break
       }
-    }, [queryParams])
+    }
+  }, [queryParams, pathName])
 
+  if (pathName == "/account" || pathName.includes("/profile")) {
     return (
       <nav className='flex flex-col justify-between h-[150px] border-b-[1px] border-b-pink-200 dark:border-b-pink-900'>
         <div className='flex items-center justify-between px-16 p-4'>
@@ -116,24 +119,26 @@ export default function NavBarComponent() {
     )
   } else {
     return (
-      <nav className='flex h-[100px] items-center justify-between px-16 border-b-[1px] border-b-pink-200 dark:border-b-pink-900'>
-        <Link href={"/"}>
-          <Image src={LogoSVG} width={36} className='rounded-full' alt='Logo Image' />
-        </Link>
-        <div className='flex items-center gap-4 w-1/2 rounded-full pl-6 p-2 bg-transparent border border-pink-200 dark:border-pink-900'>
-          <form className='flex w-full gap-4' action="/search">
-            <button type='submit' onSubmit={handleSearch} className='text-pink-200 dark:text-pink-950'>
-              <Search size={24} absoluteStrokeWidth={true} />
-            </button>
-            <input id='search-input' name='q' onChange={e => setQuery(e.target.value)} type="text" className='w-full bg-transparent outline-none' placeholder='Explore and indulge' value={query} />
-          </form>
-        </div>
-        <button>
-          <Link href={"/account"}>
-            <Image src={LogoSVG} className='rounded-full' width={56} alt='Profile Pic' />
+      <Suspense>
+        <nav className='flex h-[100px] items-center justify-between px-16 border-b-[1px] border-b-pink-200 dark:border-b-pink-900'>
+          <Link href={"/"}>
+            <Image src={LogoSVG} width={36} className='rounded-full' alt='Logo Image' />
           </Link>
-        </button>
-      </nav>
+          <div className='flex items-center gap-4 w-1/2 rounded-full pl-6 p-2 bg-transparent border border-pink-200 dark:border-pink-900'>
+            <form className='flex w-full gap-4' action="/search">
+              <button type='submit' onSubmit={handleSearch} className='text-pink-200 dark:text-pink-950'>
+                <Search size={24} absoluteStrokeWidth={true} />
+              </button>
+              <input id='search-input' name='q' onChange={e => setQuery(e.target.value)} type="text" className='w-full bg-transparent outline-none' placeholder='Explore and indulge' value={query} />
+            </form>
+          </div>
+          <button>
+            <Link href={"/account"}>
+              <Image src={LogoSVG} className='rounded-full' width={56} alt='Profile Pic' />
+            </Link>
+          </button>
+        </nav>
+      </Suspense>
     )
   }
 }

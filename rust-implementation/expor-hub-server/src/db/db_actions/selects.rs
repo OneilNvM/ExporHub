@@ -1,7 +1,7 @@
 use crate::{db::models::*, SearchResultsTypes};
 use diesel::{prelude::*, sql_query, sql_types::Text};
 
-pub fn find_users(conn: &mut MysqlConnection) -> Result<Vec<User>, anyhow::Error> {
+pub fn find_users(conn: &mut PgConnection) -> Result<Vec<User>, anyhow::Error> {
     use crate::schema::users::dsl::*;
 
     let results = conn.transaction(|conn| users.select(User::as_select()).load(conn));
@@ -12,7 +12,7 @@ pub fn find_users(conn: &mut MysqlConnection) -> Result<Vec<User>, anyhow::Error
     }
 }
 
-pub fn find_projects(conn: &mut MysqlConnection) -> Result<Vec<Project>, anyhow::Error> {
+pub fn find_projects(conn: &mut PgConnection) -> Result<Vec<Project>, anyhow::Error> {
     use crate::schema::projects::dsl::*;
 
     let results = conn.transaction(|conn| projects.select(Project::as_select()).load(conn));
@@ -23,7 +23,7 @@ pub fn find_projects(conn: &mut MysqlConnection) -> Result<Vec<Project>, anyhow:
     }
 }
 
-pub fn find_images(conn: &mut MysqlConnection) -> Result<Vec<Image>, anyhow::Error> {
+pub fn find_images(conn: &mut PgConnection) -> Result<Vec<Image>, anyhow::Error> {
     use crate::schema::images::dsl::*;
 
     let results = conn.transaction(|conn| images.select(Image::as_select()).load(conn));
@@ -34,7 +34,7 @@ pub fn find_images(conn: &mut MysqlConnection) -> Result<Vec<Image>, anyhow::Err
     }
 }
 
-pub fn find_follows(conn: &mut MysqlConnection) -> Result<Vec<Follow>, anyhow::Error> {
+pub fn find_follows(conn: &mut PgConnection) -> Result<Vec<Follow>, anyhow::Error> {
     use crate::schema::follows::dsl::*;
 
     let results = conn.transaction(|conn| follows.select(Follow::as_select()).load(conn));
@@ -45,7 +45,7 @@ pub fn find_follows(conn: &mut MysqlConnection) -> Result<Vec<Follow>, anyhow::E
     }
 }
 
-pub fn find_favourites(conn: &mut MysqlConnection) -> Result<Vec<Favourite>, anyhow::Error> {
+pub fn find_favourites(conn: &mut PgConnection) -> Result<Vec<Favourite>, anyhow::Error> {
     use crate::schema::favourites::dsl::*;
 
     let results = conn.transaction(|conn| favourites.select(Favourite::as_select()).load(conn));
@@ -56,7 +56,7 @@ pub fn find_favourites(conn: &mut MysqlConnection) -> Result<Vec<Favourite>, any
     }
 }
 
-pub fn find_comments(conn: &mut MysqlConnection) -> Result<Vec<Comment>, anyhow::Error> {
+pub fn find_comments(conn: &mut PgConnection) -> Result<Vec<Comment>, anyhow::Error> {
     use crate::schema::comments::dsl::*;
 
     let results = conn.transaction(|conn| comments.select(Comment::as_select()).load(conn));
@@ -67,7 +67,7 @@ pub fn find_comments(conn: &mut MysqlConnection) -> Result<Vec<Comment>, anyhow:
     }
 }
 
-pub fn find_replies(conn: &mut MysqlConnection) -> Result<Vec<Reply>, anyhow::Error> {
+pub fn find_replies(conn: &mut PgConnection) -> Result<Vec<Reply>, anyhow::Error> {
     use crate::schema::replies::dsl::*;
 
     let results = conn.transaction(|conn| replies.select(Reply::as_select()).load(conn));
@@ -78,7 +78,7 @@ pub fn find_replies(conn: &mut MysqlConnection) -> Result<Vec<Reply>, anyhow::Er
     }
 }
 
-pub fn find_threads(conn: &mut MysqlConnection) -> Result<Vec<Thread>, anyhow::Error> {
+pub fn find_threads(conn: &mut PgConnection) -> Result<Vec<Thread>, anyhow::Error> {
     use crate::schema::threads::dsl::*;
 
     let results = conn.transaction(|conn| threads.select(Thread::as_select()).load(conn));
@@ -89,7 +89,7 @@ pub fn find_threads(conn: &mut MysqlConnection) -> Result<Vec<Thread>, anyhow::E
     }
 }
 
-pub fn find_likes(conn: &mut MysqlConnection) -> Result<Vec<Like>, anyhow::Error> {
+pub fn find_likes(conn: &mut PgConnection) -> Result<Vec<Like>, anyhow::Error> {
     use crate::schema::likes::dsl::*;
 
     let results = conn.transaction(|conn| likes.select(Like::as_select()).load(conn));
@@ -100,7 +100,7 @@ pub fn find_likes(conn: &mut MysqlConnection) -> Result<Vec<Like>, anyhow::Error
     }
 }
 
-pub fn find_dislikes(conn: &mut MysqlConnection) -> Result<Vec<Dislike>, anyhow::Error> {
+pub fn find_dislikes(conn: &mut PgConnection) -> Result<Vec<Dislike>, anyhow::Error> {
     use crate::schema::dislikes::dsl::*;
 
     let results = conn.transaction(|conn| dislikes.select(Dislike::as_select()).load(conn));
@@ -111,7 +111,7 @@ pub fn find_dislikes(conn: &mut MysqlConnection) -> Result<Vec<Dislike>, anyhow:
     }
 }
 
-pub fn find_comment_likes(conn: &mut MysqlConnection) -> Result<Vec<CommentLike>, anyhow::Error> {
+pub fn find_comment_likes(conn: &mut PgConnection) -> Result<Vec<CommentLike>, anyhow::Error> {
     use crate::schema::comment_likes::dsl::*;
 
     let results =
@@ -124,7 +124,7 @@ pub fn find_comment_likes(conn: &mut MysqlConnection) -> Result<Vec<CommentLike>
 }
 
 pub fn find_comment_dislikes(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
 ) -> Result<Vec<CommentDislike>, anyhow::Error> {
     use crate::schema::comment_dislikes::dsl::*;
 
@@ -140,7 +140,7 @@ pub fn find_comment_dislikes(
     }
 }
 
-pub fn find_reply_likes(conn: &mut MysqlConnection) -> Result<Vec<ReplyLike>, anyhow::Error> {
+pub fn find_reply_likes(conn: &mut PgConnection) -> Result<Vec<ReplyLike>, anyhow::Error> {
     use crate::schema::reply_likes::dsl::*;
 
     let results = conn.transaction(|conn| reply_likes.select(ReplyLike::as_select()).load(conn));
@@ -151,7 +151,7 @@ pub fn find_reply_likes(conn: &mut MysqlConnection) -> Result<Vec<ReplyLike>, an
     }
 }
 
-pub fn find_reply_dislikes(conn: &mut MysqlConnection) -> Result<Vec<ReplyDislike>, anyhow::Error> {
+pub fn find_reply_dislikes(conn: &mut PgConnection) -> Result<Vec<ReplyDislike>, anyhow::Error> {
     use crate::schema::reply_dislikes::dsl::*;
 
     let results =
@@ -163,7 +163,7 @@ pub fn find_reply_dislikes(conn: &mut MysqlConnection) -> Result<Vec<ReplyDislik
     }
 }
 
-pub fn find_user_by_id(conn: &mut MysqlConnection, in_id: i32) -> Result<User, anyhow::Error> {
+pub fn find_user_by_id(conn: &mut PgConnection, in_id: i32) -> Result<User, anyhow::Error> {
     use crate::schema::users::dsl::*;
 
     let results = users.find(in_id).select(User::as_select()).get_result(conn);
@@ -175,7 +175,7 @@ pub fn find_user_by_id(conn: &mut MysqlConnection, in_id: i32) -> Result<User, a
 }
 
 pub fn find_user_by_email(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_email: &str,
 ) -> Result<User, anyhow::Error> {
     use crate::schema::users::dsl::*;
@@ -192,7 +192,7 @@ pub fn find_user_by_email(
 }
 
 pub fn find_user_by_username(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_username: &str,
 ) -> Result<User, anyhow::Error> {
     use crate::schema::users::dsl::*;
@@ -209,7 +209,7 @@ pub fn find_user_by_username(
 }
 
 pub fn find_project_by_id(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_id: i32,
 ) -> Result<Project, anyhow::Error> {
     use crate::schema::projects::dsl::*;
@@ -226,7 +226,7 @@ pub fn find_project_by_id(
 }
 
 pub fn find_project_by_name(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_name: &str,
 ) -> Result<Project, anyhow::Error> {
     use crate::schema::projects::dsl::*;
@@ -243,7 +243,7 @@ pub fn find_project_by_name(
 }
 
 pub fn find_projects_by_user_id(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_user_id: i32,
 ) -> Result<Vec<Project>, anyhow::Error> {
     use crate::schema::projects;
@@ -266,7 +266,7 @@ pub fn find_projects_by_user_id(
 }
 
 pub fn find_projects_by_user_id_udate_desc(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_user_id: i32,
 ) -> Result<Vec<Project>, anyhow::Error> {
     use crate::schema::projects;
@@ -290,7 +290,7 @@ pub fn find_projects_by_user_id_udate_desc(
 }
 
 pub fn find_favourites_by_user_id(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_user_id: i32,
 ) -> Result<Vec<Favourite>, anyhow::Error> {
     use crate::schema::users;
@@ -311,7 +311,7 @@ pub fn find_favourites_by_user_id(
 }
 
 pub fn find_favourite_by_ids(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_user_id: i32,
     in_project_id: i32,
 ) -> Result<Favourite, anyhow::Error> {
@@ -329,7 +329,7 @@ pub fn find_favourite_by_ids(
 }
 
 pub fn find_user_followings(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_follower_id: i32,
 ) -> Result<Vec<Follow>, anyhow::Error> {
     use crate::schema::follows::dsl::*;
@@ -349,7 +349,7 @@ pub fn find_user_followings(
 }
 
 pub fn count_projects_by_user(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_user_id: i32,
 ) -> Result<i64, anyhow::Error> {
     use crate::schema::users;
@@ -368,7 +368,7 @@ pub fn count_projects_by_user(
 }
 
 pub fn find_follow_by_ids(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_follower_id: i32,
     in_following_id: i32,
 ) -> Result<Follow, anyhow::Error> {
@@ -390,18 +390,18 @@ pub fn find_follow_by_ids(
 }
 
 pub fn find_search_results(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_query: String,
 ) -> Result<Vec<SearchResultsTypes>, anyhow::Error> {
     use SearchResultsTypes::*;
     let users = sql_query(format!(
-        "SELECT * FROM users WHERE MATCH(username, bio) AGAINST('{}' WITH QUERY EXPANSION)",
+        "SELECT * FROM users WHERE to_tsvector(username || ' ' || bio) @@ to_tsquery('{}')",
         &in_query
     ))
     .bind::<Text, _>(&in_query)
     .load::<User>(conn)?;
     let projects = sql_query(format!(
-        "SELECT * FROM projects WHERE MATCH(name, description) AGAINST('{}' WITH QUERY EXPANSION)",
+        "SELECT * FROM projects WHERE to_tsvector(name || ' ' || description) @@ to_tsquery('{}')",
         &in_query
     ))
     .bind::<Text, _>(&in_query)
@@ -413,7 +413,7 @@ pub fn find_search_results(
 }
 
 pub fn find_profile_image(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_user_id: i32,
 ) -> Result<Image, anyhow::Error> {
     use crate::schema::images::dsl::*;
@@ -430,7 +430,7 @@ pub fn find_profile_image(
 }
 
 pub fn find_project_images(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_user_id: i32,
     in_project_id: i32,
 ) -> Result<Vec<Image>, anyhow::Error> {
@@ -448,7 +448,7 @@ pub fn find_project_images(
 }
 
 pub fn find_project_comments(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_project_id: i32,
 ) -> Result<Vec<Comment>, anyhow::Error> {
     use crate::schema::comments::dsl::*;
@@ -466,7 +466,7 @@ pub fn find_project_comments(
 }
 
 pub fn find_project_replies(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_comment_id: i32,
 ) -> Result<Vec<Reply>, anyhow::Error> {
     use crate::schema::replies::dsl::*;
@@ -495,7 +495,7 @@ pub fn find_project_replies(
 }
 
 pub fn find_user_likes(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_user_id: i32,
 ) -> Result<Vec<Like>, anyhow::Error> {
     use crate::schema::likes::dsl::*;
@@ -512,7 +512,7 @@ pub fn find_user_likes(
 }
 
 pub fn find_user_dislikes(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_user_id: i32,
 ) -> Result<Vec<Dislike>, anyhow::Error> {
     use crate::schema::dislikes::dsl::*;
@@ -529,7 +529,7 @@ pub fn find_user_dislikes(
 }
 
 pub fn count_comment_likes(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_comment_id: i32,
 ) -> Result<i64, anyhow::Error> {
     use crate::schema::comments::dsl::*;
@@ -550,7 +550,7 @@ pub fn count_comment_likes(
 }
 
 pub fn count_comment_dislikes(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_comment_id: i32,
 ) -> Result<i64, anyhow::Error> {
     use crate::schema::comments::dsl::*;
@@ -571,7 +571,7 @@ pub fn count_comment_dislikes(
 }
 
 pub fn count_reply_likes(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_reply_id: i32,
 ) -> Result<i64, anyhow::Error> {
     use crate::schema::replies::dsl::*;
@@ -592,7 +592,7 @@ pub fn count_reply_likes(
 }
 
 pub fn count_reply_dislikes(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_reply_id: i32,
 ) -> Result<i64, anyhow::Error> {
     use crate::schema::replies::dsl::*;

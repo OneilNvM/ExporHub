@@ -35,7 +35,7 @@ export default function LoginFormComponent() {
                 throw new Error(`Error: ${response.statusText}`)
             }
     
-            let json = await response.json();
+            const json = await response.json();
     
             if (json.code) {
                 const status = json as ResponseStatus;

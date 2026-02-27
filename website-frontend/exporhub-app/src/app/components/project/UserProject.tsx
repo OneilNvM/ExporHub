@@ -1,7 +1,5 @@
-'use client'
-
 import Link from 'next/link'
-import React from 'react'
+import React, { Suspense } from 'react'
 import FavouriteButton from '../profile-tabs/client-components/FavouriteButton'
 import { Project } from '~/types/types'
 
@@ -14,7 +12,9 @@ export default function UserProject({ sessionUserId, isFavourited, project }: { 
                 <p className='text-gray-400 line-clamp-2'>{project.description}</p>
             </div>
             <div className='flex flex-col justify-between items-center'>
-                <FavouriteButton sessionUserId={sessionUserId} isFavourited={isFavourited} project={project} />
+                <Suspense>
+                    <FavouriteButton sessionUserId={sessionUserId} isFavourited={isFavourited} project={project} />
+                </Suspense>
                 <p className='text-xs'>{project.date_updated ? "Last Updated on " + new Date(project.date_updated).toDateString() : "Created on " + new Date(project.date_created).toDateString()}</p>
             </div>
         </div>

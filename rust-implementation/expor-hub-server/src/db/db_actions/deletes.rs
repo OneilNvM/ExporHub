@@ -3,7 +3,7 @@ use diesel::prelude::*;
 use crate::errors::error::DeleteError;
 
 pub fn delete_user_by_id(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_user_id: i32,
 ) -> Result<usize, DeleteError> {
     use crate::schema::users::dsl::*;
@@ -24,7 +24,7 @@ pub fn delete_user_by_id(
 }
 
 pub fn delete_user_by_username(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_username: &str,
 ) -> Result<usize, DeleteError> {
     use crate::schema::users::dsl::*;
@@ -45,7 +45,7 @@ pub fn delete_user_by_username(
 }
 
 pub fn delete_project_by_id(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_project_id: i32,
 ) -> Result<usize, DeleteError> {
     use crate::schema::projects::dsl::*;
@@ -66,7 +66,7 @@ pub fn delete_project_by_id(
 }
 
 pub fn delete_project_by_name(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_name: &str,
 ) -> Result<usize, DeleteError> {
     use crate::schema::projects::dsl::*;
@@ -87,7 +87,7 @@ pub fn delete_project_by_name(
 }
 
 pub fn delete_image_by_id(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_image_id: i32,
 ) -> Result<usize, DeleteError> {
     use crate::schema::images::dsl::*;
@@ -108,7 +108,7 @@ pub fn delete_image_by_id(
 }
 
 pub fn delete_image_by_file_path(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_file_path: &str,
 ) -> Result<usize, DeleteError> {
     use crate::schema::images::dsl::*;
@@ -129,7 +129,7 @@ pub fn delete_image_by_file_path(
 }
 
 pub fn delete_favourite_by_id(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_favourite_id: i32,
 ) -> Result<usize, DeleteError> {
     use crate::schema::favourites::dsl::*;
@@ -151,7 +151,7 @@ pub fn delete_favourite_by_id(
 }
 
 pub fn delete_favourite_by_ids(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_user_id: i32,
     in_project_id: i32,
 ) -> Result<usize, DeleteError> {
@@ -175,7 +175,7 @@ pub fn delete_favourite_by_ids(
 }
 
 pub fn delete_follow_by_id(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_follow_id: i32,
 ) -> Result<usize, DeleteError> {
     use crate::schema::follows::dsl::*;
@@ -196,7 +196,7 @@ pub fn delete_follow_by_id(
 }
 
 pub fn delete_follow_by_ids(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_follower_id: i32,
     in_following_id: i32,
 ) -> Result<usize, DeleteError> {
@@ -225,7 +225,7 @@ pub fn delete_follow_by_ids(
 }
 
 pub fn delete_comment_by_id(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_comment_id: i32,
 ) -> Result<usize, DeleteError> {
     use crate::schema::comments::dsl::*;
@@ -246,7 +246,7 @@ pub fn delete_comment_by_id(
 }
 
 pub fn delete_reply_by_id(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_reply_id: i32,
 ) -> Result<usize, DeleteError> {
     use crate::schema::replies::dsl::*;
@@ -267,7 +267,7 @@ pub fn delete_reply_by_id(
 }
 
 pub fn delete_thread_by_id(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_thread_id: i32,
 ) -> Result<usize, DeleteError> {
     use crate::schema::threads::dsl::*;
@@ -288,7 +288,7 @@ pub fn delete_thread_by_id(
 }
 
 pub fn delete_thread_by_ids(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_comment_id: i32,
     in_reply_id: i32,
 ) -> Result<usize, DeleteError> {
@@ -312,7 +312,7 @@ pub fn delete_thread_by_ids(
 }
 
 pub fn delete_like_by_id(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_like_id: i32,
 ) -> Result<usize, DeleteError> {
     use crate::schema::likes::dsl::*;
@@ -333,7 +333,7 @@ pub fn delete_like_by_id(
 }
 
 pub fn delete_dislike_by_id(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_dislike_id: i32,
 ) -> Result<usize, DeleteError> {
     use crate::schema::dislikes::dsl::*;
@@ -354,7 +354,7 @@ pub fn delete_dislike_by_id(
 }
 
 pub fn delete_comment_like_by_id(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_comment_like_id: i32,
 ) -> Result<usize, DeleteError> {
     use crate::schema::comment_likes::dsl::*;
@@ -376,7 +376,7 @@ pub fn delete_comment_like_by_id(
 }
 
 pub fn delete_comment_like_by_ids(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_comment_id: i32,
     in_like_id: i32,
 ) -> Result<usize, DeleteError> {
@@ -401,7 +401,7 @@ pub fn delete_comment_like_by_ids(
 }
 
 pub fn delete_comment_dislike_by_id(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_comment_dislike_id: i32,
 ) -> Result<usize, DeleteError> {
     use crate::schema::comment_dislikes::dsl::*;
@@ -423,7 +423,7 @@ pub fn delete_comment_dislike_by_id(
 }
 
 pub fn delete_comment_dislike_by_ids(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_comment_id: i32,
     in_dislike_id: i32,
 ) -> Result<usize, DeleteError> {
@@ -452,7 +452,7 @@ pub fn delete_comment_dislike_by_ids(
 }
 
 pub fn delete_reply_like_by_id(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_reply_like_id: i32,
 ) -> Result<usize, DeleteError> {
     use crate::schema::reply_likes::dsl::*;
@@ -473,7 +473,7 @@ pub fn delete_reply_like_by_id(
 }
 
 pub fn delete_reply_like_by_ids(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_reply_id: i32,
     in_like_id: i32,
 ) -> Result<usize, DeleteError> {
@@ -497,7 +497,7 @@ pub fn delete_reply_like_by_ids(
 }
 
 pub fn delete_reply_dislike_by_id(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_reply_dislike_id: i32,
 ) -> Result<usize, DeleteError> {
     use crate::schema::reply_dislikes::dsl::*;
@@ -519,7 +519,7 @@ pub fn delete_reply_dislike_by_id(
 }
 
 pub fn delete_reply_dislike_by_ids(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_reply_id: i32,
     in_dislike_id: i32,
 ) -> Result<usize, DeleteError> {

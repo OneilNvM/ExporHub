@@ -5,6 +5,7 @@ import ProfileItem from '@/app/components/user/ProfileItem'
 import { useSearchParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import fetchFavourite from '~/fetch/fetchFavourite'
+import { fetchUser } from '~/fetch/fetchUser'
 import { Project, User } from '~/types/types'
 
 export default function SearchResults({ sessionUserId }: {
@@ -38,11 +39,11 @@ export default function SearchResults({ sessionUserId }: {
     useEffect(() => {
         const setStates = async () => {
             if (results) {
-                let arr: boolean[] = []
-    
+                const arr: boolean[] = []
+
                 for (const project of results[1].Projects) {
                     const favouriteObj = await fetchFavourite(sessionUserId, project.project_id)
-    
+
                     favouriteObj && arr.push(true)
                 }
 
@@ -53,7 +54,7 @@ export default function SearchResults({ sessionUserId }: {
         }
 
         setStates()
-    }, [results])
+    }, [results, sessionUserId])
     return (
         <>
             <section className='flex w-full justify-evenly'>
@@ -63,11 +64,12 @@ export default function SearchResults({ sessionUserId }: {
                 </div>
             </section>
             <section className='flex w-full items-center flex-col gap-8'>
-                {users ? users.map((user, index) => {
-                    return <ProfileItem key={user.user_id} user={user} followedUsers={null} profileUserId={user.user_id} />
+                {users ? users.map(user => {
+                    return <ProfileItem key={user.user_id} user={user} followedUsers={null} sessionUserId={sessionUserId} />
                 }) : null}
-                {projects ? projects.map((project, index) => {
-                    return <ProjectItem key={project.project_id} project={project} sessionUserId={sessionUserId} isFavourited={favouritesArr[index]} />
+                {projects ? projects.map(async (project, index) => {
+                    const user = await fetchUser(project.user_id)
+                    return <ProjectItem key={project.project_id} user={user} project={project} sessionUserId={sessionUserId} isFavourited={favouritesArr[index]} />
                 }) : null}
                 {projects && users ? users.length === 0 && projects.length === 0 && <p>No Results</p> : null}
             </section>

@@ -1,21 +1,18 @@
 use actix_web::{
     error::ErrorInternalServerError,
-    get,
-    http::header::{ACCESS_CONTROL_ALLOW_HEADERS, ACCESS_CONTROL_ALLOW_METHODS},
-    options, post,
+    get, post,
     web::{self, Query},
-    HttpResponse, Responder, Result,
+    HttpResponse, Result,
 };
 
 use crate::{
     db::db_actions::{
         inserts::{insert_project, insert_project_image},
         selects::{
-            count_projects_by_user, find_project_by_id, find_projects_by_user_id,
-            find_projects_by_user_id_udate_desc,
+            count_projects_by_user, find_project_by_id, find_project_by_name, find_projects_by_user_id, find_projects_by_user_id_udate_desc
         },
     },
-    routes::{NoDates, ProjectId, ServerResponse, UserId},
+    routes::{ProjectId, ProjectName, ServerResponse, UserId},
     DbPool,
 };
 
@@ -36,10 +33,32 @@ pub async fn get_project_by_id(
 
     match project {
         Ok(project) => Ok(HttpResponse::Ok().json(project)),
-        Err(_error) => Ok(HttpResponse::Ok().json(ServerResponse {
-            code: 1,
+        Err(_error) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
             message: "No project".to_owned(),
         })),
+    }
+}
+
+#[get("project-name")]
+pub async fn get_project_by_name(pool: web::Data<DbPool>, name: Query<ProjectName>) -> Result<HttpResponse> {
+    let inputs = name.into_inner();
+
+    println!("{}", inputs.name);
+
+    let project = web::block(move || {
+        let conn = &mut pool.get()?;
+
+        find_project_by_name(conn, &inputs.name)
+
+    }).await?.map_err(ErrorInternalServerError);
+
+    match project {
+        Ok(project) => Ok(HttpResponse::Ok().json(project)),
+        Err(_) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
+            message: "Could not find project".to_owned()
+        }))
     }
 }
 
@@ -58,8 +77,8 @@ pub async fn get_projects_by_user_id(
 
     match projects {
         Ok(projects) => Ok(HttpResponse::Ok().json(projects)),
-        Err(_error) => Ok(HttpResponse::Ok().json(ServerResponse {
-            code: 1,
+        Err(_error) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
             message: "No projects".to_owned(),
         })),
     }
@@ -80,7 +99,8 @@ pub async fn get_projects_by_date_updated(
 
     match projects {
         Ok(projects) => Ok(HttpResponse::Ok().json(projects)),
-        Err(_error) => Ok(HttpResponse::Ok().json(NoDates {
+        Err(_error) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
             message: "No projects".to_owned(),
         })),
     }
@@ -101,8 +121,8 @@ pub async fn get_num_of_projects_by_user(
 
     match result {
         Ok(num) => Ok(HttpResponse::Ok().body(num.to_string())),
-        Err(error) => Ok(HttpResponse::Ok().json(ServerResponse {
-            code: 1,
+        Err(error) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
             message: error.to_string(),
         })),
     }
@@ -130,7 +150,7 @@ pub async fn create_project(
                 for name in inputs.images {
                     let _ = insert_project_image(
                         conn,
-                        &format!("uploads/project/{}", name),
+                        &format!("images/projects/{}", name),
                         inputs.user_id,
                         result.as_ref().unwrap().project_id,
                     );
@@ -145,17 +165,9 @@ pub async fn create_project(
 
     match project {
         Some(project) => Ok(HttpResponse::Ok().json(project)),
-        None => Ok(HttpResponse::Ok().json(ServerResponse {
-            code: 1,
+        None => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
             message: "Failed to create project".to_owned(),
         })),
     }
-}
-
-#[options("/create-project")]
-pub async fn create_project_options() -> impl Responder {
-    HttpResponse::NoContent()
-        .insert_header((ACCESS_CONTROL_ALLOW_METHODS, "POST"))
-        .insert_header((ACCESS_CONTROL_ALLOW_HEADERS, "content-type"))
-        .finish()
 }

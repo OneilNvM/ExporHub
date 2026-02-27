@@ -1,11 +1,18 @@
-import { Follow, User } from "~/types/types"
+import { Follow, ResponseStatus, User } from "~/types/types"
 
 export default async function fetchFollowedUsers(userId: number): Promise<User[] | null> {
     try {
-        const followings = await fetch(`https://api.exporhub.com:9000/api/follow/user-id?user_id=${userId}`)
+        const followings = await fetch(`https://api.exporhub.com:9000/api/follow/user-id?user_id=${userId}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Basic ${process.env.NEXT_PUBLIC_EXPORHUB_API_KEY}`
+            }
+        })
 
         if (!followings.ok) {
-            throw new Error(`Failed to find followings ${followings.status} ${followings.statusText}`)
+            const error = await followings.json() as ResponseStatus
+            throw new Error(`\nCode: ${error.code}\nMessage: ${error.message}`)
         }
 
         const follows = await followings.json() as Array<Follow>
@@ -13,11 +20,17 @@ export default async function fetchFollowedUsers(userId: number): Promise<User[]
         let results: Array<User> = []
 
         for (const follow of follows) {
-            const userResponse = await fetch(`https://api.exporhub.com:9000/api/user/user-id?user_id=${follow.following}`)
+            const userResponse = await fetch(`https://api.exporhub.com:9000/api/user/user-id?user_id=${follow.following}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Basic ${process.env.NEXT_PUBLIC_EXPORHUB_API_KEY}`
+                }
+            })
 
             if (!userResponse.ok) {
-                throw new Error(`Failed to find user`)
-            }
+                const error = await userResponse.json() as ResponseStatus
+                throw new Error(`\nCode: ${error.code}\nMessage: ${error.message}`)            }
 
             const user = await userResponse.json() as User
 

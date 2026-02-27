@@ -16,7 +16,7 @@ pub mod users;
 
 #[derive(Serialize)]
 struct ServerResponse {
-    code: u8,
+    code: u16,
     message: String,
 }
 
@@ -38,9 +38,9 @@ struct ProjectId {
     project_id: i32,
 }
 
-#[derive(Serialize)]
-struct NoDates {
-    message: String,
+#[derive(Deserialize)]
+struct ProjectName {
+    name: String
 }
 
 #[derive(Deserialize)]

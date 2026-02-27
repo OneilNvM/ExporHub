@@ -8,13 +8,14 @@ resolver = "2"
 members = ["web-assembly-functions"]
 
 [dependencies]
+actix-cors = "0.7.1"
 actix-extensible-rate-limit = "0.4.0"
 actix-web = { version = "4.9.0", features = ["rustls-0_23"] }
 actix-web-httpauth = "0.8.2"
 actix-web-lab = "0.23.0"
 anyhow = "1.0.97"
 chrono = { version = "0.4.40", features = ["serde"] }
-diesel = { version = "2.2.6", features = ["mysql", "chrono", "r2d2"] }
+diesel = { version = "2.2.6", features = ["mysql", "chrono", "r2d2", "postgres"] }
 dotenvy = "0.15.7"
 env_logger = "0.11.7"
 hex = "0.4.3"

@@ -1,7 +1,5 @@
 use actix_web::{
-    error,
-    http::header::{ACCESS_CONTROL_ALLOW_HEADERS, ACCESS_CONTROL_ALLOW_METHODS},
-    options, post, web, HttpResponse, Responder, Result,
+    error, post, web, HttpResponse, Result,
 };
 use sha2::{Digest, Sha256};
 
@@ -43,14 +41,14 @@ pub async fn login(
                 if hex == user.password {
                     Ok(HttpResponse::Ok().json(user))
                 } else {
-                    Ok(HttpResponse::Ok().json(ServerResponse {
-                        code: 1,
+                    Ok(HttpResponse::BadRequest().json(ServerResponse {
+                        code: 400,
                         message: LoginError::InvalidCredentials.to_string(),
                     }))
                 }
             }
-            Err(error) => Ok(HttpResponse::Ok().json(ServerResponse {
-                code: 2,
+            Err(error) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+                code: 500,
                 message: error.to_string(),
             })),
         }
@@ -74,26 +72,18 @@ pub async fn login(
                 if hex == user.password {
                     Ok(HttpResponse::Ok().json(user))
                 } else {
-                    Ok(HttpResponse::Ok().json(ServerResponse {
-                        code: 1,
+                    Ok(HttpResponse::BadRequest().json(ServerResponse {
+                        code: 400,
                         message: LoginError::InvalidCredentials.to_string(),
                     }))
                 }
             }
-            Err(error) => Ok(HttpResponse::Ok().json(ServerResponse {
-                code: 2,
+            Err(error) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+                code: 500,
                 message: error.to_string(),
             })),
         }
     }
-}
-
-#[options("/login")]
-pub async fn login_options() -> impl Responder {
-    HttpResponse::NoContent()
-        .insert_header((ACCESS_CONTROL_ALLOW_METHODS, "POST"))
-        .insert_header((ACCESS_CONTROL_ALLOW_HEADERS, "content-type"))
-        .finish()
 }
 
 #[post("/create-account")]
@@ -113,17 +103,9 @@ pub async fn create_account(
 
     match user {
         Ok(user) => Ok(HttpResponse::Ok().json(user.unwrap())),
-        Err(error) => Ok(HttpResponse::Ok().json(ServerResponse {
-            code: 1,
+        Err(error) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
             message: error.to_string(),
         })),
     }
-}
-
-#[options("/create-account")]
-pub async fn create_account_options() -> impl Responder {
-    HttpResponse::NoContent()
-        .insert_header((ACCESS_CONTROL_ALLOW_METHODS, "POST"))
-        .insert_header((ACCESS_CONTROL_ALLOW_HEADERS, "content-type"))
-        .finish()
 }

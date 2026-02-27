@@ -1,5 +1,5 @@
 use actix_web::{
-    error, get, http::header::ACCESS_CONTROL_ALLOW_METHODS, options, web, HttpResponse, Responder,
+    error, get, web, HttpResponse,
     Result,
 };
 
@@ -24,18 +24,11 @@ pub async fn get_user_by_id(
 
     match user {
         Ok(user) => Ok(HttpResponse::Ok().json(user)),
-        Err(error) => Ok(HttpResponse::Ok().json(ServerResponse {
-            code: 1,
+        Err(error) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
             message: error.to_string(),
         })),
     }
-}
-
-#[options("/user-id")]
-pub async fn user_id_options() -> impl Responder {
-    HttpResponse::NoContent()
-        .insert_header((ACCESS_CONTROL_ALLOW_METHODS, "GET"))
-        .finish()
 }
 
 #[get("/username")]
@@ -53,18 +46,11 @@ pub async fn get_user_by_username(
 
     match user {
         Ok(user) => Ok(HttpResponse::Ok().json(user)),
-        Err(error) => Ok(HttpResponse::Ok().json(ServerResponse {
-            code: 1,
+        Err(error) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
             message: error.to_string(),
         })),
     }
-}
-
-#[options("/username")]
-pub async fn username_options() -> impl Responder {
-    HttpResponse::NoContent()
-        .insert_header((ACCESS_CONTROL_ALLOW_METHODS, "GET"))
-        .finish()
 }
 
 #[get("/email")]
@@ -82,16 +68,9 @@ pub async fn get_user_by_email(
 
     match user {
         Ok(user) => Ok(HttpResponse::Ok().json(user)),
-        Err(error) => Ok(HttpResponse::Ok().json(ServerResponse {
-            code: 1,
+        Err(error) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
             message: error.to_string(),
         })),
     }
-}
-
-#[options("/email")]
-pub async fn email_options() -> impl Responder {
-    HttpResponse::NoContent()
-        .insert_header((ACCESS_CONTROL_ALLOW_METHODS, "GET"))
-        .finish()
 }

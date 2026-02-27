@@ -1,7 +1,7 @@
 -- Your SQL goes here
 CREATE TABLE IF NOT EXISTS follows (
-    follow_id       INT PRIMARY KEY AUTO_INCREMENT,
+    follow_id       SERIAL PRIMARY KEY,
     follower        INT NOT NULL REFERENCES users(user_id),
     following       INT NOT NULL REFERENCES users(user_id),
-    date_followed   DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6)
+    date_followed   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(6)
 );

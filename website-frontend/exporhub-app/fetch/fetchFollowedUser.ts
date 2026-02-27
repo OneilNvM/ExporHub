@@ -1,9 +1,18 @@
-export default async function fetchFollowedUser(follower: number, following: number) {
+import { ResponseStatus } from "~/types/types"
+
+export default async function fetchFollowedUser(follower: number, following: number): Promise<boolean> {
     try {
-        const followingResponse = await fetch(`https://api.exporhub.com:9000/api/follow/unique-follow?follower=${follower}&following=${following}`)
+        const followingResponse = await fetch(`https://api.exporhub.com:9000/api/follow/unique-follow?follower=${follower}&following=${following}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Basic ${process.env.NEXT_PUBLIC_EXPORHUB_API_KEY}`
+            }
+        })
 
         if (!followingResponse.ok) {
-            throw new Error(`Failed to find followings ${followingResponse.status} ${followingResponse.statusText}`)
+            const error = await followingResponse.json() as ResponseStatus
+            throw new Error(`\nCode: ${error.code}\nMessage: ${error.message}`)
         }
 
         const follow = await followingResponse.json()

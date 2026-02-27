@@ -31,8 +31,8 @@ pub async fn get_favourites_by_user_id(
 
     match favourites {
         Ok(favourites) => Ok(HttpResponse::Ok().json(favourites)),
-        Err(_error) => Ok(HttpResponse::Ok().json(ServerResponse {
-            code: 1,
+        Err(_error) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
             message: "No Favourites".to_owned(),
         })),
     }
@@ -64,8 +64,8 @@ pub async fn unfavourite_project(
 
     match result {
         Ok(_) => Ok(HttpResponse::NoContent().finish()),
-        Err(error) => Ok(HttpResponse::Ok().json(ServerResponse {
-            code: 1,
+        Err(error) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
             message: error.to_string(),
         })),
     }
@@ -88,8 +88,8 @@ pub async fn get_favourite_by_ids(
 
     match favourite {
         Ok(favourite) => Ok(HttpResponse::Ok().json(favourite)),
-        Err(_error) => Ok(HttpResponse::Ok().json(ServerResponse {
-            code: 1,
+        Err(_error) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
             message: "No Favourite".to_owned(),
         })),
     }
@@ -124,8 +124,8 @@ pub async fn create_new_favourite(
 
     match favourite {
         Ok(favourite) => Ok(HttpResponse::Ok().json(favourite.unwrap())),
-        Err(_error) => Ok(HttpResponse::Ok().json(ServerResponse {
-            code: 1,
+        Err(_error) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
             message: "Failed to favourite".to_owned(),
         })),
     }

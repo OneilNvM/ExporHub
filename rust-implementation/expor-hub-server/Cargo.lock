@@ -20,6 +20,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "actix-cors"
+version = "0.7.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "daa239b93927be1ff123eebada5a3ff23e89f0124ccb8609234e5103d5a5ae6d"
+dependencies = [
+ "actix-utils",
+ "actix-web",
+ "derive_more 2.0.1",
+ "futures-util",
+ "log",
+ "once_cell",
+ "smallvec",
+]
+
+[[package]]
 name = "actix-extensible-rate-limit"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -923,8 +938,10 @@ dependencies = [
  "byteorder",
  "chrono",
  "diesel_derives",
+ "itoa",
  "mysqlclient-sys",
  "percent-encoding",
+ "pq-sys",
  "r2d2",
  "url",
 ]
@@ -1067,6 +1084,7 @@ dependencies = [
 name = "expor-hub-server"
 version = "0.1.0"
 dependencies = [
+ "actix-cors",
  "actix-extensible-rate-limit",
  "actix-web",
  "actix-web-httpauth",
@@ -1931,6 +1949,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "85eae3c4ed2f50dcfe72643da4befc30deadb458a9b590d720cde2f2b1e97da9"
 dependencies = [
  "zerocopy 0.8.24",
+]
+
+[[package]]
+name = "pq-sys"
+version = "0.7.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "41c852911b98f5981956037b2ca976660612e548986c30af075e753107bc3400"
+dependencies = [
+ "libc",
+ "vcpkg",
 ]
 
 [[package]]

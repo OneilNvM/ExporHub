@@ -7,7 +7,7 @@ use diesel::prelude::*;
 use sha2::{Digest, Sha256};
 
 pub fn insert_user(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_username: &str,
     in_email: &str,
     in_password: &str,
@@ -50,7 +50,7 @@ pub fn insert_user(
 }
 
 pub fn insert_project(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_name: &str,
     in_description: &str,
     in_user_id: i32,
@@ -85,7 +85,7 @@ pub fn insert_project(
 }
 
 pub fn insert_profile_image(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_file_path: &str,
     in_user_id: i32,
 ) -> Result<Option<Image>, anyhow::Error> {
@@ -112,7 +112,7 @@ pub fn insert_profile_image(
 }
 
 pub fn insert_project_image(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_file_path: &str,
     in_user_id: i32,
     in_project_id: i32,
@@ -140,7 +140,7 @@ pub fn insert_project_image(
 }
 
 pub fn insert_favourite(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_user_id: i32,
     in_project_id: i32,
 ) -> Result<Option<Favourite>, anyhow::Error> {
@@ -167,7 +167,7 @@ pub fn insert_favourite(
 }
 
 pub fn insert_follow(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_follower: i32,
     in_following: i32,
 ) -> Result<Option<Follow>, anyhow::Error> {
@@ -194,7 +194,7 @@ pub fn insert_follow(
 }
 
 pub fn insert_comment(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_text: &str,
     in_user_id: i32,
     in_project_id: i32,
@@ -227,7 +227,7 @@ pub fn insert_comment(
 }
 
 pub fn insert_reply(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_text: &str,
     in_user_id: i32,
 ) -> Result<Option<Reply>, ReplyCreationError> {
@@ -259,7 +259,7 @@ pub fn insert_reply(
 }
 
 pub fn insert_thread(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_comment_id: i32,
     in_reply_id: i32,
 ) -> Result<Option<Thread>, anyhow::Error> {
@@ -286,7 +286,7 @@ pub fn insert_thread(
 }
 
 pub fn insert_like(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_user_id: i32,
 ) -> Result<Option<Like>, anyhow::Error> {
     use crate::schema::likes;
@@ -315,7 +315,7 @@ pub fn insert_like(
 }
 
 pub fn insert_dislike(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_user_id: i32,
 ) -> Result<Option<Dislike>, anyhow::Error> {
     use crate::schema::dislikes;
@@ -344,7 +344,7 @@ pub fn insert_dislike(
 }
 
 pub fn insert_comment_like(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_comment_id: i32,
     in_like_id: i32,
 ) -> Result<Option<CommentLike>, anyhow::Error> {
@@ -374,7 +374,7 @@ pub fn insert_comment_like(
 }
 
 pub fn insert_comment_dislike(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_comment_id: i32,
     in_dislike_id: i32,
 ) -> Result<Option<CommentDislike>, anyhow::Error> {
@@ -404,7 +404,7 @@ pub fn insert_comment_dislike(
 }
 
 pub fn insert_reply_like(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_reply_id: i32,
     in_like_id: i32,
 ) -> Result<Option<ReplyLike>, anyhow::Error> {
@@ -434,7 +434,7 @@ pub fn insert_reply_like(
 }
 
 pub fn insert_reply_dislike(
-    conn: &mut MysqlConnection,
+    conn: &mut PgConnection,
     in_reply_id: i32,
     in_dislike_id: i32,
 ) -> Result<Option<ReplyDislike>, anyhow::Error> {

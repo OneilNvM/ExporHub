@@ -21,8 +21,8 @@ pub async fn process_search_query(
 
     match results {
         Ok(results) => Ok(HttpResponse::Ok().json(results)),
-        Err(error) => Ok(HttpResponse::Ok().json(ServerResponse {
-            code: 1,
+        Err(error) => Ok(HttpResponse::BadRequest().json(ServerResponse {
+            code: 400,
             message: error.to_string(),
         })),
     }

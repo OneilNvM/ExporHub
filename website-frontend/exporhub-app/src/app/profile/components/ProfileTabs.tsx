@@ -1,28 +1,30 @@
-'use client'
-
 import FavouritesTab from '@/app/components/profile-tabs/FavouritesTab'
 import FollowingTab from '@/app/components/profile-tabs/FollowingTab'
 import ProfileTab from '@/app/components/profile-tabs/ProfileTab'
 import ProjectsTab from '@/app/components/profile-tabs/ProjectsTab'
-import { useSearchParams } from 'next/navigation'
+import { headers } from 'next/headers'
 import React from 'react'
 import { Project, User } from '~/types/types'
 
-export default function ProfileTabs({ user, favouritesArr, favouritedProjectsArr, projects, favouriteProjects, followings, profileUserId, sessionUserId, projectNotifications, isFollowed }: { user: User | null, profileUserId: number, sessionUserId: number, followings: User[] | null, favouritesArr: boolean[], favouritedProjectsArr: boolean[], projects: Project[] | null, projectNotifications: Project[] | null, favouriteProjects: Project[] | null, isFollowed: boolean }) {
-    const searchParams = useSearchParams()
+export default async function ProfileTabs({ user, projects, favouriteProjects, followings, profileUserId, sessionUserId, projectNotifications, isFollowed }: { user: User | null, profileUserId: number, sessionUserId: number, followings: User[] | null, projects: Project[] | null, projectNotifications: Project[] | null, favouriteProjects: Project[] | null, isFollowed: boolean }) {
+    const headerList = await headers()
 
-    switch (searchParams.get('tab')) {
-        case 'projects':
+    const searchParams = headerList.get("x-search-params")
+
+    console.log(searchParams)
+
+    switch (searchParams) {
+        case 'tab=projects':
             return (
-                <ProjectsTab sessionUserId={sessionUserId} favouritesArr={favouritesArr} projects={projects} />
+                <ProjectsTab user={user} sessionUserId={sessionUserId} projects={projects} />
             )
-        case 'favourites':
+        case 'tab=favourites':
             return (
-                <FavouritesTab favouritedProjectsArr={favouritedProjectsArr} favouriteProjects={favouriteProjects} sessionUserId={sessionUserId} />
+                <FavouritesTab user={user} favouriteProjects={favouriteProjects} sessionUserId={sessionUserId} />
             )
-        case 'following':
+        case 'tab=following':
             return (
-                <FollowingTab followings={followings} profileUserId={profileUserId} />
+                <FollowingTab followings={followings} sessionUserId={sessionUserId} />
             )
         default:
             return (

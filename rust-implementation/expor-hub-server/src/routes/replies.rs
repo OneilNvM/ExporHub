@@ -23,8 +23,8 @@ pub async fn get_comment_replies(
 
     match replies {
         Ok(replies) => Ok(HttpResponse::Ok().json(replies)),
-        Err(_) => Ok(HttpResponse::Ok().json(ServerResponse {
-            code: 1,
+        Err(_) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
             message: "Failed to retrieve replies".to_owned(),
         })),
     }

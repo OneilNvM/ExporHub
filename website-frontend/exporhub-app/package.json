@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -H exporhub.com --experimental-https --experimental-https-cert ./certificates/exporhub.crt  --experimental-https-key ./certificates/private.key --experimental-https-ca ./certificates/rootCA.crt",
+    "dev": "next dev -H test.exporhub.com --experimental-https --experimental-https-cert ./certificates/exporhub.crt  --experimental-https-key ./certificates/private.key --experimental-https-ca ./certificates/rootCA.crt",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -H test.exporhub.com",
     "lint": "next lint"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.50.0",
     "jose": "^6.0.10",
     "lucide-react": "^0.479.0",
     "next": "^15.2.4",
@@ -25,6 +26,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.1.6",
     "postcss": "^8",
+    "supabase": "^2.24.3",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }

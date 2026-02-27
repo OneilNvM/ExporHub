@@ -2,58 +2,61 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import GlobeSVG from '~/public/logo_draft_3.svg'
 import { User } from '~/types/types'
 import UnfollowButton from './UnfollowButton'
+import { fetchProjectCount } from '~/fetch/fetchProjectCount'
+import { fetchUserFollowings } from '~/fetch/fethUserFollowings'
 
-export default function ProfileItem({ user, followedUsers, profileUserId, sessionUserId, setFollowedUsers }: { user: User, followedUsers: User[] | null, profileUserId?: number, sessionUserId?: number, setFollowedUsers?: React.Dispatch<React.SetStateAction<User[] | null>> }) {
-    const [numOfProjects, setNumOfProjects] = useState<number | null>(null)
-    const pathname = usePathname()
+export default function ProfileItem({ user, followedUsers, sessionUserId, setFollowedUsers }: { user: User, followedUsers: User[] | null, sessionUserId?: number, setFollowedUsers?: React.Dispatch<React.SetStateAction<User[] | null>> }) {
+    const [numOfProjects, setNumOfProjects] = useState<{ count: number | null }[] | null>(null)
+    const [mutuals, setMutuals] = useState<{ username: string, followed: boolean }[] | null>(null)
 
     useEffect(() => {
-        if (profileUserId) {
-            const fetchData = async () => {
-                fetch(`https://api.exporhub.com:9000/api/project/num-of-projects?user_id=${profileUserId}`)
-                    .then(res => {
-                        if (!res.ok) {
-                            throw new Error(`Failed to find projects`)
-                        }
-    
-                        return res.text()
-                    })
-                    .then(num => {
-                        setNumOfProjects(Number(num))
-                    })
-                    .catch(error => {
-                        console.error(error)
-                    })
-            }
-    
-            fetchData()
-        } else {
-            const fetchData = async () => {
-                fetch(`https://api.exporhub.com:9000/api/project/num-of-projects?user_id=${sessionUserId}`)
-                    .then(res => {
-                        if (!res.ok) {
-                            throw new Error(`Failed to find projects`)
-                        }
-    
-                        return res.text()
-                    })
-                    .then(num => {
-                        setNumOfProjects(Number(num))
-                    })
-                    .catch(error => {
-                        console.error(error)
-                    })
-            }
-    
-            fetchData()
+        const fetchData = async () => {
+            const projectCountMap: { count: number | null }[] = [];
+
+            const count = await fetchProjectCount(user.user_id)
+
+            console.log(user)
+
+            projectCountMap.push({ count: count })
+
+
+            console.dir(projectCountMap)
+
+            setNumOfProjects(projectCountMap)
+
         }
 
-    }, [profileUserId, sessionUserId])
+        fetchData()
+
+    }, [user])
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const mutuals: { username: string, followed: boolean }[] = []
+            if (followedUsers && sessionUserId) {
+                for (const user of followedUsers) {
+                    const follows = await fetchUserFollowings(sessionUserId)
+
+                    follows?.forEach(follow => {
+                        if (user.user_id === follow.following) {
+                            mutuals.push({ username: user.username, followed: true })
+                        } else {
+                            mutuals.push({ username: user.username, followed: false })
+                        }
+                    })
+                }
+            }
+
+            setMutuals(mutuals)
+        }
+
+        fetchData()
+
+    }, [followedUsers, sessionUserId])
 
     return (
         <div className='flex rounded-2xl p-4 w-full max-w-[52rem] items-center gap-4 border border-pink-200 dark:border-pink-900'>
@@ -67,12 +70,16 @@ export default function ProfileItem({ user, followedUsers, profileUserId, sessio
                         <p className='line-clamp-2 text-gray-500'>{user.bio}</p>
                     </div>
                     {
-                        pathname == "/account" ? profileUserId && setFollowedUsers ? <UnfollowButton followedUsers={followedUsers} setFollowedUsers={setFollowedUsers} profileUserId={profileUserId} user={user} /> : setFollowedUsers ? <UnfollowButton followedUsers={followedUsers} setFollowedUsers={setFollowedUsers} sessionUserId={sessionUserId} user={user} /> : null : null
+                        mutuals?.map((mutual, index) => {
+                            return mutual.followed && mutual.username === user.username && setFollowedUsers ? <UnfollowButton key={index} followedUsers={followedUsers} setFollowedUsers={setFollowedUsers} sessionUserId={sessionUserId} user={user} /> : null
+                        })
                     }
                 </div>
                 <div className='flex py-2 justify-between'>
-                    <p>{numOfProjects !== 1 ? numOfProjects === null ? "" : `${numOfProjects} projects` : `1 Project`}</p>
-                    <p>{user.followers}</p>
+                    {numOfProjects?.map((value, index) => {
+                        return <p key={index}>{value.count !== null ? value.count !== 1 ? `${value.count} projects` : `${value.count} project` : ""}</p>
+                    })}
+                    <p>{user.followers} followers</p>
                 </div>
             </div>
         </div>

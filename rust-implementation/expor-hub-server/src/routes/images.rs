@@ -1,8 +1,6 @@
 use actix_web::{
     error::ErrorInternalServerError,
-    get,
-    http::header::{ACCESS_CONTROL_ALLOW_HEADERS, ACCESS_CONTROL_ALLOW_METHODS},
-    options, post, web, HttpResponse, Responder, Result,
+    get, post, web, HttpResponse, Result,
 };
 
 use crate::{
@@ -31,8 +29,8 @@ pub async fn get_profile_image(
 
     match image {
         Ok(image) => Ok(HttpResponse::Ok().json(image)),
-        Err(_) => Ok(HttpResponse::Ok().json(ServerResponse {
-            code: 1,
+        Err(_) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
             message: "Image not found".to_owned(),
         })),
     }
@@ -55,8 +53,8 @@ pub async fn get_project_images(
 
     match images {
         Ok(images) => Ok(HttpResponse::Ok().json(images)),
-        Err(_) => Ok(HttpResponse::Ok().json(ServerResponse {
-            code: 1,
+        Err(_) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
             message: "Project images not found".to_owned(),
         })),
     }
@@ -84,22 +82,14 @@ pub async fn upload_profile_image(
     match result {
         Ok(result) => match result {
             Some(image) => Ok(HttpResponse::Ok().json(image)),
-            None => Ok(HttpResponse::Ok().json(ServerResponse {
-                code: 1,
+            None => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+                code: 500,
                 message: "Failed to upload image path".to_owned(),
             })),
         },
-        Err(_) => Ok(HttpResponse::Ok().json(ServerResponse {
-            code: 1,
+        Err(_) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
             message: "Failed to upload image path".to_owned(),
         })),
     }
-}
-
-#[options("/upload")]
-pub async fn upload_profile_image_options() -> impl Responder {
-    HttpResponse::NoContent()
-        .insert_header((ACCESS_CONTROL_ALLOW_METHODS, "POST"))
-        .insert_header((ACCESS_CONTROL_ALLOW_HEADERS, "content-type"))
-        .finish()
 }

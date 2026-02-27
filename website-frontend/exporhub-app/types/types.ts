@@ -8,8 +8,8 @@ export type User = {
     username: string,
     email: string,
     password: string,
-    bio: string,
-    profileImg: string,
+    bio?: string,
+    profileImg?: string,
     followers: number,
     dateCreated: Date
 }
@@ -26,7 +26,7 @@ export type Project = {
     favourites: number,
     user_id: number,
     date_created: Date,
-    date_updated: Date,
+    date_updated?: Date,
 }
 
 export type Favourite = {
@@ -41,4 +41,12 @@ export type Follow = {
     follower: number,
     following: number,
     date_followed: Date,
+}
+
+export type Image = {
+    image_id: number,
+    file_path: string,
+    user_id?: number,
+    project_id?: number,
+    date_uploaded: Date
 }

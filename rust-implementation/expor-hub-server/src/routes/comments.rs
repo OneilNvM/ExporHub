@@ -21,8 +21,8 @@ pub async fn get_project_comments(
 
     match comments {
         Ok(comments) => Ok(HttpResponse::Ok().json(comments)),
-        Err(_) => Ok(HttpResponse::Ok().json(ServerResponse {
-            code: 1,
+        Err(_) => Ok(HttpResponse::InternalServerError().json(ServerResponse {
+            code: 500,
             message: "Failed to find comments".to_owned(),
         })),
     }
